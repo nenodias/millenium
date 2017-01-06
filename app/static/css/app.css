@@ -1,0 +1,23 @@
+.box-template{
+    padding: 60px 15px;
+}
+
+.table-inverse {
+    background-color: #373a3c;
+    color: #eceeef;
+}
+.table-inverse {
+    color: #eceeef;
+}
+.table-inverse td, .table-inverse th, .table-inverse thead th {
+    border-color: #55595c;
+}
+
+.table thead th {
+    border-bottom: 2px solid #eceeef;
+    vertical-align: bottom;
+}
+.thead-inverse th {
+    background-color: #373a3c;
+    color: #fff;
+}

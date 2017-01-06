@@ -1,0 +1,203 @@
+{% extends 'layout.html' %}
+{% block title %}Consulta de Falhas{% endblock %}
+{% block content %}
+        <form class="form-horizontal">
+            <fieldset>
+
+                <!-- Form Name -->
+                <legend>Consulta de falhas</legend>
+                
+                <input type="hidden" id="limit" name="limit" value="10" />
+                <input type="hidden" id="offset" name="offset" value="0" />
+
+                <!-- Search input-->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="descricao">Nome da falha</label>
+                    <div class="col-md-5 input-group">
+                        <span class="input-group-addon">
+                            <span class="glyphicon">&#xe003;</span>
+                        </span>
+                        <input id="descricao" name="descricao" type="search" placeholder="Informe a especialdade" class="form-control input-md" value="{{ model['descricao'] }}">
+                    </div>
+                </div>
+
+                <!-- Button (Double) -->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="btnPesquisar"></label>
+                    <div class="col-md-8">
+                        <button type="button" id="btnPesquisar" class="btn btn-primary">
+                        <span class="glyphicon glyphicon-search"></span>&nbsp;
+                        Pesquisar
+                        </button>
+                    </div>
+                    <div class="col-md-12">
+                        <a class="btn btn-info" role="button" href="{{ url_for('falha.form',pk=None)}}">
+                        <span class="glyphicon glyphicon-plus"></span>&nbsp;
+                        Inserir
+                        </a>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+        <hr />
+        <table class="table table-bordered table-striped">
+            <thead class="thead-inverse">
+                <tr>
+                    <th>Id</th>
+                    <th>Descrição</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody class="dados-tabela">
+                
+            </tbody>
+        </table>
+        <div class="div-paginacao">
+        </div>
+        <template id="linha-template">
+            <tr>
+                <td>[{id}]</td>
+                <td>[{descricao}]</td>
+                <td>
+                    <a class="btn btn-warning" href="{{url_for('falha.form')}}[{id}]">
+                    <span class="glyphicon glyphicon-pencil"></span>&nbsp;
+                    Editar
+                    </a>
+                    <a class="btn btn-danger" href="#" data-target="{{url_for('falha.delete',pk='')}}[{id}]">
+                    <span class="glyphicon glyphicon-trash"></span>&nbsp;
+                    Excluir
+                    </a>
+                </td>
+            </tr>
+        </template>
+        <template id="paginacao-template">
+            <nav aria-label="...">
+              <ul class="pager">
+                <li><a href="#paginacao-template" class="[{prev}]" data-target="-[{limit}]">Previous</a></li>
+                <li><a href="#paginacao-template" class="[{next}]" data-target="+[{limit}]">Next</a></li>
+                <li class="pull-right">Total: [{count}]</li>
+              </ul>
+            </nav>
+        </template>
+        <template id="loading">
+            <tr>
+                <td colspan="4">
+                <h4 class="text-center"> Carregando</h4>
+                <div class="progress">
+                  <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                    <span class="sr-only"> Carregando</span>
+                  </div>
+                </div>
+                </td>
+            </tr>
+        </template>
+        <template id="nenhum">
+            <tr>
+                <td colspan="4">
+                <h4 class="text-center"> Nenhum Resultado Encontrado!</h4>
+                </td>
+            </tr>
+        </template>
+        <script type="text/javascript">
+            var limit = 10;
+            var offset = 0;
+
+            var carregarDados = function(){
+                var dados = $('form').serialize();
+                
+                var loading_tpl = _.template( $("#loading").html() );
+                $('.dados-tabela').html(loading_tpl());
+
+                var d_count = $.ajax({
+                    url:'{{ url_for("falha.count") }}',
+                    data: dados,
+                    method:'get',
+                    dataType: 'json'
+                });
+                var d_dados = $.ajax({
+                    url:'{{ url_for("falha.ajax") }}',
+                    data: dados,
+                    method:'get',
+                    dataType: 'json'
+                });
+                $.when(d_count,d_dados).then(function(r_count, retorno){
+                    //Atualizando paginação
+                    var retorno_count = r_count[0];
+                    $('.div-paginacao').html('');
+                    var template = _.template( $("#paginacao-template").html() );
+                    var _count = parseInt(retorno_count['count']);
+                    var _offset = parseInt($('#offset').val());
+                    var _limit = parseInt($('#limit').val());
+                    var _max_page = _count /_limit;
+                    _max_page = parseInt(_count % _limit != 0)? _max_page + 1: _max_page;
+                    retorno_count['prev'] = _offset == 0 ? 'disabled' : '';
+                    retorno_count['next'] = (_offset + _limit)  >= _count ? 'disabled' : '';
+                    retorno_count['limit'] - _limit;
+                    $('.div-paginacao').append( template(retorno_count) );
+                    //Fim da paginação
+
+                    //Atualizando Tabela
+                    var dados = retorno[0];
+                    //$('.dados-tabela').html('');
+                    var dados_tabela = document.createElement('tbody');
+                    var loaded = $.Deferred();
+                    var template = _.template( $("#linha-template").html() );
+                    var max_count = dados.length;
+                    var count = 0;
+                    if(dados.length > 0){
+                        _.each(dados, function(linha){
+                            var html = template(linha);
+                            $(dados_tabela).append(html);
+                            count++;
+                            if(max_count == count){
+                                loaded.resolve('');
+                            }
+                        });
+                    }else{
+                        var template = _.template( $("#nenhum").html() );
+                        var html = template();
+                        $(dados_tabela).append(html);
+                    }
+                    if(max_count == count){
+                        loaded.resolve('');
+                    }
+                    loaded.done(function(){
+                        $('.dados-tabela').html( $(dados_tabela).html() );
+                    });
+                    //Fim da Atualizacao da Tabela
+
+                })
+            };
+
+            var eventoExcluir = function(){
+                var btn = $(this);
+                bootbox.confirm("Deseja excluir esse registro?", function(result) {
+                    if(result){
+                        $.post(btn.data('target'),function(data){
+                            bootbox.alert('Registro excluído com sucesso!');
+                            window.location.reload();
+                        }).fail(function(){
+                            bootbox.alert('Erro ao excluir registro!');
+                        });
+                    }
+                });
+            };
+            var eventoPage = function(event){
+                var target = event.target;
+                if($(target).hasClass('disabled')){
+                    event.preventDefault();
+                }else{
+                    var _offset = parseInt( $("#offset").val() );
+                    _offset += parseInt( $(target).data('target') );
+                    $("#offset").val(_offset);
+                    carregarDados();
+                }
+            }
+            $(document).ready(function(){
+                carregarDados();
+                $("#btnPesquisar").click(carregarDados);
+                $('table').on('click','.btn-danger', eventoExcluir);
+                $('.div-paginacao').on('click','.pager a', eventoPage);
+            });
+        </script>
+{% endblock %}

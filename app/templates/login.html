@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Login{% endblock %}
+{% block base %}
+    <div class="container">
+        <form class="form-horizontal" method="post">
+            <fieldset>
+                    
+                {% if mensagem %}
+                <div class="alert alert-{{tipo_mensagem}}" role="alert">{{mensagem}}</div>
+                {% endif %}
+
+                <!-- Form Name -->
+                <legend align="center">Login</legend>
+
+                <!-- Text input-->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="usuario">Usuário:</label>  
+                    <div class="col-md-4">
+                        <input id="usuario" name="usuario" type="text" placeholder="Informe o usuários" class="form-control input-md" required="">
+                    </div>
+                </div>
+
+                <!-- Password input-->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="passwordSenha">Senha:</label>
+                    <div class="col-md-4">
+                        <input id="senha" name="senha" type="password" placeholder="Informe a senha" class="form-control input-md" required="">
+                    </div>
+                </div>
+
+                <!-- Button -->
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="btnLogin"></label>
+                    <div class="col-md-4">
+                        <button id="btnLogin" name="btnLogin" class="btn btn-primary">Login</button>
+                    </div>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+{% endblock %}
