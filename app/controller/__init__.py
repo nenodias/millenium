@@ -2,6 +2,8 @@
 from app import app, request, render_template, redirect, session, auth_require, url_for
 from .falha_blueprint import falha_blueprint
 from .peca_blueprint import peca_blueprint
+from .servico_blueprint import servico_blueprint
+from .tecnico_blueprint import tecnico_blueprint
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
@@ -32,3 +34,5 @@ def index():
 
 app.register_blueprint(falha_blueprint, url_prefix='/falha')
 app.register_blueprint(peca_blueprint, url_prefix='/peca')
+app.register_blueprint(servico_blueprint, url_prefix='/servico')
+app.register_blueprint(tecnico_blueprint, url_prefix='/tecnico')

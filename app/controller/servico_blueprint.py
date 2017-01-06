@@ -5,13 +5,13 @@ from flask import (Blueprint, render_template, request, redirect, url_for, flash
     jsonify, render_template, Response)
 from app import auth_require
 from app import db
-from app.models import Peca
+from app.models import Servico
 
-peca_blueprint = Blueprint('peca', __name__)
+servico_blueprint = Blueprint('servico', __name__)
 
-peca_colunas = [ col.name for col in Peca.__table__._columns ]
+servico_colunas = [ col.name for col in Servico.__table__._columns ]
 
-@peca_blueprint.route('/')
+@servico_blueprint.route('/')
 @auth_require()
 def index():
     contexto = {}
@@ -19,10 +19,10 @@ def index():
     contexto['model'] = {
         'descricao':_descricao,
     }
-    return render_template('peca/consulta.html', **contexto)
+    return render_template('servico/consulta.html', **contexto)
 
-@peca_blueprint.route('/form/', defaults={'pk':None}, methods = ['post', 'get'])
-@peca_blueprint.route('/form/<pk>', methods = ['post', 'get'])
+@servico_blueprint.route('/form/', defaults={'pk':None}, methods = ['post', 'get'])
+@servico_blueprint.route('/form/<pk>', methods = ['post', 'get'])
 @auth_require()
 def form(pk):
     #Pega os dados dos campos na tela
@@ -39,7 +39,7 @@ def form(pk):
         }
         if pk:
             dicionario['id'] = pk
-        modelo = Peca(**dicionario)
+        modelo = Servico(**dicionario)
         mensagem = None
         try:
             contexto['tipo_mensagem'] = 'success'
@@ -50,24 +50,24 @@ def form(pk):
             db.session.commit()
             id_cadastro = modelo.id
             if pk:
-                flash( u'Peça {0} atualizada com sucesso'.format(id_cadastro), 'success')
+                flash( u'Serviço {0} atualizado com sucesso'.format(id_cadastro), 'success')
             else:
-                flash( u'Peça {0} cadastrada com sucesso'.format(id_cadastro), 'success')
-            return redirect(url_for('peca.index'))
+                flash( u'Serviço {0} cadastrado com sucesso'.format(id_cadastro), 'success')
+            return redirect(url_for('servico.index'))
         except Exception as ex:
             print(ex)
-            contexto['mensagem'] = u'Erro ao cadastrar peça'
+            contexto['mensagem'] = u'Erro ao cadastrar serviço'
             contexto['tipo_mensagem'] = 'danger'
     elif pk:
-        data = Peca.query.filter_by(id=pk).one()
-        contexto['model'] = Peca.to_dict(data, peca_colunas)
-    return render_template('peca/cadastro.html', **contexto)
+        data = Servico.query.filter_by(id=pk).one()
+        contexto['model'] = Servico.to_dict(data, servico_colunas)
+    return render_template('servico/cadastro.html', **contexto)
 
 
-@peca_blueprint.route('/delete/<pk>', methods = ['post'])
+@servico_blueprint.route('/delete/<pk>', methods = ['post'])
 @auth_require()
 def delete(pk):
-    data = Peca.query.filter_by(id=pk).one()
+    data = Servico.query.filter_by(id=pk).one()
     if data:
         try:
             db.session.delete(data)
@@ -77,7 +77,7 @@ def delete(pk):
             print(ex)
     return '',404
 
-@peca_blueprint.route('/ajax', methods = ['get'])
+@servico_blueprint.route('/ajax', methods = ['get'])
 @auth_require()
 def ajax():
     _limit = int(request.args.get('limit','10'))
@@ -87,29 +87,29 @@ def ajax():
     items = []
 
     try:
-        fetch = Peca.query.filter(Peca.descricao.like('%'+_descricao+'%')).slice(_offset, _limit).all()
-        colunas = [ col.name for col in Peca.__table__._columns ]
+        fetch = Servico.query.filter(Servico.descricao.like('%'+_descricao+'%')).slice(_offset, _limit).all()
+        colunas = [ col.name for col in Servico.__table__._columns ]
         for dado in fetch:
-            items.append( Peca.to_dict(dado, peca_colunas) )
+            items.append( Servico.to_dict(dado, servico_colunas) )
     except Exception as ex:
         print(ex)
     return Response(response=json.dumps( items ), status=200, mimetype="application/json")
 
-@peca_blueprint.route('/count', methods = ['get'])
+@servico_blueprint.route('/count', methods = ['get'])
 @auth_require()
 def count():
     _descricao = request.args.get('descricao', '')
     count = 0
     try:
-        count = Peca.query.filter(Peca.descricao.like('%'+_descricao+'%')).count()
+        count = Servico.query.filter(Servico.descricao.like('%'+_descricao+'%')).count()
     except Exception as ex:
         print(ex)
     return Response(response=json.dumps( {"count":count} ), status=200, mimetype="application/json")
 
-@peca_blueprint.route('/ajax/<pk>', methods = ['get'])
+@servico_blueprint.route('/ajax/<pk>', methods = ['get'])
 @auth_require()
 def ajax_by_id(pk):
-    data = Peca.query.filter_by(id=pk).one()
+    data = Servico.query.filter_by(id=pk).one()
     if data:
-        return Response(response=json.dumps( Peca.to_dict(data, peca_colunas) ), status=200, mimetype="application/json")
+        return Response(response=json.dumps( Servico.to_dict(data, servico_colunas) ), status=200, mimetype="application/json")
     return '',404

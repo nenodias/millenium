@@ -1,23 +1,23 @@
 {% extends 'layout.html' %}
-{% block title %}Consulta de Falhas{% endblock %}
+{% block title %}Consulta de Serviços{% endblock %}
 {% block content %}
         <form class="form-horizontal">
             <fieldset>
 
                 <!-- Form Name -->
-                <legend>Consulta de falhas</legend>
+                <legend>Consulta de Serviços</legend>
                 
                 <input type="hidden" id="limit" name="limit" value="10" />
                 <input type="hidden" id="offset" name="offset" value="0" />
 
                 <!-- Search input-->
                 <div class="form-group">
-                    <label class="col-md-4 control-label" for="descricao">Nome da falha</label>
+                    <label class="col-md-4 control-label" for="descricao">Nome da peça</label>
                     <div class="col-md-5 input-group">
                         <span class="input-group-addon">
                             <span class="glyphicon">&#xe003;</span>
                         </span>
-                        <input id="descricao" name="descricao" type="search" placeholder="Informe a falha" class="form-control input-md" value="{{ model['descricao'] }}">
+                        <input id="descricao" name="descricao" type="search" placeholder="Informe o serviço" class="form-control input-md" value="{{ model['descricao'] }}">
                     </div>
                 </div>
 
@@ -31,7 +31,7 @@
                         </button>
                     </div>
                     <div class="col-md-12">
-                        <a class="btn btn-info" role="button" href="{{ url_for('falha.form',pk=None)}}">
+                        <a class="btn btn-info" role="button" href="{{ url_for('servico.form',pk=None)}}">
                         <span class="glyphicon glyphicon-plus"></span>&nbsp;
                         Inserir
                         </a>
@@ -45,6 +45,7 @@
                 <tr>
                     <th>Id</th>
                     <th>Descrição</th>
+                    <th>Valor</th>
                     <th>Ações</th>
                 </tr>
             </thead>
@@ -58,12 +59,13 @@
             <tr>
                 <td>[{id}]</td>
                 <td>[{descricao}]</td>
+                <td>[{valor}]</td>
                 <td>
-                    <a class="btn btn-warning" href="{{url_for('falha.form')}}[{id}]">
+                    <a class="btn btn-warning" href="{{url_for('servico.form')}}[{id}]">
                     <span class="glyphicon glyphicon-pencil"></span>&nbsp;
                     Editar
                     </a>
-                    <a class="btn btn-danger" href="#" data-target="{{url_for('falha.delete',pk='')}}[{id}]">
+                    <a class="btn btn-danger" href="#" data-target="{{url_for('servico.delete',pk='')}}[{id}]">
                     <span class="glyphicon glyphicon-trash"></span>&nbsp;
                     Excluir
                     </a>
@@ -109,13 +111,13 @@
                 $('.dados-tabela').html(loading_tpl());
 
                 var d_count = $.ajax({
-                    url:'{{ url_for("falha.count") }}',
+                    url:'{{ url_for("servico.count") }}',
                     data: dados,
                     method:'get',
                     dataType: 'json'
                 });
                 var d_dados = $.ajax({
-                    url:'{{ url_for("falha.ajax") }}',
+                    url:'{{ url_for("servico.ajax") }}',
                     data: dados,
                     method:'get',
                     dataType: 'json'

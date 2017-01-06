@@ -1,11 +1,11 @@
 {% extends 'layout.html' %}
-{% block title %}Cadastro de Peças{% endblock %}
+{% block title %}Cadastro de Serviços{% endblock %}
 {% block content %}
         <form class="form-horizontal" method="post">
             <fieldset>
 
             <!-- Form Name -->
-            <legend>Cadastro de peças</legend>
+            <legend>Cadastro de Serviço</legend>
 
             {% if mensagem %}
             <div class="alert alert-{{tipo_mensagem}}" role="alert">{{mensagem}}</div>
@@ -17,18 +17,18 @@
 
               <!-- Text input-->
               <div class="form-group">
-                <label class="col-md-4 control-label" for="descricao">* Nome da peça:</label>  
+                <label class="col-md-4 control-label" for="descricao">* Nome da serviço:</label>  
                 <div class="col-md-5 input-group">
                     <span class="input-group-addon">
                       <span class="glyphicon">&#xe139;</span>
                     </span>
-                    <input id="descricao" name="descricao" type="text" value="{{ model['descricao'] }}" placeholder="Informe a peça" class="form-control input-md" required="" />
+                    <input id="descricao" name="descricao" type="text" value="{{ model['descricao'] }}" placeholder="Informe a serviço" class="form-control input-md" required="" />
                 </div>
               </div>
 
               <!-- Text input-->
               <div class="form-group">
-                <label class="col-md-4 control-label" for="descricao">* Valor da peça:</label>  
+                <label class="col-md-4 control-label" for="descricao">* Valor da serviço:</label>  
                 <div class="col-md-5 input-group">
                     <span class="input-group-addon">
                       <span class="glyphicon">&#xe139;</span>
@@ -45,7 +45,7 @@
                   <span class="glyphicon glyphicon-ok"></span>&nbsp;
                   Salvar
                   </button>
-                  <a id="btnCancelar" type="button" class="btn btn-danger" href="{{ url_for('peca.index') }}">
+                  <a id="btnCancelar" type="button" class="btn btn-danger" href="{{ url_for('servico.index') }}">
                   <span class="glyphicon glyphicon-remove"></span>&nbsp;
                   Cancelar
                   </a>
