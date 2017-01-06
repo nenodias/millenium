@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from flask import (Flask, request, redirect, url_for, flash, 
     jsonify,render_template, Blueprint, session)
-from app import db
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)

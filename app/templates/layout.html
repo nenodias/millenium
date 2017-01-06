@@ -20,6 +20,12 @@
                 <li><a href="{{ url_for('falha.form',pk=None) }}">Cadastro</a></li>
                 <li><a href="{{ url_for('falha.index') }}">Consulta</a></li>
             </ul>
+            <li class="dropdown">
+              <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#">Peças <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="{{ url_for('peca.form',pk=None) }}">Cadastro</a></li>
+                <li><a href="{{ url_for('peca.index') }}">Consulta</a></li>
+            </ul>
           </ul>
           <ul class="nav navbar-nav navbar-right">
             <li><a href="{{ url_for('logout') }}">Sair</a></li>

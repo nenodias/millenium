@@ -14,7 +14,7 @@ class MixinSerialize():
                 item[col] = getattr(instance, col)
         return item
 
-class Cliente(db.Model):
+class Cliente(MixinSerialize, db.Model):
     __tablename__ = 'clientes'
 
     codigo_cliente = db.Column(db.Integer, primary_key=True, server_default=text("nextval('clientes_codigo_cliente_seq'::regclass)"))
@@ -38,7 +38,7 @@ class Cliente(db.Model):
     dtnasc = db.Column(db.DateTime)
     mes = db.Column(db.Integer)
 
-class Historico(db.Model):
+class Historico(MixinSerialize, db.Model):
     __tablename__ = 'historico'
 
     sequencia = db.Column(db.Integer, primary_key=True, server_default=text("nextval('historico_sequencia_seq'::regclass)"))
@@ -57,7 +57,7 @@ class Historico(db.Model):
     tecnico1 = db.relationship('Tecnico')
 
 
-class HistoricoItem(db.Model):
+class HistoricoItem(MixinSerialize, db.Model):
     __tablename__ = 'historico_item'
 
     sequencia = db.Column(db.ForeignKey('historico.sequencia'), nullable=False)
@@ -71,7 +71,7 @@ class HistoricoItem(db.Model):
     historico1 = db.relationship('Historico')
 
 
-class Modelo(db.Model):
+class Modelo(MixinSerialize, db.Model):
     __tablename__ = 'modelo'
 
     nome_modelo = db.Column(db.String(40), nullable=False)
@@ -82,7 +82,7 @@ class Modelo(db.Model):
     montadora = db.relationship('Montadora')
 
 
-class Montadora(db.Model):
+class Montadora(MixinSerialize, db.Model):
     __tablename__ = 'montadora'
 
     origem = db.Column(db.String(1), nullable=False)
@@ -96,7 +96,7 @@ class Falha(MixinSerialize, db.Model):
     descricao = db.Column(db.String(60))
     id = db.Column(db.BigInteger, primary_key=True, server_default=text("nextval('falhas_id_seq'::regclass)"))
 
-class Peca(db.Model):
+class Peca(MixinSerialize, db.Model):
     __tablename__ = 'pecas'
 
     descricao = db.Column(db.String(60), nullable=False)
@@ -104,7 +104,7 @@ class Peca(db.Model):
     id = db.Column(db.BigInteger, primary_key=True, server_default=text("nextval('cadpecas_id_seq'::regclass)"))
 
 
-class Servico(db.Model):
+class Servico(MixinSerialize, db.Model):
     __tablename__ = 'servicos'
 
     descricao = db.Column(db.String(60), nullable=False)
@@ -112,21 +112,21 @@ class Servico(db.Model):
     id = db.Column(db.BigInteger, primary_key=True, server_default=text("nextval('cadservicos_id_seq'::regclass)"))
 
 
-class Tecnico(db.Model):
+class Tecnico(MixinSerialize, db.Model):
     __tablename__ = 'tecnico'
 
     codigo_tecnico = db.Column(db.Integer, primary_key=True, server_default=text("nextval('tecnico_codigo_tecnico_seq'::regclass)"))
     nome = db.Column(db.String(60), nullable=False)
 
 
-class Tipoitem(db.Model):
+class Tipoitem(MixinSerialize, db.Model):
     __tablename__ = 'tipoitem'
 
     tipo = db.Column(db.String(1), primary_key=True)
     descricao = db.Column(db.String(15))
 
 
-class Veiculo(db.Model):
+class Veiculo(MixinSerialize, db.Model):
     __tablename__ = 'veiculo'
 
     codveiculo = db.Column(db.Integer, primary_key=True, server_default=text("nextval('veiculo_codveiculo_seq'::regclass)"))

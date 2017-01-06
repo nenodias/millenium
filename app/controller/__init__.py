@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from app import app, request, render_template, redirect, session, auth_require, url_for
 from .falha_blueprint import falha_blueprint
+from .peca_blueprint import peca_blueprint
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
@@ -30,3 +31,4 @@ def index():
     return render_template('index.html'), 200
 
 app.register_blueprint(falha_blueprint, url_prefix='/falha')
+app.register_blueprint(peca_blueprint, url_prefix='/peca')
