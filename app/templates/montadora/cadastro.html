@@ -1,0 +1,66 @@
+{% extends 'layout.html' %}
+{% block title %}Cadastro de montadoras{% endblock %}
+{% block content %}
+        <form class="form-horizontal" method="post">
+            <fieldset>
+
+            <!-- Form Name -->
+            <legend>Cadastro de montadoras</legend>
+
+            {% if mensagem %}
+            <div class="alert alert-{{tipo_mensagem}}" role="alert">{{mensagem}}</div>
+            {% else %}
+
+              <!-- Alerta obrigatoriedade -->
+              <div class ="alert-info">Os campos sinalizados com asterisco (*) são obrigatórios.
+              </div><br><br>
+
+              <!-- Text input-->
+              <div class="form-group">
+                <label class="col-md-4 control-label" for="descricao">* Nome da montadora:</label>  
+                <div class="col-md-5 input-group">
+                    <span class="input-group-addon">
+                      <span class="glyphicon">&#xe139;</span>
+                    </span>
+                    <input id="nome" name="nome" type="text" value="{{ model['nome'] }}" placeholder="Informe o nome" class="form-control input-md" required="" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-md-4 control-label" for="origem">* Origem da montadora:</label>  
+                <div class="col-md-5 input-group">
+                    <span class="input-group-addon">
+                      <span class="glyphicon">&#xe139;</span>
+                    </span>
+                    <input id="origem" name="origem" type="text" value="{{ model['origem'] }}" placeholder="Informe a origem" class="form-control input-md" required="" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-md-4 control-label" for="codmon_ea">* Código da montadora EA:</label>  
+                <div class="col-md-5 input-group">
+                    <span class="input-group-addon">
+                      <span class="glyphicon">&#xe139;</span>
+                    </span>
+                    <input id="codmon_ea" name="codmon_ea" type="text" value="{{ model['codmon_ea'] }}" placeholder="Informe o código" class="form-control input-md" required="" />
+                </div>
+              </div>
+
+                            <!-- Button (Double) -->
+              <div class="form-group">
+                <label class="col-md-4 control-label" for="btnSalvar"></label>
+                <div class="col-md-8">
+                  <button id="btnSalvar" type="submit" class="btn btn-success">
+                  <span class="glyphicon glyphicon-ok"></span>&nbsp;
+                  Salvar
+                  </button>
+                  <a id="btnCancelar" type="button" class="btn btn-danger" href="{{ url_for('montadora.index') }}">
+                  <span class="glyphicon glyphicon-remove"></span>&nbsp;
+                  Cancelar
+                  </a>
+                </div>
+              </div>
+            {% endif %}
+            </fieldset>
+        </form>
+{% endblock %}

@@ -91,7 +91,7 @@ class Montadora(MixinSerialize, db.Model):
 
     id = db.Column(db.BigInteger, primary_key=True, server_default=text("nextval('monta_id_seq'::regclass)"))
     origem = db.Column(db.String(1), nullable=False)
-    nome_montadora = db.Column(db.String(20), nullable=False)
+    nome = db.Column('nome_montadora',db.String(20), nullable=False)
     codmon_ea = db.Column(db.Integer)
 
 class Falha(MixinSerialize, db.Model):
