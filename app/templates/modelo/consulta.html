@@ -1,23 +1,34 @@
 {% extends 'layout.html' %}
-{% block title %}Consulta de Técnicos{% endblock %}
+{% block title %}Consulta de Modelos{% endblock %}
 {% block content %}
         <form class="form-horizontal">
             <fieldset>
 
                 <!-- Form Name -->
-                <legend>Consulta de técnicos</legend>
+                <legend>Consulta de Modelos</legend>
                 
                 <input type="hidden" id="limit" name="limit" value="10" />
                 <input type="hidden" id="offset" name="offset" value="0" />
 
                 <!-- Search input-->
                 <div class="form-group">
-                    <label class="col-md-4 control-label" for="nome">Nome da técnico</label>
+                    <label class="col-md-4 control-label" for="nome">Nome do modelo</label>
                     <div class="col-md-5 input-group">
                         <span class="input-group-addon">
                             <span class="glyphicon">&#xe003;</span>
                         </span>
                         <input id="nome" name="nome" type="search" placeholder="Informe o nome" class="form-control input-md" value="{{ model['nome'] }}">
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="id_monta">Montadora</label>
+                    <div class="col-md-5 input-group">
+                        <span class="input-group-addon">
+                            <span class="glyphicon">&#xe003;</span>
+                        </span>
+                        <input id="id_monta" name="id_monta" type="search" placeholder="Informe a montadora" class="form-control input-md" value="{{ model['id_monta'] }}">
                     </div>
                 </div>
 
@@ -31,7 +42,7 @@
                         </button>
                     </div>
                     <div class="col-md-12">
-                        <a class="btn btn-info" role="button" href="{{ url_for('tecnico.form',pk=None)}}">
+                        <a class="btn btn-info" role="button" href="{{ url_for('modelo.form',pk=None)}}">
                         <span class="glyphicon glyphicon-plus"></span>&nbsp;
                         Inserir
                         </a>
@@ -45,6 +56,8 @@
                 <tr>
                     <th>Id</th>
                     <th>Nome</th>
+                    <th>Montadora</th>
+                    <th>Código EA</th>
                     <th>Ações</th>
                 </tr>
             </thead>
@@ -58,12 +71,14 @@
             <tr>
                 <td>[{id}]</td>
                 <td>[{nome}]</td>
+                <td>[{montadora}]</td>
+                <td>[{codvei_ea}]</td>
                 <td>
-                    <a class="btn btn-warning" href="{{url_for('tecnico.form')}}[{id}]">
+                    <a class="btn btn-warning" href="{{url_for('modelo.form')}}[{id}]">
                     <span class="glyphicon glyphicon-pencil"></span>&nbsp;
                     Editar
                     </a>
-                    <a class="btn btn-danger" href="#" data-target="{{url_for('tecnico.delete',pk='')}}[{id}]">
+                    <a class="btn btn-danger" href="#" data-target="{{url_for('modelo.delete',pk='')}}[{id}]">
                     <span class="glyphicon glyphicon-trash"></span>&nbsp;
                     Excluir
                     </a>
@@ -102,6 +117,20 @@
             var limit = 10;
             var offset = 0;
 
+            var getMontadora = function(id){
+                var d1 = $.Deferred();
+                $.ajax({
+                    url:'{{ url_for("montadora.ajax_by_id",pk='') }}'+id,
+                    method:'get',
+                    dataType: 'json'
+                }).done(function(data){
+                    d1.resolve(data.nome);
+                }).fail(function(){
+                    d1.resolve('');
+                });
+                return d1;
+            };
+
             var carregarDados = function(){
                 var dados = $('form').serialize();
                 
@@ -109,13 +138,13 @@
                 $('.dados-tabela').html(loading_tpl());
 
                 var d_count = $.ajax({
-                    url:'{{ url_for("tecnico.count") }}',
+                    url:'{{ url_for("modelo.count") }}',
                     data: dados,
                     method:'get',
                     dataType: 'json'
                 });
                 var d_dados = $.ajax({
-                    url:'{{ url_for("tecnico.ajax") }}',
+                    url:'{{ url_for("modelo.ajax") }}',
                     data: dados,
                     method:'get',
                     dataType: 'json'
@@ -146,12 +175,15 @@
                     var count = 0;
                     if(dados.length > 0){
                         _.each(dados, function(linha){
-                            var html = template(linha);
-                            $(dados_tabela).append(html);
-                            count++;
-                            if(max_count == count){
-                                loaded.resolve('');
-                            }
+                            getMontadora(linha['id_monta']).done(function(montadora){
+                                linha['montadora'] = montadora;
+                                var html = template(linha);
+                                $(dados_tabela).append(html);
+                                count++;
+                                if(max_count == count){
+                                    loaded.resolve('');
+                                }
+                            });
                         });
                     }else{
                         var template = _.template( $("#nenhum").html() );
@@ -198,6 +230,29 @@
                 $("#btnPesquisar").click(carregarDados);
                 $('table').on('click','.btn-danger', eventoExcluir);
                 $('.div-paginacao').on('click','.pager a', eventoPage);
+            });
+
+            $("#id_monta").selectSearch({
+                findSearch:function(search, limit, offset){
+                    return $.ajax({
+                        url : "{{ url_for('montadora.ajax') }}",
+                        dataType : "json",
+                        data:'nome='+search+'&limit='+limit+'&offset='+(limit * offset)
+                    });
+                },
+                findById:function(id){
+                    return $.ajax({
+                        url : "{{ url_for('montadora.ajax_by_id',pk='') }}"+id,
+                        dataType : "json"
+                    });
+                },
+                getDescription: function(data){
+                    return data.id+'-'+data.nome;
+                },
+                getValue: function(data){
+                    return data.id;
+                },
+                hideField:true
             });
         </script>
 {% endblock %}

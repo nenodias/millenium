@@ -3,6 +3,7 @@ from pdb import set_trace
 from app import db
 from sqlalchemy.sql.expression import text
 from sqlalchemy.ext.declarative import declared_attr
+from sqlalchemy import or_, and_
 
 class MixinSerialize():
 
@@ -79,7 +80,7 @@ class Modelo(MixinSerialize, db.Model):
     __tablename__ = 'modelo'
 
     id = db.Column(db.BigInteger, primary_key=True, server_default=text("nextval('modelo_id_seq'::regclass)"))
-    nome_modelo = db.Column(db.String(40), nullable=False)
+    nome = db.Column('nome_modelo', db.String(40), nullable=False)
     codvei_ea = db.Column(db.Integer)
     id_monta = db.Column(db.ForeignKey('montadora.id'))
 

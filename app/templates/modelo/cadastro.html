@@ -1,11 +1,11 @@
 {% extends 'layout.html' %}
-{% block title %}Cadastro de montadoras{% endblock %}
+{% block title %}Cadastro de Modelos{% endblock %}
 {% block content %}
         <form class="form-horizontal" method="post">
             <fieldset>
 
             <!-- Form Name -->
-            <legend>Cadastro de montadoras</legend>
+            <legend>Cadastro de Modelos</legend>
 
             {% if mensagem %}
             <div class="alert alert-{{tipo_mensagem}}" role="alert">{{mensagem}}</div>
@@ -17,7 +17,7 @@
 
               <!-- Text input-->
               <div class="form-group">
-                <label class="col-md-4 control-label" for="nome">* Nome da montadora:</label>  
+                <label class="col-md-4 control-label" for="nome">* Nome do modelo:</label>  
                 <div class="col-md-5 input-group">
                     <span class="input-group-addon">
                       <span class="glyphicon">&#xe139;</span>
@@ -27,22 +27,22 @@
               </div>
 
               <div class="form-group">
-                <label class="col-md-4 control-label" for="origem">* Origem da montadora:</label>  
+                <label class="col-md-4 control-label" for="id_monta">* Montadora:</label>  
                 <div class="col-md-5 input-group">
                     <span class="input-group-addon">
                       <span class="glyphicon">&#xe139;</span>
                     </span>
-                    <input id="origem" name="origem" type="text" value="{{ model['origem'] }}" placeholder="Informe a origem" class="form-control input-md" required="" />
+                    <input id="id_monta" name="id_monta" type="text" value="{{ model['id_monta'] }}" placeholder="Informe a montadora" class="form-control input-md" required="" />
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="col-md-4 control-label" for="codmon_ea">* Código da montadora EA:</label>  
+                <label class="col-md-4 control-label" for="codvei_ea">* Código EA:</label>  
                 <div class="col-md-5 input-group">
                     <span class="input-group-addon">
                       <span class="glyphicon">&#xe139;</span>
                     </span>
-                    <input id="codmon_ea" name="codmon_ea" type="text" value="{{ model['codmon_ea'] }}" placeholder="Informe o código" class="form-control input-md" required="" />
+                    <input id="codvei_ea" name="codvei_ea" type="text" value="{{ model['codvei_ea'] }}" placeholder="Informe o código ea" class="form-control input-md" required="" />
                 </div>
               </div>
 
@@ -54,7 +54,7 @@
                   <span class="glyphicon glyphicon-ok"></span>&nbsp;
                   Salvar
                   </button>
-                  <a id="btnCancelar" type="button" class="btn btn-danger" href="{{ url_for('montadora.index') }}">
+                  <a id="btnCancelar" type="button" class="btn btn-danger" href="{{ url_for('modelo.index') }}">
                   <span class="glyphicon glyphicon-remove"></span>&nbsp;
                   Cancelar
                   </a>
@@ -63,4 +63,28 @@
             {% endif %}
             </fieldset>
         </form>
+        <script type="text/javascript">
+          $("#id_monta").selectSearch({
+                findSearch:function(search, limit, offset){
+                    return $.ajax({
+                        url : "{{ url_for('montadora.ajax') }}",
+                        dataType : "json",
+                        data:'nome='+search+'&limit='+limit+'&offset='+(limit * offset)
+                    });
+                },
+                findById:function(id){
+                    return $.ajax({
+                        url : "{{ url_for('montadora.ajax_by_id',pk='') }}"+id,
+                        dataType : "json"
+                    });
+                },
+                getDescription: function(data){
+                    return data.id+'-'+data.nome;
+                },
+                getValue: function(data){
+                    return data.id;
+                },
+                hideField:true
+            });
+        </script>
 {% endblock %}
