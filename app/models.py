@@ -4,6 +4,8 @@ from app import db
 from sqlalchemy.sql.expression import text
 from sqlalchemy.ext.declarative import declared_attr
 from sqlalchemy import or_, and_
+from datetime import datetime
+from app.utils import from_datetime_to_str
 
 class MixinSerialize():
 
@@ -13,6 +15,8 @@ class MixinSerialize():
         for col in colunas:
             if hasattr(instance, col):
                 valor = getattr(instance, col)
+                if isinstance(valor, datetime):
+                    valor = from_datetime_to_str(valor)
                 if valor:
                     item[col] = valor
                 else:
@@ -23,9 +27,9 @@ class Cliente(MixinSerialize, db.Model):
     __tablename__ = 'clientes'
 
     id = db.Column('codigo_cliente',db.Integer, primary_key=True, server_default=text("nextval('clientes_codigo_cliente_seq'::regclass)"))
-    nome_cliente = db.Column(db.String(60), nullable=False)
-    ie_rg = db.Column(db.String(16))
-    cgc = db.Column(db.String(19))
+    nome = db.Column('nome_cliente',db.String(60), nullable=False)
+    rg = db.Column('ie_rg',db.String(16))
+    cpf = db.Column('cgc',db.String(19))
     endereco = db.Column(db.String(50))
     complemento = db.Column(db.String(30))
     bairro = db.Column(db.String(30))
@@ -33,14 +37,14 @@ class Cliente(MixinSerialize, db.Model):
     cep = db.Column(db.String(9))
     estado = db.Column(db.String(2))
     pais = db.Column(db.String(20))
-    tel_res = db.Column(db.String(20))
-    fax_res = db.Column(db.String(20))
+    telefone = db.Column('tel_res',db.String(20))
+    fax = db.Column('fax_res',db.String(20))
     celular = db.Column(db.String(20))
-    tel_com = db.Column(db.String(20))
-    fax_com = db.Column(db.String(20))
-    e_mail = db.Column(db.String(40))
-    bip_cod = db.Column(db.String(30))
-    dtnasc = db.Column(db.DateTime)
+    telefone_comercial = db.Column('tel_com',db.String(20))
+    fax_comercial = db.Column('fax_com',db.String(20))
+    email = db.Column('e_mail',db.String(40))
+    bip = db.Column('bip_cod',db.String(30))
+    data_nascimento = db.Column('dtnasc',db.DateTime)
     mes = db.Column(db.Integer)
 
 class Historico(MixinSerialize, db.Model):

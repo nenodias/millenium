@@ -1,0 +1,90 @@
+{% extends 'layout.html' %}
+{% block title %}Cadastro de Clientes{% endblock %}
+{% block content %}
+        <form class="form-horizontal" method="post">
+            <fieldset>
+
+            <!-- Form Name -->
+            <legend>Cadastro de Clientes</legend>
+
+            {% if mensagem %}
+            <div class="alert alert-{{tipo_mensagem}}" role="alert">{{mensagem}}</div>
+            {% else %}
+
+              <!-- Alerta obrigatoriedade -->
+              <div class ="alert-info">Os campos sinalizados com asterisco (*) são obrigatórios.
+              </div><br><br>
+
+              <!-- Text input-->
+              <div class="form-group">
+                <label class="col-md-4 control-label" for="nome">* Nome do cliente:</label>  
+                <div class="col-md-5 input-group">
+                    <span class="input-group-addon">
+                      <span class="glyphicon">&#xe139;</span>
+                    </span>
+                    <input id="nome" name="nome" type="text" value="{{ model['nome'] }}" placeholder="Informe o nome" class="form-control input-md" required="" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-md-4 control-label" for="id_monta">* Montadora:</label>  
+                <div class="col-md-5 input-group">
+                    <span class="input-group-addon">
+                      <span class="glyphicon">&#xe139;</span>
+                    </span>
+                    <input id="id_monta" name="id_monta" type="text" value="{{ model['id_monta'] }}" placeholder="Informe a montadora" class="form-control input-md" required="" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-md-4 control-label" for="codvei_ea">* Código EA:</label>  
+                <div class="col-md-5 input-group">
+                    <span class="input-group-addon">
+                      <span class="glyphicon">&#xe139;</span>
+                    </span>
+                    <input id="codvei_ea" name="codvei_ea" type="text" value="{{ model['codvei_ea'] }}" placeholder="Informe o código ea" class="form-control input-md" required="" />
+                </div>
+              </div>
+
+                            <!-- Button (Double) -->
+              <div class="form-group">
+                <label class="col-md-4 control-label" for="btnSalvar"></label>
+                <div class="col-md-8">
+                  <button id="btnSalvar" type="submit" class="btn btn-success">
+                  <span class="glyphicon glyphicon-ok"></span>&nbsp;
+                  Salvar
+                  </button>
+                  <a id="btnCancelar" type="button" class="btn btn-danger" href="{{ url_for('cliente.index') }}">
+                  <span class="glyphicon glyphicon-remove"></span>&nbsp;
+                  Cancelar
+                  </a>
+                </div>
+              </div>
+            {% endif %}
+            </fieldset>
+        </form>
+        <script type="text/javascript">
+          $("#id_monta").selectSearch({
+                findSearch:function(search, limit, offset){
+                    return $.ajax({
+                        url : "{{ url_for('montadora.ajax') }}",
+                        dataType : "json",
+                        data:'nome='+search+'&limit='+limit+'&offset='+(limit * offset)
+                    });
+                },
+                findById:function(id){
+                    return $.ajax({
+                        url : "{{ url_for('montadora.ajax_by_id',pk='') }}"+id,
+                        dataType : "json"
+                    });
+                },
+                getDescription: function(data){
+                    return data.id+'-'+data.nome;
+                },
+                getValue: function(data){
+                    return data.id;
+                },
+                hideField:true
+            });
+        </script>
+{% endblock %}

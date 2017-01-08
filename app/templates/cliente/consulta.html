@@ -1,18 +1,18 @@
 {% extends 'layout.html' %}
-{% block title %}Consulta de Modelos{% endblock %}
+{% block title %}Consulta de Clientes{% endblock %}
 {% block content %}
         <form class="form-horizontal">
             <fieldset>
 
                 <!-- Form Name -->
-                <legend>Consulta de Modelos</legend>
+                <legend>Consulta de Clientes</legend>
                 
                 <input type="hidden" id="limit" name="limit" value="10" />
                 <input type="hidden" id="offset" name="offset" value="0" />
 
                 <!-- Search input-->
                 <div class="form-group">
-                    <label class="col-md-4 control-label" for="nome">Nome do modelo</label>
+                    <label class="col-md-4 control-label" for="nome">Nome do cliente</label>
                     <div class="col-md-5 input-group">
                         <span class="input-group-addon">
                             <span class="glyphicon">&#xe003;</span>
@@ -23,12 +23,22 @@
 
 
                 <div class="form-group">
-                    <label class="col-md-4 control-label" for="id_monta">Montadora</label>
+                    <label class="col-md-4 control-label" for="telefone">Telefone</label>
                     <div class="col-md-5 input-group">
                         <span class="input-group-addon">
                             <span class="glyphicon">&#xe003;</span>
                         </span>
-                        <input id="id_monta" name="id_monta" type="search" placeholder="Informe a montadora" class="form-control input-md" value="{{ model['id_monta'] }}">
+                        <input id="telefone" name="telefone" type="search" placeholder="Informe o telefone" class="form-control input-md" value="{{ model['telefone'] }}">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-4 control-label" for="celular">Celular</label>
+                    <div class="col-md-5 input-group">
+                        <span class="input-group-addon">
+                            <span class="glyphicon">&#xe003;</span>
+                        </span>
+                        <input id="celular" name="celular" type="search" placeholder="Informe o celular" class="form-control input-md" value="{{ model['celular'] }}">
                     </div>
                 </div>
 
@@ -42,7 +52,7 @@
                         </button>
                     </div>
                     <div class="col-md-12">
-                        <a class="btn btn-info" role="button" href="{{ url_for('modelo.form',pk=None)}}">
+                        <a class="btn btn-info" role="button" href="{{ url_for('cliente.form',pk=None)}}">
                         <span class="glyphicon glyphicon-plus"></span>&nbsp;
                         Inserir
                         </a>
@@ -56,8 +66,11 @@
                 <tr>
                     <th>Id</th>
                     <th>Nome</th>
-                    <th>Montadora</th>
-                    <th>Código EA</th>
+                    <th>Telefone</th>
+                    <th>Celular</th>
+                    <th>Endereço</th>
+                    <th>Bairro</th>
+                    <th>Telefone Comercial</th>
                     <th>Ações</th>
                 </tr>
             </thead>
@@ -71,14 +84,17 @@
             <tr>
                 <td>[{id}]</td>
                 <td>[{nome}]</td>
-                <td>[{montadora}]</td>
-                <td>[{codvei_ea}]</td>
+                <td>[{telefone}]</td>
+                <td>[{celular}]</td>
+                <td>[{endereco}]</td>
+                <td>[{bairro}]</td>
+                <td>[{telefone_comercial}]</td>
                 <td>
-                    <a class="btn btn-warning" href="{{url_for('modelo.form')}}[{id}]">
+                    <a class="btn btn-warning" href="{{url_for('cliente.form')}}[{id}]">
                     <span class="glyphicon glyphicon-pencil"></span>&nbsp;
                     Editar
                     </a>
-                    <a class="btn btn-danger" href="#" data-target="{{url_for('modelo.delete',pk='')}}[{id}]">
+                    <a class="btn btn-danger" href="#" data-target="{{url_for('cliente.delete',pk='')}}[{id}]">
                     <span class="glyphicon glyphicon-trash"></span>&nbsp;
                     Excluir
                     </a>
@@ -96,7 +112,7 @@
         </template>
         <template id="loading">
             <tr>
-                <td colspan="5">
+                <td colspan="8">
                 <h4 class="text-center"> Carregando</h4>
                 <div class="progress">
                   <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
@@ -117,20 +133,6 @@
             var limit = 10;
             var offset = 0;
 
-            var getMontadora = function(id){
-                var d1 = $.Deferred();
-                $.ajax({
-                    url:'{{ url_for("montadora.ajax_by_id",pk='') }}'+id,
-                    method:'get',
-                    dataType: 'json'
-                }).done(function(data){
-                    d1.resolve(data.nome);
-                }).fail(function(){
-                    d1.resolve('');
-                });
-                return d1;
-            };
-
             var carregarDados = function(){
                 var dados = $('form').serialize();
                 
@@ -138,13 +140,13 @@
                 $('.dados-tabela').html(loading_tpl());
 
                 var d_count = $.ajax({
-                    url:'{{ url_for("modelo.count") }}',
+                    url:'{{ url_for("cliente.count") }}',
                     data: dados,
                     method:'get',
                     dataType: 'json'
                 });
                 var d_dados = $.ajax({
-                    url:'{{ url_for("modelo.ajax") }}',
+                    url:'{{ url_for("cliente.ajax") }}',
                     data: dados,
                     method:'get',
                     dataType: 'json'
@@ -175,15 +177,12 @@
                     var count = 0;
                     if(dados.length > 0){
                         _.each(dados, function(linha){
-                            getMontadora(linha['id_monta']).done(function(montadora){
-                                linha['montadora'] = montadora;
-                                var html = template(linha);
-                                $(dados_tabela).append(html);
-                                count++;
-                                if(max_count == count){
-                                    loaded.resolve('');
-                                }
-                            });
+                            var html = template(linha);
+                            $(dados_tabela).append(html);
+                            count++;
+                            if(max_count == count){
+                                loaded.resolve('');
+                            }
                         });
                     }else{
                         var template = _.template( $("#nenhum").html() );
@@ -232,27 +231,5 @@
                 $('.div-paginacao').on('click','.pager a', eventoPage);
             });
 
-            $("#id_monta").selectSearch({
-                findSearch:function(search, limit, offset){
-                    return $.ajax({
-                        url : "{{ url_for('montadora.ajax') }}",
-                        dataType : "json",
-                        data:'nome='+search+'&limit='+limit+'&offset='+(limit * offset)
-                    });
-                },
-                findById:function(id){
-                    return $.ajax({
-                        url : "{{ url_for('montadora.ajax_by_id',pk='') }}"+id,
-                        dataType : "json"
-                    });
-                },
-                getDescription: function(data){
-                    return data.id+'-'+data.nome;
-                },
-                getValue: function(data){
-                    return data.id;
-                },
-                hideField:true
-            });
         </script>
 {% endblock %}
