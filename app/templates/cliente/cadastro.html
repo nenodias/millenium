@@ -12,7 +12,7 @@
             {% else %}
 
               <!-- Alerta obrigatoriedade -->
-              <div class ="alert-info">Os campos sinalizados com asterisco (*) são obrigatórios.
+              <div class ="alert-info">Os campos sinalizados com asterisco ( ) são obrigatórios.
               </div><br><br>
 
               <!-- Text input-->
@@ -27,24 +27,175 @@
               </div>
 
               <div class="form-group">
-                <label class="col-md-4 control-label" for="id_monta">* Montadora:</label>  
+                <label class="col-md-4 control-label" for="rg">  RG:</label>
                 <div class="col-md-5 input-group">
-                    <span class="input-group-addon">
-                      <span class="glyphicon">&#xe139;</span>
-                    </span>
-                    <input id="id_monta" name="id_monta" type="text" value="{{ model['id_monta'] }}" placeholder="Informe a montadora" class="form-control input-md" required="" />
+                  <span class="input-group-addon">
+                    <span class="glyphicon">&#xe139;</span>
+                  </span>
+                  <input id="rg" name="rg" type="text" value="{{ model['rg'] }}" placeholder="Informe o RG" class="form-control input-md" />
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="col-md-4 control-label" for="codvei_ea">* Código EA:</label>  
+                <label class="col-md-4 control-label" for="cpf">  CPF:</label>
                 <div class="col-md-5 input-group">
-                    <span class="input-group-addon">
-                      <span class="glyphicon">&#xe139;</span>
-                    </span>
-                    <input id="codvei_ea" name="codvei_ea" type="text" value="{{ model['codvei_ea'] }}" placeholder="Informe o código ea" class="form-control input-md" required="" />
+                  <span class="input-group-addon">
+                    <span class="glyphicon">&#xe139;</span>
+                  </span>
+                  <input id="cpf" name="cpf" type="text" value="{{ model['cpf'] }}" placeholder="Informe o CPF" class="form-control input-md" />
                 </div>
               </div>
+
+              <div class="form-group">
+                <label class="col-md-4 control-label" for="endereco">  Endereço:</label>
+                <div class="col-md-5 input-group">
+                  <span class="input-group-addon">
+                    <span class="glyphicon">&#xe139;</span>
+                  </span>
+                  <input id="endereco" name="endereco" type="text" value="{{ model['endereco'] }}" placeholder="Informe o Endereço" class="form-control input-md" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-md-4 control-label" for="complemento">  Complemento:</label>
+                <div class="col-md-5 input-group">
+                  <span class="input-group-addon">
+                    <span class="glyphicon">&#xe139;</span>
+                  </span>
+                  <input id="complemento" name="complemento" type="text" value="{{ model['complemento'] }}" placeholder="Informe o complemento" class="form-control input-md" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-md-4 control-label" for="bairro">  Bairro:</label>
+                <div class="col-md-5 input-group">
+                  <span class="input-group-addon">
+                    <span class="glyphicon">&#xe139;</span>
+                  </span>
+                  <input id="bairro" name="bairro" type="text" value="{{ model['bairro'] }}" placeholder="Informe o bairro" class="form-control input-md" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-md-4 control-label" for="cidade">  Cidade:</label>
+                <div class="col-md-5 input-group">
+                  <span class="input-group-addon">
+                    <span class="glyphicon">&#xe139;</span>
+                  </span>
+                  <input id="cidade" name="cidade" type="text" value="{{ model['cidade'] }}" placeholder="Informe a cidade" class="form-control input-md" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-md-4 control-label" for="cep">  CEP:</label>
+                <div class="col-md-5 input-group">
+                  <span class="input-group-addon">
+                    <span class="glyphicon">&#xe139;</span>
+                  </span>
+                  <input id="cep" name="cep" type="text" value="{{ model['cep'] }}" placeholder="Informe o CEP" class="form-control input-md" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-md-4 control-label" for="estado">  Estado:</label>
+                <div class="col-md-5 input-group">
+                  <span class="input-group-addon">
+                    <span class="glyphicon">&#xe139;</span>
+                  </span>
+                  <input id="estado" name="estado" type="text" value="{{ model['estado'] }}" placeholder="Informe o estado" class="form-control input-md" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-md-4 control-label" for="pais">  País:</label>
+                <div class="col-md-5 input-group">
+                  <span class="input-group-addon">
+                    <span class="glyphicon">&#xe139;</span>
+                  </span>
+                  <input id="pais" name="pais" type="text" value="{{ model['pais'] }}" placeholder="Informe a país" class="form-control input-md" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-md-4 control-label" for="telefone">  Telefone:</label>
+                <div class="col-md-5 input-group">
+                  <span class="input-group-addon">
+                    <span class="glyphicon">&#xe139;</span>
+                  </span>
+                  <input id="telefone" name="telefone" type="text" value="{{ model['telefone'] }}" placeholder="Informe o telefone" class="form-control input-md" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-md-4 control-label" for="fax">  Fax:</label>
+                <div class="col-md-5 input-group">
+                  <span class="input-group-addon">
+                    <span class="glyphicon">&#xe139;</span>
+                  </span>
+                  <input id="fax" name="fax" type="text" value="{{ model['fax'] }}" placeholder="Informe o fax" class="form-control input-md" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-md-4 control-label" for="celular">  Calular:</label>
+                <div class="col-md-5 input-group">
+                  <span class="input-group-addon">
+                    <span class="glyphicon">&#xe139;</span>
+                  </span>
+                  <input id="celular" name="celular" type="text" value="{{ model['celular'] }}" placeholder="Informe o celular" class="form-control input-md" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-md-4 control-label" for="telefone_comercial">  Telefone Comercial:</label>
+                <div class="col-md-5 input-group">
+                  <span class="input-group-addon">
+                    <span class="glyphicon">&#xe139;</span>
+                  </span>
+                  <input id="telefone_comercial" name="telefone_comercial" type="text" value="{{ model['telefone_comercial'] }}" placeholder="Informe o telefone comercial" class="form-control input-md" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-md-4 control-label" for="fax_comercial">  Fax Comercial:</label>
+                <div class="col-md-5 input-group">
+                  <span class="input-group-addon">
+                    <span class="glyphicon">&#xe139;</span>
+                  </span>
+                  <input id="fax_comercial" name="fax_comercial" type="text" value="{{ model['fax_comercial'] }}" placeholder="Informe o fax comercial" class="form-control input-md" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-md-4 control-label" for="email">  Email:</label>
+                <div class="col-md-5 input-group">
+                  <span class="input-group-addon">
+                    <span class="glyphicon">&#xe139;</span>
+                  </span>
+                  <input id="email" name="email" type="text" value="{{ model['email'] }}" placeholder="Informe o email" class="form-control input-md" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-md-4 control-label" for="bip">  BIP:</label>
+                <div class="col-md-5 input-group">
+                  <span class="input-group-addon">
+                    <span class="glyphicon">&#xe139;</span>
+                  </span>
+                  <input id="bip" name="bip" type="text" value="{{ model['bip'] }}" placeholder="Informe o bip" class="form-control input-md" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-md-4 control-label" for="data_nascimento">  Data Nascimento:</label>
+                <div class="col-md-5 input-group">
+                  <span class="input-group-addon">
+                    <span class="glyphicon">&#xe139;</span>
+                  </span>
+                  <input id="data_nascimento" name="data_nascimento" type="text" value="{{ model['data_nascimento'] }}" placeholder="Informe a data de nascimento" class="form-control input-md" />
+                </div>
+              </div>
+
 
                             <!-- Button (Double) -->
               <div class="form-group">
@@ -63,28 +214,4 @@
             {% endif %}
             </fieldset>
         </form>
-        <script type="text/javascript">
-          $("#id_monta").selectSearch({
-                findSearch:function(search, limit, offset){
-                    return $.ajax({
-                        url : "{{ url_for('montadora.ajax') }}",
-                        dataType : "json",
-                        data:'nome='+search+'&limit='+limit+'&offset='+(limit * offset)
-                    });
-                },
-                findById:function(id){
-                    return $.ajax({
-                        url : "{{ url_for('montadora.ajax_by_id',pk='') }}"+id,
-                        dataType : "json"
-                    });
-                },
-                getDescription: function(data){
-                    return data.id+'-'+data.nome;
-                },
-                getValue: function(data){
-                    return data.id;
-                },
-                hideField:true
-            });
-        </script>
 {% endblock %}

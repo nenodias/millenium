@@ -52,6 +52,11 @@ def form(pk):
         bip = request.form.get('bip')
         data_nascimento = from_str_to_datetime_or_none(request.form.get('data_nascimento'))
         mes = to_int_or_none( request.form.get('mes') )
+
+        if data_nascimento:
+            mes = data_nascimento.month
+        else:
+            mes = 0
       
         #Criar dicionário com os dados
         dicionario = {
