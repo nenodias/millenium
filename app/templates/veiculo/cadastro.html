@@ -1,0 +1,46 @@
+{% extends 'layout.html' %}
+{% block title %}Cadastro de Falhas{% endblock %}
+{% block content %}
+        <form class="form-horizontal" method="post">
+            <fieldset>
+
+            <!-- Form Name -->
+            <legend>Cadastro de veiculos</legend>
+
+            {% if mensagem %}
+            <div class="alert alert-{{tipo_mensagem}}" role="alert">{{mensagem}}</div>
+            {% else %}
+
+              <!-- Alerta obrigatoriedade -->
+              <div class ="alert-info">Os campos sinalizados com asterisco (*) são obrigatórios.
+              </div><br><br>
+
+              <!-- Text input-->
+              <div class="form-group">
+                <label class="col-md-4 control-label" for="descricao">* Nome da veiculo:</label>  
+                <div class="col-md-5 input-group">
+                    <span class="input-group-addon">
+                      <span class="glyphicon">&#xe139;</span>
+                    </span>
+                    <input id="descricao" name="descricao" type="text" value="{{ model['descricao'] }}" placeholder="Informe a veiculo" class="form-control input-md" required="" />
+                </div>
+              </div>
+
+                            <!-- Button (Double) -->
+              <div class="form-group">
+                <label class="col-md-4 control-label" for="btnSalvar"></label>
+                <div class="col-md-8">
+                  <button id="btnSalvar" type="submit" class="btn btn-success">
+                  <span class="glyphicon glyphicon-ok"></span>&nbsp;
+                  Salvar
+                  </button>
+                  <a id="btnCancelar" type="button" class="btn btn-danger" href="{{ url_for('veiculo.index') }}">
+                  <span class="glyphicon glyphicon-remove"></span>&nbsp;
+                  Cancelar
+                  </a>
+                </div>
+              </div>
+            {% endif %}
+            </fieldset>
+        </form>
+{% endblock %}

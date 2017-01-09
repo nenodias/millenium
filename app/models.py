@@ -132,7 +132,7 @@ class Veiculo(MixinSerialize, db.Model):
     __tablename__ = 'veiculo'
 
     id = db.Column('codveiculo',db.Integer, primary_key=True, server_default=text("nextval('veiculo_codveiculo_seq'::regclass)"))
-    codigo_cliente = db.Column(db.ForeignKey('clientes.codigo_cliente'))
+    id_cliente = db.Column('codigo_cliente',db.ForeignKey('clientes.codigo_cliente'))
     placa = db.Column(db.String(8), nullable=False)
     pais = db.Column(db.String(20))
     cor = db.Column(db.String(20))
