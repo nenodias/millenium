@@ -1,11 +1,11 @@
 {% extends 'layout.html' %}
-{% block title %}Cadastro de Falhas{% endblock %}
+{% block title %}Cadastro de Veículos{% endblock %}
 {% block content %}
         <form class="form-horizontal" method="post">
             <fieldset>
 
             <!-- Form Name -->
-            <legend>Cadastro de veiculos</legend>
+            <legend>Cadastro de veículos</legend>
 
             {% if mensagem %}
             <div class="alert alert-{{tipo_mensagem}}" role="alert">{{mensagem}}</div>
@@ -17,14 +17,95 @@
 
               <!-- Text input-->
               <div class="form-group">
-                <label class="col-md-4 control-label" for="descricao">* Nome da veiculo:</label>  
+                <label class="col-md-4 control-label" for="id_cliente">* Cliente:</label>
                 <div class="col-md-5 input-group">
-                    <span class="input-group-addon">
-                      <span class="glyphicon">&#xe139;</span>
-                    </span>
-                    <input id="descricao" name="descricao" type="text" value="{{ model['descricao'] }}" placeholder="Informe a veiculo" class="form-control input-md" required="" />
+                  <span class="input-group-addon">
+                    <span class="glyphicon">&#xe139;</span>
+                  </span>
+                  <input id="id_cliente" name="id_cliente" type="text" value="{{ model['id_cliente'] }}" placeholder="Informe o cliente" class="form-control input-md" />
                 </div>
               </div>
+
+              <div class="form-group">
+                <label class="col-md-4 control-label" for="id_modelo">* Modelo:</label>
+                <div class="col-md-5 input-group">
+                  <span class="input-group-addon">
+                    <span class="glyphicon">&#xe139;</span>
+                  </span>
+                  <input id="id_modelo" name="id_modelo" type="text" value="{{ model['id_modelo'] }}" placeholder="Informe o modelo" class="form-control input-md" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-md-4 control-label" for="placa">* Placa:</label>
+                <div class="col-md-5 input-group">
+                  <span class="input-group-addon">
+                    <span class="glyphicon">&#xe139;</span>
+                  </span>
+                  <input id="placa" name="placa" type="text" value="{{ model['placa'] }}" placeholder="Informe a placa" class="form-control input-md" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-md-4 control-label" for="pais">* País:</label>
+                <div class="col-md-5 input-group">
+                  <span class="input-group-addon">
+                    <span class="glyphicon">&#xe139;</span>
+                  </span>
+                  <input id="pais" name="pais" type="text" value="{{ model['pais'] }}" placeholder="Informe o país" class="form-control input-md" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-md-4 control-label" for="cor">* Cor:</label>
+                <div class="col-md-5 input-group">
+                  <span class="input-group-addon">
+                    <span class="glyphicon">&#xe139;</span>
+                  </span>
+                  <input id="cor" name="cor" type="text" value="{{ model['cor'] }}" placeholder="Informe a cor" class="form-control input-md" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-md-4 control-label" for="combustivel">* Combustível:</label>
+                <div class="col-md-5 input-group">
+                  <span class="input-group-addon">
+                    <span class="glyphicon">&#xe139;</span>
+                  </span>
+                  <input id="combustivel" name="combustivel" type="text" value="{{ model['combustivel'] }}" placeholder="Informe o combustível" class="form-control input-md" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-md-4 control-label" for="renavam">* Renavam:</label>
+                <div class="col-md-5 input-group">
+                  <span class="input-group-addon">
+                    <span class="glyphicon">&#xe139;</span>
+                  </span>
+                  <input id="renavam" name="renavam" type="text" value="{{ model['renavam'] }}" placeholder="Informe o renavam" class="form-control input-md" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-md-4 control-label" for="chassi">* Chassis:</label>
+                <div class="col-md-5 input-group">
+                  <span class="input-group-addon">
+                    <span class="glyphicon">&#xe139;</span>
+                  </span>
+                  <input id="chassi" name="chassi" type="text" value="{{ model['chassi'] }}" placeholder="Informe o chassis" class="form-control input-md" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-md-4 control-label" for="ano">* Ano:</label>
+                <div class="col-md-5 input-group">
+                  <span class="input-group-addon">
+                    <span class="glyphicon">&#xe139;</span>
+                  </span>
+                  <input id="ano" name="ano" type="text" value="{{ model['ano'] }}" placeholder="Informe a ano" class="form-control input-md" />
+                </div>
+              </div>
+
 
                             <!-- Button (Double) -->
               <div class="form-group">
@@ -43,4 +124,51 @@
             {% endif %}
             </fieldset>
         </form>
+        <script type="text/javascript">
+           $("#id_cliente").selectSearch({
+                findSearch:function(search, limit, offset){
+                    return $.ajax({
+                        url : "{{ url_for('cliente.ajax') }}",
+                        dataType : "json",
+                        data:'nome='+search+'&limit='+limit+'&offset='+(limit * offset)
+                    });
+                },
+                findById:function(id){
+                    return $.ajax({
+                        url : "{{ url_for('cliente.ajax_by_id',pk='') }}"+id,
+                        dataType : "json"
+                    });
+                },
+                getDescription: function(data){
+                    return data.id+'-'+data.nome;
+                },
+                getValue: function(data){
+                    return data.id;
+                },
+                hideField:true
+            });
+
+            $("#id_modelo").selectSearch({
+                findSearch:function(search, limit, offset){
+                    return $.ajax({
+                        url : "{{ url_for('modelo.ajax') }}",
+                        dataType : "json",
+                        data:'nome='+search+'&limit='+limit+'&offset='+(limit * offset)
+                    });
+                },
+                findById:function(id){
+                    return $.ajax({
+                        url : "{{ url_for('modelo.ajax_by_id',pk='') }}"+id,
+                        dataType : "json"
+                    });
+                },
+                getDescription: function(data){
+                    return data.id+'-'+data.nome;
+                },
+                getValue: function(data){
+                    return data.id;
+                },
+                hideField:true
+            });
+        </script>
 {% endblock %}
