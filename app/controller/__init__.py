@@ -8,6 +8,7 @@ from .montadora_blueprint import montadora_blueprint
 from .modelo_blueprint import modelo_blueprint
 from .cliente_blueprint import cliente_blueprint
 from .veiculo_blueprint import veiculo_blueprint
+from .historico_blueprint import historico_blueprint
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
@@ -44,3 +45,4 @@ app.register_blueprint(montadora_blueprint, url_prefix='/montadora')
 app.register_blueprint(modelo_blueprint, url_prefix='/modelo')
 app.register_blueprint(cliente_blueprint, url_prefix='/cliente')
 app.register_blueprint(veiculo_blueprint, url_prefix='/veiculo')
+app.register_blueprint(historico_blueprint, url_prefix='/historico')

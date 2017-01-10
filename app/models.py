@@ -12,15 +12,32 @@ class MixinSerialize():
     @classmethod
     def to_dict(cls, instance, colunas):
         item = {}
-        for col in colunas:
-            if hasattr(instance, col):
-                valor = getattr(instance, col)
+        def resolve_column(inst, colu):
+            if hasattr(inst, colu):
+                valor = getattr(inst, colu)
                 if isinstance(valor, datetime):
                     valor = from_datetime_to_str(valor)
                 if valor:
-                    item[col] = valor
+                    return valor
                 else:
-                    item[col] = ''
+                    return ''
+        for col in colunas:
+            if isinstance(col, str):
+                item[col] = resolve_column(instance, col)
+            else:
+                childs = []
+                master_field = col[0]
+                detail_fields = col[1]
+                item[master_field] = childs
+                if hasattr(instance, master_field):
+                    instances = getattr(instance, master_field)
+                    for child_instance in instances:
+                        item_chield = {}
+                        for field in detail_fields:
+                            item_chield[field] = resolve_column(child_instance, field)
+                        childs.append( item_chield )
+
+
         return item
 
 class Cliente(MixinSerialize, db.Model):
@@ -51,33 +68,34 @@ class Historico(MixinSerialize, db.Model):
     __tablename__ = 'historico'
 
     id = db.Column('sequencia', db.Integer, primary_key=True, server_default=text("nextval('historico_sequencia_seq'::regclass)"))
-    codveiculo = db.Column(db.Integer, nullable=False)
-    codigo_cliente = db.Column(db.ForeignKey('clientes.codigo_cliente'), nullable=False)
-    tecnico = db.Column(db.ForeignKey('tecnico.codigo_tecnico'))
-    nr_ordem = db.Column(db.Integer)
+    id_veiculo = db.Column('codveiculo',db.ForeignKey('veiculo.codveiculo'), nullable=False)
+    id_cliente = db.Column('codigo_cliente',db.ForeignKey('clientes.codigo_cliente'), nullable=False)
+    id_tecnico = db.Column('tecnico',db.ForeignKey('tecnico.codigo_tecnico'))
+    numero_ordem = db.Column('nr_ordem',db.Integer)
     placa = db.Column(db.String(8))
     sistema = db.Column(db.Integer)
     data = db.Column(db.DateTime)
     tipo = db.Column(db.String(4))
     valor_total = db.Column(db.Float(53))
-    obs = db.Column(db.String(500))
+    observacao = db.Column('obs',db.String(500))
 
     cliente = db.relationship('Cliente')
-    tecnico1 = db.relationship('Tecnico')
+    veiculo = db.relationship('Veiculo')
+    tecnico = db.relationship('Tecnico')
 
 
 class HistoricoItem(MixinSerialize, db.Model):
     __tablename__ = 'historico_item'
 
     id = db.Column(db.BigInteger, primary_key=True, server_default=text("nextval('histitem_id_seq'::regclass)"))
-    sequencia = db.Column(db.ForeignKey('historico.sequencia'), nullable=False)
-    item = db.Column(db.Integer, nullable=False)
+    id_historico = db.Column('sequencia', db.ForeignKey('historico.sequencia'), nullable=False)
+    ordem = db.Column('item',db.Integer, nullable=False)
     tipo = db.Column(db.String(1))
-    historico = db.Column(db.String(75))
-    qtd = db.Column(db.Integer)
+    descricao = db.Column('historico',db.String(75))
+    quantidade = db.Column('qtd',db.Integer)
     valor = db.Column(db.Float(53))    
 
-    historico1 = db.relationship('Historico')
+    historico = db.relationship('Historico', backref='items')
 
 
 class Modelo(MixinSerialize, db.Model):
