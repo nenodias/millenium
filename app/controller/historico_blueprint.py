@@ -9,7 +9,7 @@ from app.models import Historico, HistoricoItem, or_, and_
 
 historico_blueprint = Blueprint('historico', __name__)
 
-tupla_tipo_historico = ( ('Orç.', 'Orçamento'),('O.S.', 'Ordem de Serviço') )
+tupla_tipo_historico = ( ('O.S.', 'Ordem de Serviço'), ('Orç.', 'Orçamento') )
 tupla_tipo_item = ( ('S', 'Serviço'),('F', 'Falha'), ('P', 'Peça') )
 
 items_colunas = ['id','ordem','tipo','descricao','quantidade','valor']
@@ -29,8 +29,9 @@ def index():
         'id_veiculo': _id_veiculo,
         'id_tecnico':_id_tecnico,
         'data':_data,
-        'tipo':_tipo
+        'tipo':_tipo,
     }
+    contexto['tupla_tipo_historico'] = tupla_tipo_historico
     return render_template('historico/consulta.html', **contexto)
 
 @historico_blueprint.route('/form/', defaults={'pk':None}, methods = ['post', 'get'])

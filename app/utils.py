@@ -2,6 +2,7 @@ from datetime import datetime
 import time
 
 DATETIME_FORMAT = '%d/%m/%Y %H:%M:%S'
+HTML_DATE_FORMAT = '%Y-%m-%d'
 DATE_FORMAT = '%d/%m/%Y'
 FINAL_MOMENT_OF_DAY = '23:59:59'
 
@@ -18,7 +19,7 @@ def from_str_to_datetime_or_none(value):
 
 def from_str_to_date_or_none(value):
 	try:
-		return datetime.strptime(value, DATE_FORMAT)
+		return datetime.strptime(value, HTML_DATE_FORMAT)
 	except:
 		return None
 
