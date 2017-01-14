@@ -35,3 +35,10 @@ def to_int_or_none(value):
     except:
         pass
     return None
+
+def to_float_or_zero(value):
+    try:
+        return float(value)
+    except:
+        pass
+    return 0

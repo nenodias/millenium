@@ -4,8 +4,8 @@ from pdb import set_trace
 from flask import (Blueprint, render_template, request, redirect, url_for, flash, 
     jsonify, render_template, Response)
 from app import auth_require, db
-from app.utils import to_int_or_none, from_str_to_datetime_or_none, from_str_to_date_or_none, final_date_day
-from app.models import Historico, HistoricoItem, or_, and_
+from app.utils import to_int_or_none, from_str_to_datetime_or_none, from_str_to_date_or_none, final_date_day, to_float_or_zero
+from app.models import Historico, HistoricoItem, Veiculo, or_, and_
 
 historico_blueprint = Blueprint('historico', __name__)
 
@@ -14,6 +14,15 @@ tupla_tipo_item = ( ('S', 'Serviço'),('F', 'Falha'), ('P', 'Peça') )
 
 items_colunas = ['id','ordem','tipo','descricao','quantidade','valor']
 historico_colunas = [ 'id', 'id_cliente', 'id_veiculo', 'id_tecnico', 'numero_ordem', 'placa', 'sistema', 'data', 'tipo', 'valor_total', 'observacao', ('items', items_colunas )]
+
+def get_tipo(tipo):
+    if tipo == 'F':
+        return 'falha'
+    elif tipo == 'S':
+        return 'servico'
+    else:
+        return 'peca'
+
 
 @historico_blueprint.route('/')
 @auth_require()
@@ -40,19 +49,28 @@ def index():
 def form(pk):
     #Pega os dados dos campos na tela
     contexto = {}
-    contexto['model'] = {}
+    contexto['model'] = {
+        "items":[]
+    }
+    contexto['tupla_tipo_historico'] = tupla_tipo_historico
+    contexto['get_tipo'] = get_tipo
+    contexto['tipo_servico'] = tupla_tipo_item[0][0]
+    contexto['tipo_falha'] = tupla_tipo_item[1][0]
+    contexto['tipo_peca'] = tupla_tipo_item[2][0]
     if request.method == 'POST':
         
         id_cliente = to_int_or_none( request.form.get("id_cliente") )
         id_veiculo = to_int_or_none( request.form.get("id_veiculo") )
         id_tecnico = to_int_or_none( request.form.get("id_tecnico") )
         numero_ordem = to_int_or_none( request.form.get("numero_ordem") )
-        placa = request.form.get("placa")
         sistema = to_int_or_none( request.form.get("sistema") )
         data = from_str_to_datetime_or_none( request.form.get("data") )
         tipo = request.form.get("tipo")
-        valor_total = float( request.form.get("valor_total") )
+        valor_total = to_float_or_zero( request.form.get("valor_total") )
         observacao = request.form.get("observacao")
+        veiculo = Veiculo.query.filter_by(id=id_veiculo).one()
+        if veiculo:
+            placa = veiculo.placa
      
         #Criar dicionário com os dados
         dicionario = {
@@ -75,22 +93,24 @@ def form(pk):
         list_items = []
         if items:
             for i in range(items):
-                id = to_int_or_none( request.form.get('item_id_'+i) )
-                ordem = to_int_or_none( request.form.get('item_ordem_'+i) )
-                tipo = request.form.get('item_tipo_'+i)
-                descricao = request.form.get('item_descricao_'+i)
-                quantidade = to_int_or_none( request.form.get('item_quantidade_'+i) )
-                valor = float( request.form.get('item_valor_'+i) )
-                item_dict = { 
-                        'id':id,
-                        'ordem':ordem,
-                        'tipo':tipo,
-                        'descricao':descricao,
-                        'quantidade':quantidade,
-                        'valor':valor,
-                        'id_historico': historico.id
-                        }
-                list_items.append( HistoricoItem(**item_dict) )
+                idx = str(i)
+                if request.form.get('item_descricao_'+ idx):
+                    id = to_int_or_none( request.form.get('item_id_'+idx) )
+                    ordem = to_int_or_none( request.form.get('item_ordem_'+idx) )
+                    tipo = request.form.get('item_tipo_'+idx)
+                    descricao = request.form.get('item_descricao_'+idx)
+                    quantidade = to_int_or_none( request.form.get('item_quantidade_'+idx) )
+                    valor = to_float_or_zero( request.form.get('item_valor_'+idx) )
+                    item_dict = { 
+                            'id':id,
+                            'ordem':ordem,
+                            'tipo':tipo,
+                            'descricao':descricao,
+                            'quantidade':quantidade,
+                            'valor':valor,
+                            'id_historico': historico.id
+                            }
+                    list_items.append( HistoricoItem(**item_dict) )
 
         mensagem = None
         try:
@@ -99,12 +119,27 @@ def form(pk):
                 db.session.merge(historico)
             else:
                 db.session.add(historico)
+            pk_items = []
             if list_items:
                 for item in list_items:
+                    # salvando os items
+                    item.ordem = len(pk_items)
                     if item.id:
-                        db.sessopn.merge(item)
+                        db.session.merge(item)
                     else:
-                        db.sessopn.add(item)
+                        db.session.add(item)
+                    pk_items.append( item.id )
+                if pk_items:
+                    # excluindo os items apagados que não foram passados na requisição
+                    items_deletar = HistoricoItem.query.filter(
+                        and_( 
+                            ~HistoricoItem.id.in_( pk_items),
+                            HistoricoItem.id_historico==historico.id 
+                            )
+                        ).all()
+                    if items_deletar:
+                        for item_delete in items_deletar:
+                            db.session.delete(item_delete)
             db.session.commit()
             id_cadastro = historico.id
             if pk:
@@ -119,7 +154,6 @@ def form(pk):
     elif pk:
         data = Historico.query.filter_by(id=pk).one()
         contexto['model'] = Historico.to_dict(data, historico_colunas)
-        contexto['tupla_tipo_historico'] = tupla_tipo_historico
     return render_template('historico/cadastro.html', **contexto)
 
 
