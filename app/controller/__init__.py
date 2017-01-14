@@ -16,7 +16,7 @@ def login():
     if request.method == 'POST':
         usuario = request.form.get('usuario')
         senha = request.form.get('senha')
-        if usuario == 'admin' and senha == '123':
+        if usuario == 'ADMIN' and senha == '123':
             session['login'] = True
             return redirect(url_for('index'))
         else:

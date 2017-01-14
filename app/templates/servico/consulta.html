@@ -12,7 +12,7 @@
 
                 <!-- Search input-->
                 <div class="form-group">
-                    <label class="col-md-4 control-label" for="descricao">Nome da peça</label>
+                    <label class="col-md-4 control-label" for="descricao">Nome da serviço</label>
                     <div class="col-md-5 input-group">
                         <span class="input-group-addon">
                             <span class="glyphicon">&#xe003;</span>
@@ -40,7 +40,7 @@
             </fieldset>
         </form>
         <hr />
-        <table class="table table-bordered table-striped">
+        <table id="servico" class="table table-bordered table-striped">
             <thead class="thead-inverse">
                 <tr>
                     <th>Id</th>
@@ -198,7 +198,7 @@
             $(document).ready(function(){
                 carregarDados();
                 $("#btnPesquisar").click(carregarDados);
-                $('table').on('click','.btn-danger', eventoExcluir);
+                $('#servico.table').on('click','.btn-danger', eventoExcluir);
                 $('.div-paginacao').on('click','.pager a', eventoPage);
             });
         </script>

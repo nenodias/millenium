@@ -40,7 +40,7 @@
             </fieldset>
         </form>
         <hr />
-        <table class="table table-bordered table-striped">
+        <table id="falha" class="table table-bordered table-striped">
             <thead class="thead-inverse">
                 <tr>
                     <th>Id</th>
@@ -196,7 +196,7 @@
             $(document).ready(function(){
                 carregarDados();
                 $("#btnPesquisar").click(carregarDados);
-                $('table').on('click','.btn-danger', eventoExcluir);
+                $('#falha.table').on('click','.btn-danger', eventoExcluir);
                 $('.div-paginacao').on('click','.pager a', eventoPage);
             });
         </script>
