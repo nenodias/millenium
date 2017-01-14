@@ -1,11 +1,11 @@
 {% extends 'layout.html' %}
-{% block title %}Cadastro de Historico{% endblock %}
+{% block title %}Cadastro de Histórico{% endblock %}
 {% block content %}
         <form class="form-horizontal" method="post">
             <fieldset>
 
             <!-- Form Name -->
-            <legend>Cadastro de historico</legend>
+            <legend>Cadastro de Histórico</legend>
 
             {% if mensagem %}
             <div class="alert alert-{{tipo_mensagem}}" role="alert">{{mensagem}}</div>
@@ -17,12 +17,198 @@
 
               <!-- Text input-->
               <div class="form-group">
-                <label class="col-md-4 control-label" for="descricao">* Nome da historico:</label>  
+                <label class="col-md-4 control-label" for="id_veiculo">* Veículo:</label>
                 <div class="col-md-5 input-group">
+                  <span class="input-group-addon">
+                    <span class="glyphicon">&#xe139;</span>
+                  </span>
+                  <input id="id_veiculo" name="id_veiculo" type="text" value="{{ model['id_veiculo'] }}" placeholder="Informe o veículo" class="form-control input-md" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-md-4 control-label" for="id_cliente">* Cliente:</label>
+                <div class="col-md-5 input-group">
+                  <span class="input-group-addon">
+                    <span class="glyphicon">&#xe139;</span>
+                  </span>
+                  <input id="id_cliente" name="id_cliente" type="text" value="{{ model['id_cliente'] }}" placeholder="Informe o cliente" class="form-control input-md" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-md-4 control-label" for="id_tecnico">* Técnico:</label>
+                <div class="col-md-5 input-group">
+                  <span class="input-group-addon">
+                    <span class="glyphicon">&#xe139;</span>
+                  </span>
+                  <input id="id_tecnico" name="id_tecnico" type="text" value="{{ model['id_tecnico'] }}" placeholder="Informe o técnico" class="form-control input-md" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-md-4 control-label" for="numero_ordem">* Nº Ordem:</label>
+                <div class="col-md-5 input-group">
+                  <span class="input-group-addon">
+                    <span class="glyphicon">&#xe139;</span>
+                  </span>
+                  <input id="numero_ordem" name="numero_ordem" type="text" value="{{ model['numero_ordem'] }}" placeholder="Informe a numero_ordem" class="form-control input-md" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-md-4 control-label" for="data">* Data:</label>
+                <div class="col-md-5 input-group">
+                  <span class="input-group-addon">
+                    <span class="glyphicon">&#xe139;</span>
+                  </span>
+                  <input id="data" name="data" type="datetime-local" placeholder="Informe a data" class="form-control input-md" value="{{ model['data'] }}">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-md-4 control-label" for="tipo">* Tipo</label>
+                <div class="col-md-4 input-group">
                     <span class="input-group-addon">
-                      <span class="glyphicon">&#xe139;</span>
+                      <span class="glyphicon">&#xe055;</span>
                     </span>
-                    <input id="descricao" name="descricao" type="text" value="{{ model['descricao'] }}" placeholder="Informe a historico" class="form-control input-md" required="" />
+                    <select id="tipo" name="tipo" class="form-control input-md" required="">
+                      {% for item in tupla_tipo_historico %}
+                        <option value="{{ item[0] }}"
+                        {{ 'selected="selected"' if (item[0] == model['tipo']) }}
+                        >
+                          {{ item[1] }}
+                        </option>
+                      {% endfor %}
+                    </select>
+                </div>
+              </div>
+
+
+              <div class="form-group">
+                <label class="col-md-4 control-label" for="observacao">* Observações:</label>
+                <div class="col-md-5 input-group">
+                  <span class="input-group-addon">
+                    <span class="glyphicon">&#xe139;</span>
+                  </span>
+                  <textarea id="observacao" name="observacao" placeholder="Informe as observações" class="form-control input-md">{{ model['observacao'] }}</textarea>
+                </div>
+              </div>
+
+
+              <table class="table table-bordered table-striped">
+                  <thead class="thead-inverse">
+                      <tr><th colspan="2">Falhas</th></tr>
+                      <tr>
+                          <th>Descrição</th>
+                          <th>Ações</th>
+                      </tr>
+                  </thead>
+                  <tbody class="dados-tabela-falha">
+                  </tbody>
+              </table>
+
+              <table class="table table-bordered table-striped">
+                  <thead class="thead-inverse">
+                      <tr><th colspan="4">Serviços</th></tr>
+                      <tr>
+                          <th>Descrição</th>
+                          <th>Qtd</th>
+                          <th>Valor</th>
+                          <th>Ações</th>
+                      </tr>
+                  </thead>
+                  <tbody class="dados-tabela-servico">
+                  </tbody>
+              </table>
+
+              <table class="table table-bordered table-striped">
+                  <thead class="thead-inverse">
+                      <tr><th colspan="4">Peças</th></tr>
+                      <tr>
+                          <th>Descrição</th>
+                          <th>Qtd</th>
+                          <th>Valor</th>
+                          <th>Ações</th>
+                      </tr>
+                  </thead>
+                  <tbody class="dados-tabela-peca">
+                  </tbody>
+              </table>
+
+              <template id="linha-falha-template">
+                  <tr>
+                      <td>
+                        <input type="hidden" name="item_id_[{indice}]" value="[{id}]" />
+                        <input type="hidden" name="item_ordem_[{indice}]" value="[{ordem}]" />
+                        <input type="hidden" name="item_tipo_[{indice}]" value="[{tipo}]" />
+                        <input type="hidden" name="item_quantidade_[{indice}]" value="[{quantidade}]" />
+                        <input type="hidden" name="item_valor_[{indice}]" value="[{valor}]" />
+                        <input type="text" name="item_descricao_[{indice}]" value="[{descricao}]" />
+                      </td>
+                      <td>
+                          <a class="btn btn-danger" href="#">
+                          <span class="glyphicon glyphicon-trash"></span>&nbsp;
+                          Remover
+                          </a>
+                      </td>
+                  </tr>
+              </template>
+
+              <template id="linha-servico-template">
+                  <tr>
+                      <td>
+                        <input type="hidden" name="item_id_[{indice}]" value="[{id}]" />
+                        <input type="hidden" name="item_ordem_[{indice}]" value="[{ordem}]" />
+                        <input type="hidden" name="item_tipo_[{indice}]" value="[{tipo}]" />
+                        <input type="text" name="item_descricao_[{indice}]" value="[{descricao}]" />
+                      </td>
+                      <td>
+                        <input type="text" name="item_quantidade_[{indice}]" value="[{quantidade}]" />
+                      </td>
+                      <td>
+                        <input type="text" name="item_valor_[{indice}]" value="[{valor}]" />
+                      </td>
+                      <td>
+                          <a class="btn btn-danger" href="#">
+                          <span class="glyphicon glyphicon-trash"></span>&nbsp;
+                          Remover
+                          </a>
+                      </td>
+                  </tr>
+              </template>
+
+
+              <template id="linha-peca-template">
+                  <tr>
+                      <td>
+                        <input type="hidden" name="item_id_[{indice}]" value="[{id}]" />
+                        <input type="hidden" name="item_ordem_[{indice}]" value="[{ordem}]" />
+                        <input type="hidden" name="item_tipo_[{indice}]" value="[{tipo}]" />
+                        <input type="text" name="item_descricao_[{indice}]" value="[{descricao}]" />
+                      </td>
+                      <td>
+                        <input type="text" name="item_quantidade_[{indice}]" value="[{quantidade}]" />
+                      </td>
+                      <td>
+                        <input type="text" name="item_valor_[{indice}]" value="[{valor}]" />
+                      </td>
+                      <td>
+                          <a class="btn btn-danger" href="#">
+                          <span class="glyphicon glyphicon-trash"></span>&nbsp;
+                          Remover
+                          </a>
+                      </td>
+                  </tr>
+              </template>
+
+              <div class="form-group">
+                <label class="col-md-4 control-label" for="valor_total">* Valor Total:</label>
+                <div class="col-md-5 input-group">
+                  <span class="input-group-addon">
+                    <span class="glyphicon">&#xe139;</span>
+                  </span>
+                  <input id="valor_total" name="valor_total" type="text" value="{{ model['valor_total'] }}" placeholder="Informe o valor total" class="form-control input-md" />
                 </div>
               </div>
 
@@ -43,4 +229,165 @@
             {% endif %}
             </fieldset>
         </form>
+        <script type="text/javascript">
+            var SEPARADOR = ' / ';
+
+            var getModelo = function(id){
+                var d1 = $.Deferred();
+                $.ajax({
+                    url:'{{ url_for("modelo.ajax_by_id",pk='') }}'+id,
+                    method:'get',
+                    dataType: 'json'
+                }).done(function(data){
+                    d1.resolve(data.nome);
+                }).fail(function(){
+                    d1.resolve('');
+                });
+                return d1;
+            };
+
+            var getVeiculo = function(id){
+                var d1 = $.Deferred();
+                $.ajax({
+                    url:'{{ url_for("veiculo.ajax_by_id",pk='') }}'+id,
+                    method:'get',
+                    dataType: 'json'
+                }).done(function(data){
+                    d1.resolve(data);
+                }).fail(function(){
+                    d1.resolve('');
+                });
+                return d1;
+            };
+
+            var getCliente = function(id){
+                var d1 = $.Deferred();
+                $.ajax({
+                    url:'{{ url_for("cliente.ajax_by_id",pk='') }}'+id,
+                    method:'get',
+                    dataType: 'json'
+                }).done(function(data){
+                    d1.resolve(data.nome);
+                }).fail(function(){
+                    d1.resolve('');
+                });
+                return d1;
+            };
+
+            var getTecnico = function(id){
+                var d1 = $.Deferred();
+                if(id !== undefined && id !== ''){
+                    $.ajax({
+                        url:'{{ url_for("tecnico.ajax_by_id",pk='') }}'+id,
+                        method:'get',
+                        dataType: 'json'
+                    }).done(function(data){
+                        d1.resolve(data.nome);
+                    }).fail(function(){
+                        d1.resolve('');
+                    });
+                }else{
+                    d1.resolve('');
+                }
+                return d1;
+            };
+            $("#id_cliente").selectSearch({
+                findSearch:function(search, limit, offset){
+                    return $.ajax({
+                        url : "{{ url_for('cliente.ajax') }}",
+                        dataType : "json",
+                        data:'nome='+search+'&limit='+limit+'&offset='+(limit * offset)
+                    });
+                },
+                findById:function(id){
+                    return $.ajax({
+                        url : "{{ url_for('cliente.ajax_by_id',pk='') }}"+id,
+                        dataType : "json"
+                    });
+                },
+                getDescription: function(data){
+                    return data.id+'-'+data.nome;
+                },
+                getValue: function(data){
+                    return data.id;
+                },
+                hideField:true
+            });
+
+            $("#id_veiculo").selectSearch({
+                findSearch:function(search, limit, offset){
+                    var d1 = $.Deferred();
+                    $.ajax({
+                        url : "{{ url_for('veiculo.ajax') }}",
+                        dataType : "json",
+                        data:'placa='+search+'&limit='+limit+'&offset='+(limit * offset)
+                    }).done(function(data){
+                        var listaDeferred = [];
+                        var max_count = data.length;
+                        var count = 0;
+                        if(data.length > 0){
+                            _.each(data, function(linha){
+                                getModelo(linha['id_modelo']).done(function(modelo){
+                                    data[count]['modelo'] = modelo;
+                                    count++;
+                                    if(max_count == count){
+                                        d1.resolve(data);
+                                    }
+                                });
+                            });
+                        }else{
+                            d1.resolve(data);
+                        }
+                    }).fail(function(){
+                        d1.resolve('');
+                    });
+                    return d1;
+                },
+                findById:function(id){
+                    var d1 = $.Deferred();
+                    $.ajax({
+                        url : "{{ url_for('veiculo.ajax_by_id',pk='') }}"+id,
+                        dataType : "json"
+                    }).done(function(data){
+                        getModelo(data.id_modelo).done(function(modelo){
+                            data['modelo'] = modelo;
+                            d1.resolve(data);
+                        });
+                    }).fail(function(){
+                        d1.resolve('');
+                    });
+                    return d1;
+                },
+                getDescription: function(data){
+                    return data.id+SEPARADOR+data.placa+SEPARADOR+data.modelo;
+                },
+                getValue: function(data){
+                    return data.id;
+                },
+                hideField:true
+            });
+
+            $("#id_tecnico").selectSearch({
+                findSearch:function(search, limit, offset){
+                    return $.ajax({
+                        url : "{{ url_for('tecnico.ajax') }}",
+                        dataType : "json",
+                        data:'nome='+search+'&limit='+limit+'&offset='+(limit * offset)
+                    });
+                },
+                findById:function(id){
+                    return $.ajax({
+                        url : "{{ url_for('tecnico.ajax_by_id',pk='') }}"+id,
+                        dataType : "json"
+                    });
+                },
+                getDescription: function(data){
+                    return data.id+'-'+data.nome;
+                },
+                getValue: function(data){
+                    return data.id;
+                },
+                hideField:true
+            });
+        </script>
 {% endblock %}

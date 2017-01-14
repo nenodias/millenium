@@ -119,6 +119,7 @@ def form(pk):
     elif pk:
         data = Historico.query.filter_by(id=pk).one()
         contexto['model'] = Historico.to_dict(data, historico_colunas)
+        contexto['tupla_tipo_historico'] = tupla_tipo_historico
     return render_template('historico/cadastro.html', **contexto)
 
 
