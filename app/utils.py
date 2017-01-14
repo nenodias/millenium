@@ -27,7 +27,7 @@ def from_str_to_date_or_none(value):
 def final_date_day(value):
 	date = value.strftime(DATE_FORMAT)
 	date += ' '+ FINAL_MOMENT_OF_DAY
-	return from_str_to_datetime_or_none(date)
+	return datetime.strptime(date, DATETIME_FORMAT)
 
 def to_int_or_none(value):
     try:
