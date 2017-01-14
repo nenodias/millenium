@@ -363,15 +363,19 @@
                         var listaDeferred = [];
                         var max_count = data.length;
                         var count = 0;
+                        var indice = 0;
                         if(data.length > 0){
                             _.each(data, function(linha){
-                                getModelo(linha['id_modelo']).done(function(modelo){
-                                    data[count]['modelo'] = modelo;
-                                    count++;
-                                    if(max_count == count){
-                                        d1.resolve(data);
-                                    }
-                                });
+                                (function(indice){
+                                    getModelo(linha['id_modelo']).done(function(modelo){
+                                        data[indice]['modelo'] = modelo;
+                                        count++;
+                                        if(max_count == count){
+                                            d1.resolve(data);
+                                        }
+                                    });
+                                })(indice);
+                                indice++;
                             });
                         }else{
                             d1.resolve(data);
