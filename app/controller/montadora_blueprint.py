@@ -5,13 +5,9 @@ from flask import (Blueprint, render_template, request, redirect, url_for, flash
     jsonify, render_template, Response)
 from app import auth_require
 from app import db
-from app.models import Montadora
+from app.models import Montadora, tupla_origem, montadora_colunas
 
 montadora_blueprint = Blueprint('montadora', __name__)
-
-montadora_colunas = [ 'id', 'origem', 'nome', 'codmon_ea' ]
-
-tupla_origem = ( ('', 'Selecionar'),(True, 'Ativo'),(False, 'Desativado') )
 
 @montadora_blueprint.route('/')
 @auth_require()

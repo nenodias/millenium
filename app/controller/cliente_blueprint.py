@@ -5,11 +5,9 @@ from flask import (Blueprint, render_template, request, redirect, url_for, flash
     jsonify, render_template, Response)
 from app import auth_require, db
 from app.utils import to_int_or_none, from_str_to_datetime_or_none
-from app.models import Cliente, or_, and_
+from app.models import Cliente, or_, and_, cliente_colunas
 
 cliente_blueprint = Blueprint('cliente', __name__)
-
-cliente_colunas = [ 'id','nome','rg','cpf','endereco','complemento','bairro','cidade','cep','estado','pais','telefone','fax','celular','telefone_comercial','fax_comercial','email','bip','data_nascimento','mes' ]
 
 @cliente_blueprint.route('/')
 @auth_require()

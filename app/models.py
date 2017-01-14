@@ -7,6 +7,24 @@ from sqlalchemy import or_, and_
 from datetime import datetime
 from app.utils import from_datetime_to_str
 
+tupla_tipo_historico = ( ('O.S.', 'Ordem de Serviço'), ('Orç.', 'Orçamento') )
+
+tupla_tipo_item = ( ('S', 'Serviço'),('F', 'Falha'), ('P', 'Peça') )
+
+tupla_origem = ( ('', 'Selecionar'),(True, 'Ativo'),(False, 'Desativado') )
+
+items_colunas = ['id','ordem','tipo','descricao','quantidade','valor']
+
+historico_colunas = [ 'id', 'id_cliente', 'id_veiculo', 'id_tecnico', 'numero_ordem', 'placa', 'sistema', 'data', 'tipo', 'valor_total', 'observacao', ('items', items_colunas )]
+
+cliente_colunas = [ 'id','nome','rg','cpf','endereco','complemento','bairro','cidade','cep','estado','pais','telefone','fax','celular','telefone_comercial','fax_comercial','email','bip','data_nascimento','mes' ]
+
+veiculo_colunas = [ 'id','id_cliente','id_modelo','placa','pais','cor','combustivel','renavam','chassi','ano']
+
+modelo_colunas = [ 'id', 'nome', 'codvei_ea', 'id_monta' ]
+
+montadora_colunas = [ 'id', 'origem', 'nome', 'codmon_ea' ]
+
 class MixinSerialize():
 
     @classmethod

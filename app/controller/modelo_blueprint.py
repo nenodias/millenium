@@ -5,11 +5,9 @@ from flask import (Blueprint, render_template, request, redirect, url_for, flash
     jsonify, render_template, Response)
 from app import auth_require, db
 from app.utils import to_int_or_none
-from app.models import Modelo, or_, and_
+from app.models import Modelo, or_, and_, modelo_colunas
 
 modelo_blueprint = Blueprint('modelo', __name__)
-
-modelo_colunas = [ 'id', 'nome', 'codvei_ea', 'id_monta' ]
 
 @modelo_blueprint.route('/')
 @auth_require()

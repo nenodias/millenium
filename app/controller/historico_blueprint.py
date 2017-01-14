@@ -1,19 +1,17 @@
 # -*- coding: utf-8 -*-
 import json
 from pdb import set_trace
-from flask import (Blueprint, render_template, request, redirect, url_for, flash, 
+from flask import (Blueprint, render_template, request, redirect, url_for, flash, send_file,
     jsonify, render_template, Response)
 from app import auth_require, db
 from app.utils import to_int_or_none, from_str_to_datetime_or_none, from_str_to_date_or_none, final_date_day, to_float_or_zero
-from app.models import Historico, HistoricoItem, Veiculo, or_, and_
+from app.models import (Historico, HistoricoItem, Cliente, Veiculo, Modelo, Montadora, or_, and_,tupla_tipo_historico,
+    tupla_tipo_item, items_colunas, historico_colunas, cliente_colunas, veiculo_colunas, modelo_colunas, montadora_colunas)
 
 historico_blueprint = Blueprint('historico', __name__)
 
-tupla_tipo_historico = ( ('O.S.', 'Ordem de Serviço'), ('Orç.', 'Orçamento') )
-tupla_tipo_item = ( ('S', 'Serviço'),('F', 'Falha'), ('P', 'Peça') )
 
-items_colunas = ['id','ordem','tipo','descricao','quantidade','valor']
-historico_colunas = [ 'id', 'id_cliente', 'id_veiculo', 'id_tecnico', 'numero_ordem', 'placa', 'sistema', 'data', 'tipo', 'valor_total', 'observacao', ('items', items_colunas )]
+
 
 def get_tipo(tipo):
     if tipo == 'F':
@@ -22,7 +20,6 @@ def get_tipo(tipo):
         return 'servico'
     else:
         return 'peca'
-
 
 @historico_blueprint.route('/')
 @auth_require()
@@ -236,3 +233,22 @@ def ajax_by_id(pk):
     if data:
         return Response(response=json.dumps( Historico.to_dict(data, historico_colunas) ), status=200, mimetype="application/json")
     return '',404
+
+
+from app.relatorio import gerar_pdf
+
+@historico_blueprint.route('/report/<pk>')
+@auth_require()
+def report(pk):
+    data = Historico.query.filter_by(id=pk).one()
+    dados = Historico.to_dict(data, historico_colunas)
+    cliente = Cliente.query.filter_by(id=data.id_cliente).one()
+    dados['cliente'] = Cliente.to_dict(cliente, cliente_colunas)
+    veiculo = Veiculo.query.filter_by(id=data.id_cliente).one()
+    dados['veiculo'] = Veiculo.to_dict(veiculo, veiculo_colunas)
+    modelo = Modelo.query.filter_by(id=veiculo.id_modelo).one()
+    dados['modelo'] = Modelo.to_dict(modelo, modelo_colunas)
+    montadora = Montadora.query.filter_by(id=modelo.id_monta).one()
+    dados['montadora'] = Modelo.to_dict(montadora, montadora_colunas)
+    pdf_buffer = gerar_pdf( dados )
+    return send_file(pdf_buffer, attachment_filename='relatorio.pdf',mimetype='application/pdf')
