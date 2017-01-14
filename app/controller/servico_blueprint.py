@@ -19,6 +19,18 @@ def index():
     contexto['model'] = {
         'descricao':_descricao,
     }
+    contexto['inherit']='layout.html'
+    return render_template('servico/consulta.html', **contexto)
+
+@servico_blueprint.route('/index/ajax')
+@auth_require()
+def index_ajax():
+    contexto = {}
+    _descricao = request.args.get('descricao', '')
+    contexto['model'] = {
+        'descricao':_descricao,
+    }
+    contexto['inherit']='ajax.html'
     return render_template('servico/consulta.html', **contexto)
 
 @servico_blueprint.route('/form/', defaults={'pk':None}, methods = ['post', 'get'])

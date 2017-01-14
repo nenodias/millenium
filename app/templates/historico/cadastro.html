@@ -98,7 +98,7 @@
               </div>
 
 
-              <table class="table table-bordered table-striped">
+              <table id="falhas" class="table table-bordered table-striped">
                   <thead class="thead-inverse">
                       <tr>
                         <th colspan="1">Falhas</th>
@@ -118,7 +118,7 @@
                   </tbody>
               </table>
 
-              <table class="table table-bordered table-striped">
+              <table id="servicos" class="table table-bordered table-striped">
                   <thead class="thead-inverse">
                       <tr>
                         <th colspan="3">Serviços</th>
@@ -140,7 +140,7 @@
                   </tbody>
               </table>
 
-              <table class="table table-bordered table-striped">
+              <table id="pecas" class="table table-bordered table-striped">
                   <thead class="thead-inverse">
                       <tr>
                         <th colspan="3">Peças</th>
@@ -171,6 +171,9 @@
                         <input type="hidden" name="item_quantidade_[{indice}]" value="[{quantidade}]" />
                         <input type="hidden" name="item_valor_[{indice}]" value="[{valor}]" />
                         <input type="text" name="item_descricao_[{indice}]" value="[{descricao}]" class="form-control input-td" required="required" />
+                        <a class="btn btn-primary search-modal" data-target="{{ url_for('falha.index_ajax') }}">
+                          <span class="glyphicon glyphicon-search"></span>&nbsp;
+                          </a>
                       </td>
                       <td>
                           <a class="btn btn-danger">
@@ -188,6 +191,9 @@
                         <input type="hidden" name="item_ordem_[{indice}]" value="[{ordem}]" />
                         <input type="hidden" name="item_tipo_[{indice}]" value="[{tipo}]" />
                         <input type="text" name="item_descricao_[{indice}]" value="[{descricao}]" class="form-control input-td" required="required" />
+                        <a class="btn btn-primary search-modal" data-target="{{ url_for('servico.index_ajax') }}">
+                          <span class="glyphicon glyphicon-search"></span>&nbsp;
+                          </a>
                       </td>
                       <td>
                         <input type="text" name="item_quantidade_[{indice}]" value="[{quantidade}]" class="form-control input-td" required="required" />
@@ -212,6 +218,9 @@
                         <input type="hidden" name="item_ordem_[{indice}]" value="[{ordem}]" />
                         <input type="hidden" name="item_tipo_[{indice}]" value="[{tipo}]" />
                         <input type="text" name="item_descricao_[{indice}]" value="[{descricao}]" class="form-control input-td" required="required" />
+                          <a class="btn btn-primary search-modal" data-target="{{ url_for('peca.index_ajax') }}">
+                          <span class="glyphicon glyphicon-search"></span>&nbsp;
+                          </a>
                       </td>
                       <td>
                         <input type="text" name="item_quantidade_[{indice}]" value="[{quantidade}]" class="form-control input-td" required="required" />
@@ -255,6 +264,25 @@
             {% endif %}
             </fieldset>
         </form>
+
+        <template id="modal-template">
+          <div class="modal fade" id="[{id_modal}]" tabindex="-1" role="dialog" aria-labelledby="[{id_modal}]-label">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                  <h4 class="modal-title" id="[{id_modal}]-label">[{titulo}]</h4>
+                </div>
+                <div class="modal-body">
+                  [{ conteudo }]
+                </div>
+                <div class="modal-footer">
+                  [{ botoes }]
+                </div>
+              </div>
+            </div>
+          </div>
+        </template>
         <script type="text/javascript">
             var SEPARADOR = ' / ';
 
@@ -545,6 +573,75 @@
               $(document).on('change', "table tbody td input",function(e){
                 atualizar_valor_total();
               });
+            });
+
+
+            //Criação dos Modais
+            var modal = function(link, callback){
+              var template = _.template($("#modal-template").html());
+              var id_modal = 'modalBusca';
+              $.ajax({
+                    url:link,
+                    method:'get',
+                }).done(function(data){
+                var dados_modal = {
+                  'id_modal': id_modal,
+                  'titulo':'Busca',
+                  'conteudo':data,
+                  'botoes':''
+                };
+                $("body").append(template(dados_modal));
+                $("#"+id_modal).modal();
+                $('#'+id_modal).on('hidden.bs.modal', function (e) {
+                  $('#'+id_modal).remove();
+                });
+                $('#'+id_modal).on('shown.bs.modal',callback);
+              });
+            };
+
+
+            //Evento de busca do modal
+            $(document).on('click','.search-modal',function(){
+              var link = $(this).data('target');
+              var $table_tr = $(this).closest('tr');
+              modal(link,function(e){
+                $(e.target).on('dblclick','td',function(ex){
+                  var $tr = $(ex.target).closest('tr');
+                  var $thead_tr = $(ex.target).closest('table').find('thead tr');
+                  var dados = {};
+                  $tr.find('td').each(function(index, el){
+                    var $td = $(this);
+                    var key = $thead_tr.children()[index].innerHTML.trim().toLowerCase();
+                    dados[key] = $td.html();
+                  });
+
+                  $table_tr.trigger('update-by-modal',dados);
+
+                  $(e.target).modal('hide');
+                });
+              });
+            });
+
+
+            //Evento ao atualizar linhas por modal
+            $(document).on('update-by-modal','#falhas tr',function(e, dados){
+              var $tr = $(this);
+              $tr.find('[name*="descricao"]').val(dados['descrição']);
+            });
+
+            $(document).on('update-by-modal','#servicos tr',function(e, dados){
+              var $tr = $(this);
+              $tr.find('[name*="valor"]').val(dados['valor']);
+              $tr.find('[name*="valor"]').change();
+              $tr.find('[name*="descricao"]').val(dados['descrição']);
+            });
+
+
+            $(document).on('update-by-modal','#pecas tr',function(e, dados){
+              var $tr = $(this);
+              $tr.find('[name*="valor"]').val(dados['valor']);
+              $tr.find('[name*="valor"]').change();
+              $tr.find('[name*="descricao"]').val(dados['descrição']);
             });
         </script>
 {% endblock %}
