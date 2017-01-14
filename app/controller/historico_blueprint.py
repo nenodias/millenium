@@ -4,14 +4,13 @@ from pdb import set_trace
 from flask import (Blueprint, render_template, request, redirect, url_for, flash, send_file,
     jsonify, render_template, Response)
 from app import auth_require, db
-from app.utils import to_int_or_none, from_str_to_datetime_or_none, from_str_to_date_or_none, final_date_day, to_float_or_zero
-from app.models import (Historico, HistoricoItem, Cliente, Veiculo, Modelo, Montadora, or_, and_,tupla_tipo_historico,
-    tupla_tipo_item, items_colunas, historico_colunas, cliente_colunas, veiculo_colunas, modelo_colunas, montadora_colunas)
+from app.utils import (to_int_or_none, from_str_to_datetime_or_none, from_str_to_date_or_none,
+ final_date_day, to_float_or_zero)
+from app.models import (Historico, HistoricoItem, Cliente, Veiculo, Modelo, Montadora, or_, and_,
+    tupla_tipo_historico, tupla_tipo_item, items_colunas, historico_colunas, cliente_colunas, 
+    veiculo_colunas, modelo_colunas, montadora_colunas)
 
 historico_blueprint = Blueprint('historico', __name__)
-
-
-
 
 def get_tipo(tipo):
     if tipo == 'F':

@@ -181,6 +181,31 @@ class Veiculo(MixinSerialize, db.Model):
     cliente = db.relationship('Cliente')
     modelo = db.relationship('Modelo')
 
+class Vistoria(db.Model):
+    __tablename__ = 'vistoria'
+
+    #id = db.Column('sequencia', db.Integer, primary_key=True, server_default=text("nextval('vistoria_sequencia_seq'::regclass)"))
+    id = db.Column('sequencia', db.ForeignKey('historico.sequencia'), primary_key=True)
+    id_carrovistoria = db.Column('carrovistoria',db.Integer)
+    nivel_combustivel = db.Column('nivelcomb',db.Integer)
+    kilometragem = db.Column(db.Float)
+    tocafitas = db.Column(db.SmallInteger, server_default=text("0"))
+    cd = db.Column(db.SmallInteger, server_default=text("0"))
+    disqueteira = db.Column(db.SmallInteger, server_default=text("0"))
+    antena = db.Column(db.SmallInteger, server_default=text("0"))
+    calotas = db.Column(db.SmallInteger, server_default=text("0"))
+    triangulo = db.Column(db.SmallInteger, server_default=text("0"))
+    macaco = db.Column(db.SmallInteger, server_default=text("0"))
+    estepe = db.Column(db.SmallInteger, server_default=text("0"))
+    outro1 = db.Column(db.SmallInteger, server_default=text("0"))
+    outro1_descricao = db.Column('outro1descr',db.String(20))
+    outro2 = db.Column(db.SmallInteger, server_default=text("0"))
+    outro2_descricao = db.Column('outro2descr',db.String(20))
+    observacao = db.Column('obs',db.String(500))
+
+    historico = db.relationship('Historico', backref='vistoria',uselist=False)
+
+
 
 class Tipoitem(MixinSerialize, db.Model):
     __tablename__ = 'tipoitem'
@@ -316,25 +341,3 @@ class Notaco(db.Model):
     top = db.Column(db.Integer)
     descricao = db.Column(db.String(30))
     esq = db.Column(db.Integer)
-
-
-class Vistoria(db.Model):
-    __tablename__ = 'vistoria'
-
-    sequencia = db.Column(db.Integer, primary_key=True, server_default=text("nextval('vistoria_sequencia_seq'::regclass)"))
-    carrovistoria = db.Column(db.Integer)
-    nivelcomb = db.Column(db.Integer)
-    kilometragem = db.Column(db.Float)
-    tocafitas = db.Column(db.SmallInteger, server_default=text("0"))
-    cd = db.Column(db.SmallInteger, server_default=text("0"))
-    disqueteira = db.Column(db.SmallInteger, server_default=text("0"))
-    antena = db.Column(db.SmallInteger, server_default=text("0"))
-    calotas = db.Column(db.SmallInteger, server_default=text("0"))
-    triangulo = db.Column(db.SmallInteger, server_default=text("0"))
-    macaco = db.Column(db.SmallInteger, server_default=text("0"))
-    estepe = db.Column(db.SmallInteger, server_default=text("0"))
-    outro1 = db.Column(db.SmallInteger, server_default=text("0"))
-    outro1descr = db.Column(db.String(20))
-    outro2 = db.Column(db.SmallInteger, server_default=text("0"))
-    outro2descr = db.Column(db.String(20))
-    obs = db.Column(db.String(500))
