@@ -3,7 +3,7 @@ import os, sys
 from io import BytesIO, StringIO
 from fpdf import FPDF
 from app.models import tupla_tipo_historico
-from app.utils import from_str_to_datetime_or_none, format_date
+from app.utils import from_str_to_datetime_or_none, format_date, to_float_or_zero
 
 class DadosOficina():
 
@@ -47,7 +47,7 @@ class MyPDF(FPDF):
         if self.dados.get('montadora'):
             veiculo += ' - '+ dados['montadora']['nome']
         veiculo += ' - Ano: '+ ano
-        veiculo += ' - Km: '+ '%.0f'%(dados['vistoria']['kilometragem'])
+        veiculo += ' - Km: '+ '%.0f'%( to_float_or_zero(dados['vistoria']['kilometragem']) )
         self.veiculo = veiculo
         self.data = format_date( from_str_to_datetime_or_none(dados['data']) )
         
@@ -117,15 +117,15 @@ class MyPDF(FPDF):
 
         self.ln(4)
         self.set_font("Arial", style="B", size=10)
-        self.cell(w=5, h = 7, txt ='Telefone    :', border = 0, ln = 0, align = 'L')
+        self.cell(w=21, h = 7, txt ='Telefone    :', border = 0, ln = 0, align = 'L')
         self.set_font("Arial", style="", size=10)
         self.cell(w=50, h = 7, txt =self.telefone, border = 0, ln = 0, align = 'L')
         self.set_font("Arial", style="B", size=10)
-        self.cell(w=5, h = 7, txt =' - Celular:', border = 0, ln = 0, align = 'L')
+        self.cell(w=18, h = 7, txt =' - Celular:', border = 0, ln = 0, align = 'L')
         self.set_font("Arial", style="", size=10)
         self.cell(w=50, h = 7, txt =self.celular, border = 0, ln = 0, align = 'L')
         self.set_font("Arial", style="B", size=10)
-        self.cell(w=5, h = 7, txt =' - Fone Coml:', border = 0, ln = 0, align = 'L')
+        self.cell(w=23, h = 7, txt =' - Fone Coml:', border = 0, ln = 0, align = 'L')
         self.set_font("Arial", style="", size=10)
         self.cell(w=50, h = 7, txt =self.telefone_comercial, border = 0, ln = 0, align = 'L')
 
@@ -164,38 +164,35 @@ class MyPDF(FPDF):
  
     #----------------------------------------------------------------------
     def footer(self):
-        """
-        Footer on each page
-        """
-        # position footer at 15mm from the bottom
         self.set_y(-15)
  
-        # set the font, I=italic
         self.set_font("Arial", style="I", size=8)
  
-        # display the page number and center it
-        pageNum = "Page %s/{nb}" % self.page_no()
+        pageNum = "%s/{nb}" % self.page_no()
         self.cell(0, 10, pageNum, align="C")
 
     def draw_falhas(self):
         def desenhar_titulo():
+            self.ln(1)
             self.set_font("Arial", style="B", size=12)
             self.cell(w=120, h = 8, txt ='FALHAS', border = 0, ln = 0, align = 'L')
             self.ln(8)
-        desenhar_titulo()
-        for falha in self.falhas:
-            self.set_font("Arial", style="", size=10)
-            self.cell(w=120, h = 8, txt =falha['descricao'], border = 0, ln = 0, align = 'L')
-            self.ln(8)
-            if self.y >= 275.0:
-                self.add_page()
-                desenhar_titulo()
+        if self.falhas:
+            desenhar_titulo()
+            for falha in self.falhas:
+                self.set_font("Arial", style="", size=10)
+                self.cell(w=120, h = 8, txt =falha['descricao'], border = 0, ln = 0, align = 'L')
+                self.ln(7)
+                if self.y >= 275.0:
+                    self.add_page()
+                    desenhar_titulo()
 
 
 
 
     def draw_pecas(self):
         def desenhar_titulo():
+            self.ln(1)
             self.set_font("Arial", style="B", size=12)
             self.cell(w=120, h = 8, txt ='PEÇAS', border = 0, ln = 0, align = 'L')
             self.set_font("Arial", style="B", size=10)
@@ -203,22 +200,24 @@ class MyPDF(FPDF):
             self.cell(w=25, h = 8, txt ='Valor', border = 0, ln = 0, align = 'C')
             self.cell(w=25, h = 8, txt ='Total', border = 0, ln = 0, align = 'C')
             self.ln(8)
-        desenhar_titulo()
-        for peca in self.pecas:
-            self.set_font("Arial", style="", size=9)
-            self.cell(w=120, h = 6, txt =peca['descricao'], border = 1, ln = 0, align = 'L')
-            self.cell(w=25, h = 6, txt ='%i'%(peca['quantidade']), border = 1, ln = 0, align = 'R')
-            self.cell(w=25, h = 6, txt ='%.2f'%(peca['valor']), border = 1, ln = 0, align = 'R')
-            self.cell(w=25, h = 6, txt ='%.2f'%(peca['quantidade']*peca['valor']), border = 1, ln = 0, align = 'R')
-            self.ln(6)
-            if self.y >= 275.0:
-                self.add_page()
-                desenhar_titulo()
-        self.cell(w=165, h = 6, txt ='Sub Total:', border = 0, ln = 0, align = 'R')
-        self.cell(w=30, h = 6, txt ='%.2f'%(self.sub_total_pecas), border = 0, ln = 6, align = 'R')
+        if self.pecas:
+            desenhar_titulo()
+            for peca in self.pecas:
+                self.set_font("Arial", style="", size=9)
+                self.cell(w=120, h = 6, txt =peca['descricao'], border = 1, ln = 0, align = 'L')
+                self.cell(w=25, h = 6, txt ='%i'%(peca['quantidade']), border = 1, ln = 0, align = 'R')
+                self.cell(w=25, h = 6, txt ='%.2f'%(peca['valor']), border = 1, ln = 0, align = 'R')
+                self.cell(w=25, h = 6, txt ='%.2f'%(peca['quantidade']*peca['valor']), border = 1, ln = 0, align = 'R')
+                self.ln(6)
+                if self.y >= 275.0:
+                    self.add_page()
+                    desenhar_titulo()
+            self.cell(w=165, h = 6, txt ='Sub Total:', border = 0, ln = 0, align = 'R')
+            self.cell(w=30, h = 6, txt ='%.2f'%(self.sub_total_pecas), border = 0, ln = 6, align = 'R')
 
     def draw_servicos(self):
         def desenhar_titulo():
+            self.ln(1)
             self.set_font("Arial", style="B", size=12)
             self.cell(w=120, h = 8, txt ='SERVIÇOS', border = 0, ln = 0, align = 'L')
             self.set_font("Arial", style="B", size=10)
@@ -226,20 +225,22 @@ class MyPDF(FPDF):
             self.cell(w=25, h = 8, txt ='Valor', border = 0, ln = 0, align = 'C')
             self.cell(w=25, h = 8, txt ='Total', border = 0, ln = 0, align = 'C')
             self.ln(8)
-        desenhar_titulo()
-        for servico in self.servicos:
-            self.set_font("Arial", style="", size=9)
-            self.cell(w=120, h = 6, txt =servico['descricao'], border = 1, ln = 0, align = 'L')
-            self.cell(w=25, h = 6, txt ='%i'%(servico['quantidade']), border = 1, ln = 0, align = 'R')
-            self.cell(w=25, h = 6, txt ='%.2f'%(servico['valor']), border = 1, ln = 0, align = 'R')
-            self.cell(w=25, h = 6, txt ='%.2f'%(servico['quantidade']*servico['valor']), border = 1, ln = 0, align = 'R')
-            self.ln(6)
-            if self.y >= 275.0:
-                self.add_page()
-                desenhar_titulo()
-        self.cell(w=165, h = 6, txt ='Sub Total:', border = 0, ln = 0, align = 'R')
-        self.cell(w=30, h = 6, txt ='%.2f'%(self.sub_total_servicos), border = 0, ln = 6, align = 'R')
+        if self.servicos:
+            desenhar_titulo()
+            for servico in self.servicos:
+                self.set_font("Arial", style="", size=9)
+                self.cell(w=120, h = 6, txt =servico['descricao'], border = 1, ln = 0, align = 'L')
+                self.cell(w=25, h = 6, txt ='%i'%(servico['quantidade']), border = 1, ln = 0, align = 'R')
+                self.cell(w=25, h = 6, txt ='%.2f'%(servico['valor']), border = 1, ln = 0, align = 'R')
+                self.cell(w=25, h = 6, txt ='%.2f'%(servico['quantidade']*servico['valor']), border = 1, ln = 0, align = 'R')
+                self.ln(6)
+                if self.y >= 275.0:
+                    self.add_page()
+                    desenhar_titulo()
+            self.cell(w=165, h = 6, txt ='Sub Total:', border = 0, ln = 0, align = 'R')
+            self.cell(w=30, h = 6, txt ='%.2f'%(self.sub_total_servicos), border = 0, ln = 6, align = 'R')
 
+        #total
         self.ln(2)
         self.set_font("Arial", style="B", size=10)
         self.cell(w=160, h = 6, txt ='Total:', border = 0, ln = 0, align = 'R')
