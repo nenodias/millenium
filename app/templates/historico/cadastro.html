@@ -54,7 +54,17 @@
                   <span class="input-group-addon">
                     <span class="glyphicon">&#xe139;</span>
                   </span>
-                  <input id="numero_ordem" name="numero_ordem" type="text" value="{{ model['numero_ordem'] }}" placeholder="Informe a numero_ordem" class="form-control input-md" />
+                  <input id="numero_ordem" name="numero_ordem" type="text" value="{{ model['numero_ordem'] }}" placeholder="Informe o número da ordem" class="form-control input-md" readonly="readonly" />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="col-md-4 control-label" for="kilometragem">* Kilometragem:</label>
+                <div class="col-md-5 input-group">
+                  <span class="input-group-addon">
+                    <span class="glyphicon">&#xe139;</span>
+                  </span>
+                  <input id="kilometragem" name="kilometragem" type="text" value="{{ model['vistoria']['kilometragem'] }}" placeholder="Informe a kilometragem" class="form-control input-md" />
                 </div>
               </div>
 
@@ -453,17 +463,10 @@
             $(document).ready(function(){
               //Setando Javascript dos items
               {% if model['items'] %}
-                {% for linha in model['items'] %}
+                {%  for linha in model['items']  %}
                   lista_{{ get_tipo( linha['tipo'] ) }}.push(
-                  {
-                    "id":"{{ linha['id'] }}",
-                    "id_historico":"{{ linha['id_historico'] }}",
-                    "ordem":"{{ linha['ordem'] }}",
-                    "tipo":"{{ linha['tipo'] }}",
-                    "descricao":"{{ linha['descricao'] }}",
-                    "quantidade":"{{ linha['quantidade'] }}",
-                    "valor":"{{ linha['valor'] }}",
-                  });
+                    {{linha|tojson|safe}}
+                  );
                 {% endfor %}
               {% endif %}
               //Final do carregamento dos items

@@ -6,7 +6,7 @@ from flask import (Blueprint, render_template, request, redirect, url_for, flash
 from app import auth_require, db
 from app.utils import (to_int_or_none, from_str_to_datetime_or_none, from_str_to_date_or_none,
  final_date_day, to_float_or_zero)
-from app.models import (Historico, HistoricoItem, Cliente, Veiculo, Modelo, Montadora, or_, and_,
+from app.models import (Historico, HistoricoItem, Vistoria, Cliente, Veiculo, Modelo, Montadora, or_, and_,
     tupla_tipo_historico, tupla_tipo_item, items_colunas, historico_colunas, cliente_colunas, 
     veiculo_colunas, modelo_colunas, montadora_colunas)
 
@@ -64,6 +64,7 @@ def form(pk):
         tipo = request.form.get("tipo")
         valor_total = to_float_or_zero( request.form.get("valor_total") )
         observacao = request.form.get("observacao")
+        kilometragem = to_float_or_zero(request.form.get("kilometragem"))
         veiculo = Veiculo.query.filter_by(id=id_veiculo).one()
         if veiculo:
             placa = veiculo.placa
@@ -84,6 +85,8 @@ def form(pk):
         if pk:
             dicionario['id'] = pk
         historico = Historico(**dicionario)
+        if not numero_ordem:
+            historico.numero_ordem = historico.id
 
         items = to_int_or_none( request.form.get("items") )
         list_items = []
@@ -110,6 +113,17 @@ def form(pk):
 
         mensagem = None
         try:
+            
+            dados_vistoria = {
+                'id':historico.id,
+                'kilometragem':kilometragem,
+                'observacao':''
+            }
+            vistoria = Vistoria(**dados_vistoria)
+            try:
+                db.session.merge(vistoria)
+            except Exception as e:
+                db.session.add(vistoria)
             contexto['tipo_mensagem'] = 'success'
             if pk:
                 db.session.merge(historico)
@@ -200,7 +214,6 @@ def ajax():
     filtro = get_filter(_id_cliente, _id_veiculo, _id_tecnico, _data, _tipo)
     try:
         fetch = Historico.query.filter( filtro ).slice(_offset, _limit).all()
-        colunas = [ col.name for col in Historico.__table__._columns ]
         for dado in fetch:
             items.append( Historico.to_dict(dado, historico_colunas) )
     except Exception as ex:

@@ -15,7 +15,9 @@ tupla_origem = ( ('', 'Selecionar'),(True, 'Ativo'),(False, 'Desativado') )
 
 items_colunas = ['id','ordem','tipo','descricao','quantidade','valor']
 
-historico_colunas = [ 'id', 'id_cliente', 'id_veiculo', 'id_tecnico', 'numero_ordem', 'placa', 'sistema', 'data', 'tipo', 'valor_total', 'observacao', ('items', items_colunas )]
+vistoria_colunas = ['id','kilometragem','observacao']
+
+historico_colunas = [ 'id', 'id_cliente', 'id_veiculo', 'id_tecnico', 'numero_ordem', 'placa', 'sistema', 'data', 'tipo', 'valor_total', 'observacao', ('items', items_colunas ), ('vistoria', vistoria_colunas)]
 
 cliente_colunas = [ 'id','nome','rg','cpf','endereco','complemento','bairro','cidade','cep','estado','pais','telefone','fax','celular','telefone_comercial','fax_comercial','email','bip','data_nascimento','mes' ]
 
@@ -40,21 +42,29 @@ class MixinSerialize():
                 else:
                     return ''
         for col in colunas:
-            if isinstance(col, str):
-                item[col] = resolve_column(instance, col)
-            else:
-                childs = []
-                master_field = col[0]
-                detail_fields = col[1]
-                item[master_field] = childs
-                if hasattr(instance, master_field):
-                    instances = getattr(instance, master_field)
-                    for child_instance in instances:
-                        item_chield = {}
-                        for field in detail_fields:
-                            item_chield[field] = resolve_column(child_instance, field)
-                        childs.append( item_chield )
-
+            try:
+                if isinstance(col, str):
+                    item[col] = resolve_column(instance, col)
+                else:
+                    master_field = col[0]
+                    detail_fields = col[1]
+                    item[master_field] = []
+                    item_chield = None
+                    if hasattr(instance, master_field):
+                        instances =  getattr(instance, master_field)
+                        if isinstance(instances,list):
+                            for child_instance in instances:
+                                item_chield = {}
+                                for field in detail_fields:
+                                    item_chield[field] = resolve_column(child_instance, field)
+                                item[master_field].append( item_chield )
+                        else:
+                            item_chield = {}
+                            for field in detail_fields:
+                                item_chield[field] = resolve_column(instances, field)
+                            item[master_field] = item_chield
+            except Exception as ex:
+                print(ex)
 
         return item
 
@@ -100,6 +110,8 @@ class Historico(MixinSerialize, db.Model):
     cliente = db.relationship('Cliente')
     veiculo = db.relationship('Veiculo')
     tecnico = db.relationship('Tecnico')
+    items = db.relationship('HistoricoItem', backref='historico')
+    vistoria = db.relationship('Vistoria', backref='historico',uselist=False)
 
 
 class HistoricoItem(MixinSerialize, db.Model):
@@ -113,7 +125,7 @@ class HistoricoItem(MixinSerialize, db.Model):
     quantidade = db.Column('qtd',db.Integer)
     valor = db.Column(db.Float(53))    
 
-    historico = db.relationship('Historico', backref='items')
+    #historico = db.relationship('Historico', backref='items', lazy="dynamic")
 
 
 class Modelo(MixinSerialize, db.Model):
@@ -202,8 +214,6 @@ class Vistoria(db.Model):
     outro2 = db.Column(db.SmallInteger, server_default=text("0"))
     outro2_descricao = db.Column('outro2descr',db.String(20))
     observacao = db.Column('obs',db.String(500))
-
-    historico = db.relationship('Historico', backref='vistoria',uselist=False)
 
 
 
