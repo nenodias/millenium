@@ -24,6 +24,12 @@ def from_str_to_date_or_none(value):
 	except:
 		return None
 
+def format_date(value):
+    try:
+        return datetime.strftime(value, DATE_FORMAT)
+    except:
+        return ''
+
 def final_date_day(value):
 	date = value.strftime(DATE_FORMAT)
 	date += ' '+ FINAL_MOMENT_OF_DAY

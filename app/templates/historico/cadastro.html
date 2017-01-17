@@ -128,28 +128,6 @@
                   </tbody>
               </table>
 
-              <table id="servicos" class="table table-bordered table-striped">
-                  <thead class="thead-inverse">
-                      <tr>
-                        <th colspan="3">Serviços</th>
-                        <th>
-                          <a class="btn btn-info" data-target="servico" role="button">
-                          <span class="glyphicon glyphicon-plus"></span>&nbsp;
-                          Inserir
-                          </a>
-                        </th>
-                      </tr>
-                      <tr>
-                          <th>Descrição</th>
-                          <th>Qtd</th>
-                          <th>Valor</th>
-                          <th>Ações</th>
-                      </tr>
-                  </thead>
-                  <tbody class="dados-tabela-servico">
-                  </tbody>
-              </table>
-
               <table id="pecas" class="table table-bordered table-striped">
                   <thead class="thead-inverse">
                       <tr>
@@ -169,6 +147,28 @@
                       </tr>
                   </thead>
                   <tbody class="dados-tabela-peca">
+                  </tbody>
+              </table>
+
+              <table id="servicos" class="table table-bordered table-striped">
+                  <thead class="thead-inverse">
+                      <tr>
+                        <th colspan="3">Serviços</th>
+                        <th>
+                          <a class="btn btn-info" data-target="servico" role="button">
+                          <span class="glyphicon glyphicon-plus"></span>&nbsp;
+                          Inserir
+                          </a>
+                        </th>
+                      </tr>
+                      <tr>
+                          <th>Descrição</th>
+                          <th>Qtd</th>
+                          <th>Valor</th>
+                          <th>Ações</th>
+                      </tr>
+                  </thead>
+                  <tbody class="dados-tabela-servico">
                   </tbody>
               </table>
 
@@ -194,14 +194,14 @@
                   </tr>
               </template>
 
-              <template id="linha-servico-template">
+              <template id="linha-peca-template">
                   <tr>
                       <td>
                         <input type="hidden" name="item_id_[{indice}]" value="[{id}]" />
                         <input type="hidden" name="item_ordem_[{indice}]" value="[{ordem}]" />
                         <input type="hidden" name="item_tipo_[{indice}]" value="[{tipo}]" />
                         <input type="text" name="item_descricao_[{indice}]" value="[{descricao}]" class="form-control input-td" required="required" />
-                        <a class="btn btn-primary search-modal" data-target="{{ url_for('servico.index_ajax') }}">
+                          <a class="btn btn-primary search-modal" data-target="{{ url_for('peca.index_ajax') }}">
                           <span class="glyphicon glyphicon-search"></span>&nbsp;
                           </a>
                       </td>
@@ -220,15 +220,14 @@
                   </tr>
               </template>
 
-
-              <template id="linha-peca-template">
+              <template id="linha-servico-template">
                   <tr>
                       <td>
                         <input type="hidden" name="item_id_[{indice}]" value="[{id}]" />
                         <input type="hidden" name="item_ordem_[{indice}]" value="[{ordem}]" />
                         <input type="hidden" name="item_tipo_[{indice}]" value="[{tipo}]" />
                         <input type="text" name="item_descricao_[{indice}]" value="[{descricao}]" class="form-control input-td" required="required" />
-                          <a class="btn btn-primary search-modal" data-target="{{ url_for('peca.index_ajax') }}">
+                        <a class="btn btn-primary search-modal" data-target="{{ url_for('servico.index_ajax') }}">
                           <span class="glyphicon glyphicon-search"></span>&nbsp;
                           </a>
                       </td>
