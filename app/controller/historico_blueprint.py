@@ -46,7 +46,8 @@ def form(pk):
     #Pega os dados dos campos na tela
     contexto = {}
     contexto['model'] = {
-        "items":[]
+        "items":[],
+        "vistoria":{}
     }
     contexto['tupla_tipo_historico'] = tupla_tipo_historico
     contexto['get_tipo'] = get_tipo
@@ -85,11 +86,18 @@ def form(pk):
         if pk:
             dicionario['id'] = pk
         historico = Historico(**dicionario)
+        if not historico.id:
+            db.session.add(historico)
+            db.session.flush()
+            db.session.refresh(historico)
         if not numero_ordem:
             historico.numero_ordem = historico.id
 
         items = to_int_or_none( request.form.get("items") )
         list_items = []
+        print('*'*10)
+        print(historico.id)
+        print('*'*10)
         if items:
             for i in range(items):
                 idx = str(i)

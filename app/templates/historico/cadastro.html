@@ -39,7 +39,7 @@
               </div>
 
               <div class="form-group">
-                <label class="col-md-4 control-label" for="id_tecnico">* Técnico:</label>
+                <label class="col-md-4 control-label" for="id_tecnico"> Técnico:</label>
                 <div class="col-md-5 input-group">
                   <span class="input-group-addon">
                     <span class="glyphicon">&#xe139;</span>
@@ -49,7 +49,7 @@
               </div>
 
               <div class="form-group">
-                <label class="col-md-4 control-label" for="numero_ordem">* Nº Ordem:</label>
+                <label class="col-md-4 control-label" for="numero_ordem"> Nº Ordem:</label>
                 <div class="col-md-5 input-group">
                   <span class="input-group-addon">
                     <span class="glyphicon">&#xe139;</span>
@@ -74,7 +74,7 @@
                   <span class="input-group-addon">
                     <span class="glyphicon">&#xe139;</span>
                   </span>
-                  <input id="data" name="data" type="datetime-local" placeholder="Informe a data" class="form-control input-md" value="{{ model['data'] }}">
+                  <input id="data" name="data" type="datetime-local" placeholder="Informe a data" class="form-control input-md" value="{{ model['data'] }}" >
                 </div>
               </div>
 
@@ -84,7 +84,7 @@
                     <span class="input-group-addon">
                       <span class="glyphicon">&#xe055;</span>
                     </span>
-                    <select id="tipo" name="tipo" class="form-control input-md" required="">
+                    <select id="tipo" name="tipo" class="form-control input-md" >
                       {% for item in tupla_tipo_historico %}
                         <option value="{{ item[0] }}"
                         {{ 'selected="selected"' if (item[0] == model['tipo']) }}
@@ -98,12 +98,12 @@
 
 
               <div class="form-group">
-                <label class="col-md-4 control-label" for="observacao">* Observações:</label>
+                <label class="col-md-4 control-label" for="observacao"> Observações:</label>
                 <div class="col-md-5 input-group">
                   <span class="input-group-addon">
                     <span class="glyphicon">&#xe139;</span>
                   </span>
-                  <textarea id="observacao" name="observacao" placeholder="Informe as observações" class="form-control input-md">{{ model['observacao'] }}</textarea>
+                  <textarea id="observacao" name="observacao" placeholder="Informe as observações" class="form-control input-md upper">{{ model['observacao'] }}</textarea>
                 </div>
               </div>
 
@@ -180,7 +180,7 @@
                         <input type="hidden" name="item_tipo_[{indice}]" value="[{tipo}]" />
                         <input type="hidden" name="item_quantidade_[{indice}]" value="[{quantidade}]" />
                         <input type="hidden" name="item_valor_[{indice}]" value="[{valor}]" />
-                        <input type="text" name="item_descricao_[{indice}]" value="[{descricao}]" class="form-control input-td" required="required" />
+                        <input type="text" name="item_descricao_[{indice}]" value="[{descricao}]" class="form-control input-td upper td-descricao" required="true" />
                         <a class="btn btn-primary search-modal" data-target="{{ url_for('falha.index_ajax') }}">
                           <span class="glyphicon glyphicon-search"></span>&nbsp;
                           </a>
@@ -200,16 +200,16 @@
                         <input type="hidden" name="item_id_[{indice}]" value="[{id}]" />
                         <input type="hidden" name="item_ordem_[{indice}]" value="[{ordem}]" />
                         <input type="hidden" name="item_tipo_[{indice}]" value="[{tipo}]" />
-                        <input type="text" name="item_descricao_[{indice}]" value="[{descricao}]" class="form-control input-td" required="required" />
+                        <input type="text" name="item_descricao_[{indice}]" value="[{descricao}]" class="form-control input-td upper td-descricao" required="true" />
                           <a class="btn btn-primary search-modal" data-target="{{ url_for('peca.index_ajax') }}">
                           <span class="glyphicon glyphicon-search"></span>&nbsp;
                           </a>
                       </td>
                       <td>
-                        <input type="text" name="item_quantidade_[{indice}]" value="[{quantidade}]" class="form-control input-td" required="required" />
+                        <input type="text" name="item_quantidade_[{indice}]" value="[{quantidade}]" class="form-control input-td td-quantidade" required="true" />
                       </td>
                       <td>
-                        <input type="text" name="item_valor_[{indice}]" value="[{valor}]" class="form-control input-td" required="required" />
+                        <input type="text" name="item_valor_[{indice}]" value="[{valor}]" class="form-control input-td td-valor" required="true" />
                       </td>
                       <td>
                           <a class="btn btn-danger">
@@ -226,16 +226,16 @@
                         <input type="hidden" name="item_id_[{indice}]" value="[{id}]" />
                         <input type="hidden" name="item_ordem_[{indice}]" value="[{ordem}]" />
                         <input type="hidden" name="item_tipo_[{indice}]" value="[{tipo}]" />
-                        <input type="text" name="item_descricao_[{indice}]" value="[{descricao}]" class="form-control input-td" required="required" />
+                        <input type="text" name="item_descricao_[{indice}]" value="[{descricao}]" class="form-control input-td upper td-descricao" required="true" />
                         <a class="btn btn-primary search-modal" data-target="{{ url_for('servico.index_ajax') }}">
                           <span class="glyphicon glyphicon-search"></span>&nbsp;
                           </a>
                       </td>
                       <td>
-                        <input type="text" name="item_quantidade_[{indice}]" value="[{quantidade}]" class="form-control input-td" required="required" />
+                        <input type="text" name="item_quantidade_[{indice}]" value="[{quantidade}]" class="form-control input-td td-quantidade" required="true" />
                       </td>
                       <td>
-                        <input type="text" name="item_valor_[{indice}]" value="[{valor}]" class="form-control input-td" required="required" />
+                        <input type="text" name="item_valor_[{indice}]" value="[{valor}]" class="form-control input-td td-valor" required="true" />
                       </td>
                       <td>
                           <a class="btn btn-danger">
@@ -645,5 +645,54 @@
               $tr.find('[name*="valor"]').change();
               $tr.find('[name*="descricao"]').val(dados['descrição']);
             });
+
+            $(document).ready(function(){
+              jQuery.validator.addClassRules('td-descricao', {
+                  required: true
+              });
+              jQuery.validator.addClassRules('td-valor', {
+                  required: true,
+                  number:true
+              });
+              jQuery.validator.addClassRules('td-quantidade', {
+                  required: true,
+                  number:true
+              });
+              $("form").validate( {
+                ignore: "",
+                rules: {
+                  id_veiculo: {
+                    required:true,
+                    number:true
+                  },
+                  id_cliente: {
+                    required:true,
+                    number:true
+                  },
+                  id_tecnico: {
+                    required: false,
+                    number: true
+                  },
+                  kilometragem: {
+                    required: true,
+                    number: true
+                  },
+                  data: {
+                    required: true,
+                    time:true
+                  },
+                  tipo: {
+                    required: true,
+                  },
+                  observacao:{
+                    maxlength:500
+                  }
+                },
+                errorPlacement: PADRAO.errorPlacement,
+                highlight: PADRAO.highlight,
+                unhighlight: PADRAO.unhighlight
+              });
+            });
+            
         </script>
 {% endblock %}
