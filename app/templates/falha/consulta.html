@@ -94,7 +94,7 @@
         <template id="nenhum">
             <tr>
                 <td colspan="3">
-                <h4 class="text-center"> Nenhum Resultado Encontrado!</h4>
+                <h4 class="text-center"> Nenhum resultado encontrado!</h4>
                 </td>
             </tr>
         </template>
@@ -175,9 +175,15 @@
                     if(result){
                         $.post(btn.data('target'),function(data){
                             bootbox.alert('Registro excluído com sucesso!');
-                            window.location.reload();
-                        }).fail(function(){
-                            bootbox.alert('Erro ao excluir registro!');
+                            setTimeout(function(){
+                                window.location.reload();
+                            }, 2000);
+                        }).fail(function(e){
+                            if(e.responseText){
+                                bootbox.alert(e.responseText);
+                            }else{
+                                bootbox.alert('Erro ao excluir registro!');
+                            }
                         });
                     }
                 });

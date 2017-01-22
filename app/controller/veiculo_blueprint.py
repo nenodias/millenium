@@ -72,7 +72,7 @@ def form(pk):
             return redirect(url_for('veiculo.index'))
         except Exception as ex:
             print(ex)
-            contexto['mensagem'] = u'Erro ao cadastrar veéculo'
+            contexto['mensagem'] = u'Erro ao cadastrar veículo'
             contexto['tipo_mensagem'] = 'danger'
     elif pk:
         data = Veiculo.query.filter_by(id=pk).one()

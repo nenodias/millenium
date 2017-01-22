@@ -69,12 +69,18 @@ def form(pk):
 def delete(pk):
     data = Montadora.query.filter_by(id=pk).one()
     if data:
-        try:
-            db.session.delete(data)
-            db.session.commit()
-            return '', 200
-        except Exception as ex:
-            print(ex)
+        if  len(data.modelos) > 0:
+            lista_ids = []
+            for modelo in data.modelos:
+                lista_ids.append(modelo.id)
+            return 'Existem os seguintes modelos cadastrados para essa montadora %s'%(lista_ids), 500
+        else:
+            try:
+                db.session.delete(data)
+                db.session.commit()
+                return '', 200
+            except Exception as ex:
+                print(ex)
     return '',404
 
 @montadora_blueprint.route('/ajax', methods = ['get'])

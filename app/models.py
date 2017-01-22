@@ -136,7 +136,7 @@ class Modelo(MixinSerialize, db.Model):
     codvei_ea = db.Column(db.Integer)
     id_monta = db.Column(db.ForeignKey('montadora.id'))
 
-    montadora = db.relationship('Montadora')
+    montadora = db.relationship('Montadora', backref='modelos')
 
 
 class Montadora(MixinSerialize, db.Model):
