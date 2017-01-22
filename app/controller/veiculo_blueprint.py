@@ -66,13 +66,13 @@ def form(pk):
             db.session.commit()
             id_cadastro = veiculo.id
             if pk:
-                flash( u'Veículo {0} atualizado com sucesso'.format(id_cadastro), 'success')
+                flash( u'Veículo {0} atualizado com sucesso.'.format(id_cadastro), 'success')
             else:
-                flash( u'Veículo {0} cadastrado com sucesso'.format(id_cadastro), 'success')
+                flash( u'Veículo {0} cadastrado com sucesso.'.format(id_cadastro), 'success')
             return redirect(url_for('veiculo.index'))
         except Exception as ex:
             print(ex)
-            contexto['mensagem'] = u'Erro ao cadastrar veículo'
+            contexto['mensagem'] = u'Erro ao cadastrar veículo.'
             contexto['tipo_mensagem'] = 'danger'
     elif pk:
         data = Veiculo.query.filter_by(id=pk).one()

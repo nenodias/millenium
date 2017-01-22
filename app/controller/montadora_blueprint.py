@@ -5,6 +5,7 @@ from flask import (Blueprint, render_template, request, redirect, url_for, flash
     jsonify, render_template, Response)
 from app import auth_require
 from app import db
+from app.utils import to_int_or_none
 from app.models import Montadora, tupla_origem, montadora_colunas
 
 montadora_blueprint = Blueprint('montadora', __name__)
@@ -29,7 +30,7 @@ def form(pk):
     if request.method == 'POST':
         nome = request.form.get("nome")
         origem = request.form.get("origem")
-        codmon_ea = int(request.form.get("codmon_ea"))
+        codmon_ea = to_int_or_none(request.form.get("codmon_ea"))
       
         #Criar dicionário com os dados
         dicionario = {
@@ -50,13 +51,13 @@ def form(pk):
             db.session.commit()
             id_cadastro = modelo.id
             if pk:
-                flash( u'Montadora {0} atualizada com sucesso'.format(id_cadastro), 'success')
+                flash( u'Montadora {0} atualizada com sucesso.'.format(id_cadastro), 'success')
             else:
-                flash( u'Montadora {0} cadastrada com sucesso'.format(id_cadastro), 'success')
+                flash( u'Montadora {0} cadastrada com sucesso.'.format(id_cadastro), 'success')
             return redirect(url_for('montadora.index'))
         except Exception as ex:
             print(ex)
-            contexto['mensagem'] = u'Erro ao cadastrar montadora'
+            contexto['mensagem'] = u'Erro ao cadastrar montadora.'
             contexto['tipo_mensagem'] = 'danger'
     elif pk:
         data = Montadora.query.filter_by(id=pk).one()

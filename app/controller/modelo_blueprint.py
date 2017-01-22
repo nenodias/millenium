@@ -52,13 +52,13 @@ def form(pk):
             db.session.commit()
             id_cadastro = modelo.id
             if pk:
-                flash( u'Modelo {0} atualizado com sucesso'.format(id_cadastro), 'success')
+                flash( u'Modelo {0} atualizado com sucesso.'.format(id_cadastro), 'success')
             else:
-                flash( u'Modelo {0} cadastrado com sucesso'.format(id_cadastro), 'success')
+                flash( u'Modelo {0} cadastrado com sucesso.'.format(id_cadastro), 'success')
             return redirect(url_for('modelo.index'))
         except Exception as ex:
             print(ex)
-            contexto['mensagem'] = u'Erro ao cadastrar modelo'
+            contexto['mensagem'] = u'Erro ao cadastrar modelo.'
             contexto['tipo_mensagem'] = 'danger'
     elif pk:
         data = Modelo.query.filter_by(id=pk).one()

@@ -32,7 +32,7 @@
                     <span class="input-group-addon">
                       <span class="glyphicon">&#xe139;</span>
                     </span>
-                    <input id="id_monta" name="id_monta" type="text" value="{{ model['id_monta'] }}" placeholder="Informe a montadora" class="form-control input-md" />
+                    <input id="id_monta" name="id_monta" type="text" value="{{ model['id_monta'] }}" placeholder="Informe a montadora" class="form-control input-md upper" />
                 </div>
               </div>
 
@@ -54,7 +54,7 @@
                   <span class="glyphicon glyphicon-ok"></span>&nbsp;
                   Salvar
                   </button>
-                  <a id="btnCancelar" type="button" class="btn btn-danger" href="{{ url_for('modelo.index') }}">
+                  <a id="btnCancelar" class="btn btn-danger" href="{{ url_for('modelo.index') }}">
                   <span class="glyphicon glyphicon-remove"></span>&nbsp;
                   Cancelar
                   </a>

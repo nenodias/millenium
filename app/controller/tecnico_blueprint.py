@@ -48,13 +48,13 @@ def form(pk):
             db.session.commit()
             id_cadastro = modelo.id
             if pk:
-                flash( u'Técnico {0} atualizado com sucesso'.format(id_cadastro), 'success')
+                flash( u'Técnico {0} atualizado com sucesso.'.format(id_cadastro), 'success')
             else:
-                flash( u'Técnico {0} cadastrado com sucesso'.format(id_cadastro), 'success')
+                flash( u'Técnico {0} cadastrado com sucesso.'.format(id_cadastro), 'success')
             return redirect(url_for('tecnico.index'))
         except Exception as ex:
             print(ex)
-            contexto['mensagem'] = u'Erro ao cadastrar tecnico'
+            contexto['mensagem'] = u'Erro ao cadastrar tecnico.'
             contexto['tipo_mensagem'] = 'danger'
     elif pk:
         data = Tecnico.query.filter_by(id=pk).one()

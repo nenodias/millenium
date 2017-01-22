@@ -161,13 +161,13 @@ def form(pk):
             db.session.commit()
             id_cadastro = historico.id
             if pk:
-                flash( u'Historico {0} atualizado com sucesso'.format(id_cadastro), 'success')
+                flash( u'Historico {0} atualizado com sucesso.'.format(id_cadastro), 'success')
             else:
-                flash( u'Historico {0} cadastrado com sucesso'.format(id_cadastro), 'success')
+                flash( u'Historico {0} cadastrado com sucesso.'.format(id_cadastro), 'success')
             return redirect(url_for('historico.index'))
         except Exception as ex:
             print(ex)
-            contexto['mensagem'] = u'Erro ao cadastrar historico'
+            contexto['mensagem'] = u'Erro ao cadastrar historico.'
             contexto['tipo_mensagem'] = 'danger'
     elif pk:
         data = Historico.query.filter_by(id=pk).one()

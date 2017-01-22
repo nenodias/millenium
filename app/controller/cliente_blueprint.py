@@ -91,13 +91,13 @@ def form(pk):
             db.session.commit()
             id_cadastro = cliente.id
             if pk:
-                flash( u'Cliente {0} atualizado com sucesso'.format(id_cadastro), 'success')
+                flash( u'Cliente {0} atualizado com sucesso.'.format(id_cadastro), 'success')
             else:
-                flash( u'Cliente {0} cadastrado com sucesso'.format(id_cadastro), 'success')
+                flash( u'Cliente {0} cadastrado com sucesso.'.format(id_cadastro), 'success')
             return redirect(url_for('cliente.index'))
         except Exception as ex:
             print(ex)
-            contexto['mensagem'] = u'Erro ao cadastrar cliente'
+            contexto['mensagem'] = u'Erro ao cadastrar cliente.'
             contexto['tipo_mensagem'] = 'danger'
     elif pk:
         data = Cliente.query.filter_by(id=pk).one()

@@ -62,13 +62,13 @@ def form(pk):
             db.session.commit()
             id_cadastro = modelo.id
             if pk:
-                flash( u'Peça {0} atualizada com sucesso'.format(id_cadastro), 'success')
+                flash( u'Peça {0} atualizada com sucesso.'.format(id_cadastro), 'success')
             else:
-                flash( u'Peça {0} cadastrada com sucesso'.format(id_cadastro), 'success')
+                flash( u'Peça {0} cadastrada com sucesso.'.format(id_cadastro), 'success')
             return redirect(url_for('peca.index'))
         except Exception as ex:
             print(ex)
-            contexto['mensagem'] = u'Erro ao cadastrar peça'
+            contexto['mensagem'] = u'Erro ao cadastrar peça.'
             contexto['tipo_mensagem'] = 'danger'
     elif pk:
         data = Peca.query.filter_by(id=pk).one()

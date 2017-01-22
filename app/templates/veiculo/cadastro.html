@@ -22,7 +22,7 @@
                   <span class="input-group-addon">
                     <span class="glyphicon">&#xe139;</span>
                   </span>
-                  <input id="id_cliente" name="id_cliente" type="text" value="{{ model['id_cliente'] }}" placeholder="Informe o cliente" class="form-control input-md" />
+                  <input id="id_cliente" name="id_cliente" type="text" value="{{ model['id_cliente'] }}" placeholder="Informe o cliente" class="form-control input-md upper" />
                 </div>
               </div>
 
@@ -32,7 +32,7 @@
                   <span class="input-group-addon">
                     <span class="glyphicon">&#xe139;</span>
                   </span>
-                  <input id="id_modelo" name="id_modelo" type="text" value="{{ model['id_modelo'] }}" placeholder="Informe o modelo" class="form-control input-md" />
+                  <input id="id_modelo" name="id_modelo" type="text" value="{{ model['id_modelo'] }}" placeholder="Informe o modelo" class="form-control input-md upper" />
                 </div>
               </div>
 
@@ -115,7 +115,7 @@
                   <span class="glyphicon glyphicon-ok"></span>&nbsp;
                   Salvar
                   </button>
-                  <a id="btnCancelar" type="button" class="btn btn-danger" href="{{ url_for('veiculo.index') }}">
+                  <a id="btnCancelar" class="btn btn-danger" href="{{ url_for('veiculo.index') }}">
                   <span class="glyphicon glyphicon-remove"></span>&nbsp;
                   Cancelar
                   </a>
