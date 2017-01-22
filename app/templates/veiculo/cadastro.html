@@ -42,62 +42,62 @@
                   <span class="input-group-addon">
                     <span class="glyphicon">&#xe139;</span>
                   </span>
-                  <input id="placa" name="placa" type="text" value="{{ model['placa'] }}" placeholder="Informe a placa" class="form-control input-md" />
+                  <input id="placa" name="placa" type="text" value="{{ model['placa'] }}" placeholder="Informe a placa" class="form-control input-md upper" />
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="col-md-4 control-label" for="pais">* País:</label>
+                <label class="col-md-4 control-label" for="pais"> País:</label>
                 <div class="col-md-5 input-group">
                   <span class="input-group-addon">
                     <span class="glyphicon">&#xe139;</span>
                   </span>
-                  <input id="pais" name="pais" type="text" value="{{ model['pais'] }}" placeholder="Informe o país" class="form-control input-md" />
+                  <input id="pais" name="pais" type="text" value="{{ model['pais'] }}" placeholder="Informe o país" class="form-control input-md upper" />
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="col-md-4 control-label" for="cor">* Cor:</label>
+                <label class="col-md-4 control-label" for="cor"> Cor:</label>
                 <div class="col-md-5 input-group">
                   <span class="input-group-addon">
                     <span class="glyphicon">&#xe139;</span>
                   </span>
-                  <input id="cor" name="cor" type="text" value="{{ model['cor'] }}" placeholder="Informe a cor" class="form-control input-md" />
+                  <input id="cor" name="cor" type="text" value="{{ model['cor'] }}" placeholder="Informe a cor" class="form-control input-md upper" />
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="col-md-4 control-label" for="combustivel">* Combustível:</label>
+                <label class="col-md-4 control-label" for="combustivel"> Combustível:</label>
                 <div class="col-md-5 input-group">
                   <span class="input-group-addon">
                     <span class="glyphicon">&#xe139;</span>
                   </span>
-                  <input id="combustivel" name="combustivel" type="text" value="{{ model['combustivel'] }}" placeholder="Informe o combustível" class="form-control input-md" />
+                  <input id="combustivel" name="combustivel" type="text" value="{{ model['combustivel'] }}" placeholder="Informe o combustível" class="form-control input-md upper" />
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="col-md-4 control-label" for="renavam">* Renavam:</label>
+                <label class="col-md-4 control-label" for="renavam"> Renavam:</label>
                 <div class="col-md-5 input-group">
                   <span class="input-group-addon">
                     <span class="glyphicon">&#xe139;</span>
                   </span>
-                  <input id="renavam" name="renavam" type="text" value="{{ model['renavam'] }}" placeholder="Informe o renavam" class="form-control input-md" />
+                  <input id="renavam" name="renavam" type="text" value="{{ model['renavam'] }}" placeholder="Informe o renavam" class="form-control input-md upper" />
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="col-md-4 control-label" for="chassi">* Chassis:</label>
+                <label class="col-md-4 control-label" for="chassi"> Chassis:</label>
                 <div class="col-md-5 input-group">
                   <span class="input-group-addon">
                     <span class="glyphicon">&#xe139;</span>
                   </span>
-                  <input id="chassi" name="chassi" type="text" value="{{ model['chassi'] }}" placeholder="Informe o chassis" class="form-control input-md" />
+                  <input id="chassi" name="chassi" type="text" value="{{ model['chassi'] }}" placeholder="Informe o chassis" class="form-control input-md upper" />
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="col-md-4 control-label" for="ano">* Ano:</label>
+                <label class="col-md-4 control-label" for="ano"> Ano:</label>
                 <div class="col-md-5 input-group">
                   <span class="input-group-addon">
                     <span class="glyphicon">&#xe139;</span>
@@ -170,5 +170,45 @@
                 },
                 hideField:true
             });
+          $(document).ready(function(){
+            $("form").validate( {
+              ignore: "",
+              rules: {
+                'id_cliente':{
+                  required:true
+                },
+                'id_modelo':{
+                  required:true
+                },
+                'placa':{
+                  required:true,
+                  maxlength:8,
+                },
+                'pais':{
+                  maxlength:20,
+                },
+                'cor':{
+                  maxlength:20,
+                },
+                'combustivel':{
+                  maxlength:10,
+                },
+                'renavam':{
+                  maxlength:40,
+                },
+                'chassi':{
+                  maxlength:40,
+                },
+                'ano':{
+                  maxlength:4,
+                  number:true
+                },
+
+              },
+              errorPlacement: PADRAO.errorPlacement,
+              highlight: PADRAO.highlight,
+              unhighlight: PADRAO.unhighlight
+            });
+          });
         </script>
 {% endblock %}

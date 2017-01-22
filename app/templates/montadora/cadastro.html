@@ -22,7 +22,7 @@
                     <span class="input-group-addon">
                       <span class="glyphicon">&#xe139;</span>
                     </span>
-                    <input id="nome" name="nome" type="text" value="{{ model['nome'] }}" placeholder="Informe o nome" class="form-control input-md" required="" />
+                    <input id="nome" name="nome" type="text" value="{{ model['nome'] }}" placeholder="Informe o nome" class="form-control input-md upper" />
                 </div>
               </div>
 
@@ -32,17 +32,17 @@
                     <span class="input-group-addon">
                       <span class="glyphicon">&#xe139;</span>
                     </span>
-                    <input id="origem" name="origem" type="text" value="{{ model['origem'] }}" placeholder="Informe a origem" class="form-control input-md" required="" />
+                    <input id="origem" name="origem" type="text" value="{{ model['origem'] }}" placeholder="Informe a origem" class="form-control input-md origem" />
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="col-md-4 control-label" for="codmon_ea">* Código da montadora EA:</label>  
+                <label class="col-md-4 control-label" for="codmon_ea"> Código da montadora EA:</label>  
                 <div class="col-md-5 input-group">
                     <span class="input-group-addon">
                       <span class="glyphicon">&#xe139;</span>
                     </span>
-                    <input id="codmon_ea" name="codmon_ea" type="text" value="{{ model['codmon_ea'] }}" placeholder="Informe o código" class="form-control input-md" required="" />
+                    <input id="codmon_ea" name="codmon_ea" type="text" value="{{ model['codmon_ea'] }}" placeholder="Informe o código" class="form-control input-md" />
                 </div>
               </div>
 
@@ -63,4 +63,27 @@
             {% endif %}
             </fieldset>
         </form>
+        <script type="text/javascript">
+          $(document).ready(function(){
+            $("form").validate( {
+              ignore: "",
+              rules: {
+                'nome':{
+                  required:true,
+                  maxlength:40
+                },
+                'origem':{
+                  required:true,
+                  maxlength:1
+                },
+                'codmon_ea':{
+                  number:true
+                }
+              },
+              errorPlacement: PADRAO.errorPlacement,
+              highlight: PADRAO.highlight,
+              unhighlight: PADRAO.unhighlight
+            });
+          });
+        </script>
 {% endblock %}

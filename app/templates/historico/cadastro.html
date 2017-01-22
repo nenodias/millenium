@@ -648,11 +648,12 @@
 
             $(document).ready(function(){
               jQuery.validator.addClassRules('td-descricao', {
-                  required: true
+                  required: true,
+                  maxlength: 75
               });
               jQuery.validator.addClassRules('td-valor', {
                   required: true,
-                  number:true
+                  number:true,
               });
               jQuery.validator.addClassRules('td-quantidade', {
                   required: true,

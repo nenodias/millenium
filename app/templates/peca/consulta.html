@@ -17,7 +17,7 @@
                         <span class="input-group-addon">
                             <span class="glyphicon">&#xe003;</span>
                         </span>
-                        <input id="descricao" name="descricao" type="search" placeholder="Informe a peça" class="form-control input-md" value="{{ model['descricao'] }}">
+                        <input id="descricao" name="descricao" type="search" placeholder="Informe a peça" class="form-control input-md upper" value="{{ model['descricao'] }}">
                     </div>
                 </div>
 
@@ -200,6 +200,12 @@
                 $("#btnPesquisar").click(carregarDados);
                 $('#peca.table').on('click','.btn-danger', eventoExcluir);
                 $('.div-paginacao').on('click','.pager a', eventoPage);
+            });
+            $(document).on('keypress',function(e){
+                var code = e.keyCode || e.which;
+                if(code == 13) { //Enter keycode
+                    $("#btnPesquisar").click();
+                }
             });
         </script>
 {% endblock %}

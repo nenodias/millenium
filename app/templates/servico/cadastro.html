@@ -22,7 +22,7 @@
                     <span class="input-group-addon">
                       <span class="glyphicon">&#xe139;</span>
                     </span>
-                    <input id="descricao" name="descricao" type="text" value="{{ model['descricao'] }}" placeholder="Informe a serviço" class="form-control input-md" required="" />
+                    <input id="descricao" name="descricao" type="text" value="{{ model['descricao'] }}" placeholder="Informe a serviço" class="form-control input-md upper" />
                 </div>
               </div>
 
@@ -33,7 +33,7 @@
                     <span class="input-group-addon">
                       <span class="glyphicon">&#xe139;</span>
                     </span>
-                    <input id="valor" name="valor" type="text" value="{{ model['valor'] }}" placeholder="Informe o valor" class="form-control input-md" required="" />
+                    <input id="valor" name="valor" type="text" value="{{ model['valor'] }}" placeholder="Informe o valor" class="form-control input-md" />
                 </div>
               </div>
 
@@ -54,4 +54,24 @@
             {% endif %}
             </fieldset>
         </form>
+        <script type="text/javascript">
+          $(document).ready(function(){
+            $("form").validate( {
+              ignore: "",
+              rules: {
+                'descricao':{
+                  required:true,
+                  maxlength:60
+                },
+                'valor':{
+                  required:true,
+                  number:true
+                }
+              },
+              errorPlacement: PADRAO.errorPlacement,
+              highlight: PADRAO.highlight,
+              unhighlight: PADRAO.unhighlight
+            });
+          });
+        </script>
 {% endblock %}

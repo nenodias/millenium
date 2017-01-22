@@ -38,7 +38,7 @@
                         <span class="input-group-addon">
                             <span class="glyphicon">&#xe003;</span>
                         </span>
-                        <input id="placa" name="placa" type="search" placeholder="Informe a placa" class="form-control input-md" value="{{ model['placa'] }}">
+                        <input id="placa" name="placa" type="search" placeholder="Informe a placa" class="form-control input-md upper" value="{{ model['placa'] }}">
                     </div>
                 </div>
 
@@ -311,6 +311,13 @@
                     return data.id;
                 },
                 hideField:true
+            });
+
+            $(document).on('keypress',function(e){
+                var code = e.keyCode || e.which;
+                if(code == 13) { //Enter keycode
+                    $("#btnPesquisar").click();
+                }
             });
         </script>
 {% endblock %}

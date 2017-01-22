@@ -22,7 +22,7 @@
                     <span class="input-group-addon">
                       <span class="glyphicon">&#xe139;</span>
                     </span>
-                    <input id="nome" name="nome" type="text" value="{{ model['nome'] }}" placeholder="Informe o nome" class="form-control input-md" required="" />
+                    <input id="nome" name="nome" type="text" value="{{ model['nome'] }}" placeholder="Informe o nome" class="form-control input-md upper" />
                 </div>
               </div>
 
@@ -32,17 +32,17 @@
                     <span class="input-group-addon">
                       <span class="glyphicon">&#xe139;</span>
                     </span>
-                    <input id="id_monta" name="id_monta" type="text" value="{{ model['id_monta'] }}" placeholder="Informe a montadora" class="form-control input-md" required="" />
+                    <input id="id_monta" name="id_monta" type="text" value="{{ model['id_monta'] }}" placeholder="Informe a montadora" class="form-control input-md" />
                 </div>
               </div>
 
               <div class="form-group">
-                <label class="col-md-4 control-label" for="codvei_ea">* Código EA:</label>  
+                <label class="col-md-4 control-label" for="codvei_ea"> Código EA:</label>  
                 <div class="col-md-5 input-group">
                     <span class="input-group-addon">
                       <span class="glyphicon">&#xe139;</span>
                     </span>
-                    <input id="codvei_ea" name="codvei_ea" type="text" value="{{ model['codvei_ea'] }}" placeholder="Informe o código ea" class="form-control input-md" required="" />
+                    <input id="codvei_ea" name="codvei_ea" type="text" value="{{ model['codvei_ea'] }}" placeholder="Informe o código ea" class="form-control input-md" />
                 </div>
               </div>
 
@@ -86,5 +86,26 @@
                 },
                 hideField:true
             });
+          
+          $(document).ready(function(){
+            $("form").validate( {
+              ignore: "",
+              rules: {
+                'nome':{
+                  required:true,
+                  maxlength:40
+                },
+                'id_monta':{
+                  required:true
+                },
+                'codvei_ea':{
+                  number:true
+                }
+              },
+              errorPlacement: PADRAO.errorPlacement,
+              highlight: PADRAO.highlight,
+              unhighlight: PADRAO.unhighlight
+            });
+          });
         </script>
 {% endblock %}
