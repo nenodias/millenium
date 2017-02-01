@@ -374,6 +374,7 @@
                 getValue: function(data){
                     return data.id;
                 },
+                onChangeValueLoad:true,
                 hideField:true
             });
 
@@ -426,6 +427,12 @@
                 },
                 getValue: function(data){
                     return data.id;
+                },
+                callback:function(obj){
+                  var search = obj[0];
+                  var data = obj[1];
+                  $("#id_cliente").val(data['id_cliente']);
+                  $("#id_cliente").trigger('update');
                 },
                 hideField:true
             });

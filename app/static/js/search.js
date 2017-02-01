@@ -53,9 +53,17 @@
                 itemsList.innerHTML = '';
             },
             selectItem:function(item){
-                labelField.value = item.innerHTML;
-                valueField.value = item.getAttribute('data-value');
+                var label = item.innerHTML;
+                var value = item.getAttribute('data-value');
+                labelField.value = label;
+                valueField.value = value;
                 elemento.hideBox();
+                if(config.callback){
+                    config.findById(valueField.value).done(function(data, textStatus, jqXHR){
+                        config.callback([{label:label,value:value}, data]);
+                    }).fail(function(jqXHR, textStatus, errorThrown){
+                    });
+                }
             },
             createItem:function(data){
                 var description = config.getDescription(data);
@@ -170,7 +178,7 @@
                 elemento.hideBox();
             }
         };
-        fieldSearch.addEventListener('keyup',eventoKey);
+        //fieldSearch.addEventListener('keyup',eventoKey);
         fieldSearch.addEventListener('keypress',eventoKey);
         valueField.addEventListener('keyup',function(e){
             if(e.keyCode === 27){
@@ -187,6 +195,9 @@
         }
         if(config.onChangeValueLoad){
             valueField.addEventListener('change', function(){
+                elemento.loadByPk();
+            });
+            $(valueField).on('update', function(){
                 elemento.loadByPk();
             });
         }
