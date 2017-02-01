@@ -12,6 +12,15 @@
 
                 <!-- Search input-->
                 <div class="form-group">
+                    <label class="col-md-4 control-label" for="numero_ordem">N° Ordem</label>
+                    <div class="col-md-5 input-group">
+                        <span class="input-group-addon">
+                            <span class="glyphicon">&#xe003;</span>
+                        </span>
+                        <input id="numero_ordem" name="numero_ordem" type="search" placeholder="Informe o n" class="form-control input-md" value="{{ model['numero_ordem'] }}">
+                    </div>
+                </div>
+                <div class="form-group">
                     <label class="col-md-4 control-label" for="id_cliente">Cliente</label>
                     <div class="col-md-5 input-group">
                         <span class="input-group-addon">
@@ -444,7 +453,9 @@
             $(document).on('keypress',function(e){
                 var code = e.keyCode || e.which;
                 if(code == 13) { //Enter keycode
-                    $("#btnPesquisar").click();
+                    if(!$(e.target).hasClass('nn-search')){
+                        $("#btnPesquisar").click();
+                    }
                 }
             });
         </script>

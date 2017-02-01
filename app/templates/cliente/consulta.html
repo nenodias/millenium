@@ -239,7 +239,9 @@
             $(document).on('keypress',function(e){
                 var code = e.keyCode || e.which;
                 if(code == 13) { //Enter keycode
-                    $("#btnPesquisar").click();
+                    if(!$(e.target).hasClass('nn-search')){
+                        $("#btnPesquisar").click();
+                    }
                 }
             });
         </script>

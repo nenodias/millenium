@@ -24,6 +24,7 @@ def get_tipo(tipo):
 @auth_require()
 def index():
     contexto = {}
+    _numero_ordem = request.args.get("numero_ordem",'')
     _id_cliente = request.args.get('id_cliente', '')
     _id_veiculo = request.args.get('id_veiculo', '')
     _id_tecnico = request.args.get('id_tecnico', '')
@@ -35,6 +36,7 @@ def index():
         'id_tecnico':_id_tecnico,
         'data':_data,
         'tipo':_tipo,
+        'numero_ordem':_numero_ordem,
     }
     contexto['tupla_tipo_historico'] = tupla_tipo_historico
     return render_template('historico/consulta.html', **contexto)
@@ -189,8 +191,10 @@ def delete(pk):
     return '',404
 
 
-def get_filter(_id_cliente, _id_veiculo, _id_tecnico, _data, _tipo):
+def get_filter(_numero_ordem, _id_cliente, _id_veiculo, _id_tecnico, _data, _tipo):
     lista_filtros = []
+    if _numero_ordem:
+        lista_filtros.append( Historico.numero_ordem==_numero_ordem)
     if _id_cliente:
         lista_filtros.append( Historico.id_cliente==_id_cliente)
     if _id_veiculo:
@@ -211,6 +215,7 @@ def ajax():
     _limit = int(request.args.get('limit','10'))
     _offset = int(request.args.get('offset','0'))
 
+    _numero_ordem = to_int_or_none( request.args.get("numero_ordem") )
     _id_cliente = to_int_or_none( request.args.get('id_cliente', '') )
     _id_veiculo = to_int_or_none( request.args.get('id_veiculo', '') )
     _id_tecnico = to_int_or_none( request.args.get('id_tecnico', '') )
@@ -219,7 +224,7 @@ def ajax():
 
     _limit = _offset + _limit
     items = []
-    filtro = get_filter(_id_cliente, _id_veiculo, _id_tecnico, _data, _tipo)
+    filtro = get_filter(_numero_ordem, _id_cliente, _id_veiculo, _id_tecnico, _data, _tipo)
     try:
         fetch = Historico.query.filter( filtro ).slice(_offset, _limit).all()
         for dado in fetch:
@@ -231,7 +236,7 @@ def ajax():
 @historico_blueprint.route('/count', methods = ['get'])
 @auth_require()
 def count():
-    
+    _numero_ordem = to_int_or_none( request.args.get("numero_ordem") )
     _id_cliente = to_int_or_none( request.args.get('id_cliente', '') )
     _id_veiculo = to_int_or_none( request.args.get('id_veiculo', '') )
     _id_tecnico = to_int_or_none( request.args.get('id_tecnico', '') )
@@ -239,7 +244,7 @@ def count():
     _tipo = request.args.get('tipo', '')
 
     count = 0
-    filtro = get_filter(_id_cliente, _id_veiculo, _id_tecnico, _data, _tipo)
+    filtro = get_filter(_numero_ordem, _id_cliente, _id_veiculo, _id_tecnico, _data, _tipo)
     try:
         count = Historico.query.filter( filtro ).count()
     except Exception as ex:

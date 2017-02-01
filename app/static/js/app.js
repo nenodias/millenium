@@ -31,7 +31,18 @@ $(function() {
         return this.optional(element) || /^\d{1,4}-\d{1,2}-\d{1,2}T\d{1,2}:\d{1,2}$/i.test(value);
     }, "Por favor digite uma data e hora válidas.");
 
-    $(document).on('keyup','input.upper, textarea.upper',function() {
-        this.value = this.value.toLocaleUpperCase();
+    var eventoUpper = function(self) {
+        self.value = self.value.toLocaleUpperCase();
+    };
+    $(document).on('keydown','input.upper, textarea.upper',function(event) {
+        var c = String.fromCharCode(event.keyCode);
+        var isWordCharacter = c.match(/\w/);
+        var isBackspaceOrDelete = (event.keyCode == 8 || event.keyCode == 46);
+        if(isWordCharacter && !isBackspaceOrDelete ){
+          eventoUpper(this);
+        }
+    });
+    $(document).on('change','input.upper, textarea.upper',function(event) {
+        eventoUpper(this);
     });
 });
