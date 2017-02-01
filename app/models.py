@@ -3,7 +3,7 @@ from pdb import set_trace
 from app import db
 from sqlalchemy.sql.expression import text
 from sqlalchemy.ext.declarative import declared_attr
-from sqlalchemy import or_, and_
+from sqlalchemy import or_, and_, desc
 from datetime import datetime
 from app.utils import from_datetime_to_str
 
@@ -67,6 +67,16 @@ class MixinSerialize():
                 print(ex)
 
         return item
+
+
+    @classmethod
+    def sorting_data(cls, fetch, _sort_order, _sort_direction):
+        if _sort_order and _sort_direction and hasattr(cls, _sort_order):
+            order = getattr(cls, _sort_order)
+            if _sort_direction == 'desc':
+                order = desc(order)
+            fetch = fetch.order_by(order)
+        return fetch
 
 class Cliente(MixinSerialize, db.Model):
     __tablename__ = 'clientes'

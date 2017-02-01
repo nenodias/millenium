@@ -9,6 +9,8 @@
                 
                 <input type="hidden" id="limit" name="limit" value="10" />
                 <input type="hidden" id="offset" name="offset" value="0" />
+                <input type="hidden" id="sort_order" name="sort_order" value="0" />
+                <input type="hidden" id="sort_direction" name="sort_direction" value="asc" />
 
                 <!-- Search input-->
                 <div class="form-group">
@@ -43,10 +45,10 @@
         <table class="table table-bordered table-striped">
             <thead class="thead-inverse">
                 <tr>
-                    <th>Id</th>
-                    <th>Nome</th>
-                    <th>Origem</th>
-                    <th>Código Montadora EA</th>
+                    <th class="sortable" data-sort="id">Id</th>
+                    <th class="sortable" data-sort="nome">Nome</th>
+                    <th class="sortable" data-sort="origem">Origem</th>
+                    <th class="sortable" data-sort="codmon_ea">Código Montadora EA</th>
                     <th>Ações</th>
                 </tr>
             </thead>
@@ -202,7 +204,27 @@
                     $("#offset").val(_offset);
                     carregarDados();
                 }
-            }
+            };
+
+            $('.sortable').on('click',function(e){
+                var $th = $(e.target);
+                if($th.prop("tagName") != "TH"){
+                    $th = $th.closest('th');
+                }
+                $th.parent().find('i').remove();
+                var sort = $th.data('sort');
+                var direction = $("#sort_direction").val();
+                if( $("#sort_order").val() == sort){
+                    direction = direction == 'asc' ? 'desc' : 'asc';
+                    $("#sort_direction").val(direction);
+                }
+                var iconClass = 'pull-right glyphicon';
+                    iconClass = direction == 'asc' ? iconClass+' glyphicon-triangle-bottom' : iconClass+' glyphicon-triangle-top';
+                    $th.html( $th.html() + '<i class="'+iconClass+'"></i>' );
+                $("#sort_order").val(sort);
+                carregarDados();
+            });
+
             $(document).ready(function(){
                 carregarDados();
                 $("#btnPesquisar").click(carregarDados);

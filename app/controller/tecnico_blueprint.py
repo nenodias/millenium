@@ -5,7 +5,7 @@ from flask import (Blueprint, render_template, request, redirect, url_for, flash
     jsonify, render_template, Response)
 from app import auth_require
 from app import db
-from app.models import Tecnico
+from app.models import Tecnico, desc
 
 tecnico_blueprint = Blueprint('tecnico', __name__)
 
@@ -80,12 +80,18 @@ def delete(pk):
 def ajax():
     _limit = int(request.args.get('limit','10'))
     _offset = int(request.args.get('offset','0'))
+    _sort_order = request.args.get('sort_order', '')
+    _sort_direction = request.args.get('sort_direction', 'asc')
+    
     _nome = request.args.get('nome', '')
     _limit = _offset + _limit
     items = []
 
     try:
-        fetch = Tecnico.query.filter(Tecnico.nome.like('%'+_nome+'%')).slice(_offset, _limit).all()
+        filtro = Tecnico.nome.like('%'+_nome+'%')
+        fetch = Tecnico.query.filter( filtro )
+        fetch = Tecnico.sorting_data(fetch, _sort_order, _sort_direction)
+        fetch = fetch.slice(_offset, _limit).all()
         colunas = [ col.name for col in Tecnico.__table__._columns ]
         for dado in fetch:
             items.append( Tecnico.to_dict(dado, tecnico_colunas) )

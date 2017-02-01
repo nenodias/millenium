@@ -7,7 +7,7 @@ from app import auth_require, db
 from app.utils import (to_int_or_none, from_str_to_datetime_or_none, from_str_to_date_or_none,
  final_date_day, to_float_or_zero)
 from app.models import (Historico, HistoricoItem, Vistoria, Cliente, Veiculo, Modelo, Montadora, or_, and_,
-    tupla_tipo_historico, tupla_tipo_item, items_colunas, historico_colunas, cliente_colunas, 
+    tupla_tipo_historico, tupla_tipo_item, items_colunas, historico_colunas, cliente_colunas, desc, 
     veiculo_colunas, modelo_colunas, montadora_colunas)
 
 historico_blueprint = Blueprint('historico', __name__)
@@ -214,6 +214,8 @@ def get_filter(_numero_ordem, _id_cliente, _id_veiculo, _id_tecnico, _data, _tip
 def ajax():
     _limit = int(request.args.get('limit','10'))
     _offset = int(request.args.get('offset','0'))
+    _sort_order = request.args.get('sort_order', '')
+    _sort_direction = request.args.get('sort_direction', 'asc')
 
     _numero_ordem = to_int_or_none( request.args.get("numero_ordem") )
     _id_cliente = to_int_or_none( request.args.get('id_cliente', '') )
@@ -226,7 +228,9 @@ def ajax():
     items = []
     filtro = get_filter(_numero_ordem, _id_cliente, _id_veiculo, _id_tecnico, _data, _tipo)
     try:
-        fetch = Historico.query.filter( filtro ).slice(_offset, _limit).all()
+        fetch = Historico.query.filter( filtro )
+        fetch = Historico.sorting_data(fetch, _sort_order, _sort_direction)
+        fetch = fetch.slice(_offset, _limit).all()
         for dado in fetch:
             items.append( Historico.to_dict(dado, historico_colunas) )
     except Exception as ex:

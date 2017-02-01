@@ -5,7 +5,7 @@ from flask import (Blueprint, render_template, request, redirect, url_for, flash
     jsonify, render_template, Response)
 from app import auth_require, db
 from app.utils import to_int_or_none, from_str_to_datetime_or_none
-from app.models import Veiculo, or_, and_, veiculo_colunas
+from app.models import Veiculo, or_, and_, desc, veiculo_colunas
 
 veiculo_blueprint = Blueprint('veiculo', __name__)
 
@@ -110,6 +110,9 @@ def get_filter(_id_cliente, _id_modelo, _placa):
 def ajax():
     _limit = int(request.args.get('limit','10'))
     _offset = int(request.args.get('offset','0'))
+    _sort_order = request.args.get('sort_order', '')
+    _sort_direction = request.args.get('sort_direction', 'asc')
+    
     _id_cliente = to_int_or_none(request.args.get('id_cliente', ''))
     _id_modelo = to_int_or_none(request.args.get('id_modelo', ''))
     _placa = request.args.get('placa', '')
@@ -117,7 +120,9 @@ def ajax():
     items = []
     filtro = get_filter(_id_cliente, _id_modelo, _placa)
     try:
-        fetch = Veiculo.query.filter( filtro ).slice(_offset, _limit).all()
+        fetch = Veiculo.query.filter( filtro )
+        fetch = Veiculo.sorting_data(fetch, _sort_order, _sort_direction)
+        fetch = fetch.slice(_offset, _limit).all()
         colunas = [ col.name for col in Veiculo.__table__._columns ]
         for dado in fetch:
             items.append( Veiculo.to_dict(dado, veiculo_colunas) )

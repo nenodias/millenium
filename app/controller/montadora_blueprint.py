@@ -6,7 +6,7 @@ from flask import (Blueprint, render_template, request, redirect, url_for, flash
 from app import auth_require
 from app import db
 from app.utils import to_int_or_none
-from app.models import Montadora, tupla_origem, montadora_colunas
+from app.models import Montadora, tupla_origem, desc, montadora_colunas
 
 montadora_blueprint = Blueprint('montadora', __name__)
 
@@ -89,12 +89,17 @@ def delete(pk):
 def ajax():
     _limit = int(request.args.get('limit','10'))
     _offset = int(request.args.get('offset','0'))
+    _sort_order = request.args.get('sort_order', '')
+    _sort_direction = request.args.get('sort_direction', 'asc')
+    
     _nome = request.args.get('nome', '')
     _limit = _offset + _limit
     items = []
 
     try:
-        fetch = Montadora.query.filter(Montadora.nome.like('%'+_nome+'%')).slice(_offset, _limit).all()
+        fetch = Montadora.query.filter( Montadora.nome.like('%'+_nome+'%') )
+        fetch = Montadora.sorting_data(fetch, _sort_order, _sort_direction)
+        fetch = fetch.slice(_offset, _limit).all()
         for dado in fetch:
             items.append( Montadora.to_dict(dado, montadora_colunas) )
     except Exception as ex:

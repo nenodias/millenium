@@ -5,7 +5,7 @@ from flask import (Blueprint, render_template, request, redirect, url_for, flash
     jsonify, render_template, Response)
 from app import auth_require, db
 from app.utils import to_int_or_none
-from app.models import Modelo, or_, and_, modelo_colunas
+from app.models import Modelo, or_, and_, desc, modelo_colunas
 
 modelo_blueprint = Blueprint('modelo', __name__)
 
@@ -94,13 +94,18 @@ def get_filter(_nome, _id_monta):
 def ajax():
     _limit = int(request.args.get('limit','10'))
     _offset = int(request.args.get('offset','0'))
+    _sort_order = request.args.get('sort_order', '')
+    _sort_direction = request.args.get('sort_direction', 'asc')
+    
     _nome = request.args.get('nome', '')
     _id_monta = to_int_or_none(request.args.get('id_monta'))
     _limit = _offset + _limit
     items = []
     filtro = get_filter(_nome, _id_monta)
     try:
-        fetch = Modelo.query.filter( filtro ).slice(_offset, _limit).all()
+        fetch = Modelo.query.filter( filtro )
+        fetch = Modelo.sorting_data(fetch, _sort_order, _sort_direction)
+        fetch = fetch.slice(_offset, _limit).all()
         colunas = [ col.name for col in Modelo.__table__._columns ]
         for dado in fetch:
             items.append( Modelo.to_dict(dado, modelo_colunas) )

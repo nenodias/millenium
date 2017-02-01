@@ -5,7 +5,7 @@ from flask import (Blueprint, render_template, request, redirect, url_for, flash
     jsonify, render_template, Response)
 from app import auth_require
 from app import db
-from app.models import Peca
+from app.models import Peca, desc
 
 peca_blueprint = Blueprint('peca', __name__)
 
@@ -94,12 +94,18 @@ def delete(pk):
 def ajax():
     _limit = int(request.args.get('limit','10'))
     _offset = int(request.args.get('offset','0'))
+    _sort_order = request.args.get('sort_order', '')
+    _sort_direction = request.args.get('sort_direction', 'asc')
+
     _descricao = request.args.get('descricao', '')
     _limit = _offset + _limit
     items = []
 
     try:
-        fetch = Peca.query.filter(Peca.descricao.like('%'+_descricao+'%')).slice(_offset, _limit).all()
+        filtro = Peca.descricao.like('%'+_descricao+'%')
+        fetch = Peca.query.filter( filtro )
+        fetch = Peca.sorting_data(fetch, _sort_order, _sort_direction)
+        fetch = fetch.slice(_offset, _limit).all()
         colunas = [ col.name for col in Peca.__table__._columns ]
         for dado in fetch:
             items.append( Peca.to_dict(dado, peca_colunas) )

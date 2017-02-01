@@ -5,7 +5,7 @@ from flask import (Blueprint, render_template, request, redirect, url_for, flash
     jsonify, render_template, Response)
 from app import auth_require, db
 from app.utils import to_int_or_none, from_str_to_datetime_or_none
-from app.models import Cliente, or_, and_, cliente_colunas
+from app.models import Cliente, or_, and_, desc, cliente_colunas
 
 cliente_blueprint = Blueprint('cliente', __name__)
 
@@ -135,6 +135,9 @@ def get_filter(_nome, _telefone, _celular):
 def ajax():
     _limit = int(request.args.get('limit','10'))
     _offset = int(request.args.get('offset','0'))
+    _sort_order = request.args.get('sort_order', '')
+    _sort_direction = request.args.get('sort_direction', 'asc')
+    
     _nome = request.args.get('nome', '')
     _telefone = request.args.get('telefone', '')
     _celular = request.args.get('celular', '')
@@ -142,7 +145,9 @@ def ajax():
     items = []
     filtro = get_filter(_nome, _telefone, _celular)
     try:
-        fetch = Cliente.query.filter( filtro ).slice(_offset, _limit).all()
+        fetch = Cliente.query.filter( filtro )
+        fetch = Cliente.sorting_data(fetch, _sort_order, _sort_direction)
+        fetch = fetch.slice(_offset, _limit).all()
         colunas = [ col.name for col in Cliente.__table__._columns ]
         for dado in fetch:
             items.append( Cliente.to_dict(dado, cliente_colunas) )

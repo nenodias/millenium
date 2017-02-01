@@ -5,7 +5,7 @@ from flask import (Blueprint, render_template, request, redirect, url_for, flash
     jsonify, render_template, Response)
 from app import auth_require
 from app import db
-from app.models import Falha
+from app.models import Falha, desc
 
 falha_blueprint = Blueprint('falha', __name__)
 
@@ -92,12 +92,18 @@ def delete(pk):
 def ajax():
     _limit = int(request.args.get('limit','10'))
     _offset = int(request.args.get('offset','0'))
+    _sort_order = request.args.get('sort_order', '')
+    _sort_direction = request.args.get('sort_direction', 'asc')
+    
     _descricao = request.args.get('descricao', '')
     _limit = _offset + _limit
     items = []
 
     try:
-        fetch = Falha.query.filter(Falha.descricao.like('%'+_descricao+'%')).slice(_offset, _limit).all()
+        filtro = Falha.descricao.like('%'+_descricao+'%')
+        fetch = Falha.query.filter( filtro )
+        fetch = Falha.sorting_data(fetch, _sort_order, _sort_direction)
+        fetch = fetch.slice(_offset, _limit).all()
         colunas = [ col.name for col in Falha.__table__._columns ]
         for dado in fetch:
             items.append( Falha.to_dict(dado, falha_colunas) )
@@ -123,3 +129,10 @@ def ajax_by_id(pk):
     if data:
         return Response(response=json.dumps( Falha.to_dict(data, falha_colunas) ), status=200, mimetype="application/json")
     return '',404
+
+def sorting_data(fetch, _sort_order, _sort_direction, entidade):
+    if _sort_order and _sort_direction and hasattr(entidade, _sort_order):
+        order = getattr(entidade, _sort_order)
+        if _sort_direction == 'desc':
+            order = desc(order)
+        fetch = fetch.order_by(order)
