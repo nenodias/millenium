@@ -273,7 +273,7 @@ def report(pk):
     dados = Historico.to_dict(data, historico_colunas)
     cliente = Cliente.query.filter_by(id=data.id_cliente).one()
     dados['cliente'] = Cliente.to_dict(cliente, cliente_colunas)
-    veiculo = Veiculo.query.filter_by(id=data.id_cliente).one()
+    veiculo = Veiculo.query.filter_by(id=data.id_veiculo).one()
     dados['veiculo'] = Veiculo.to_dict(veiculo, veiculo_colunas)
     modelo = Modelo.query.filter_by(id=veiculo.id_modelo).one()
     dados['modelo'] = Modelo.to_dict(modelo, modelo_colunas)
