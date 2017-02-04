@@ -176,13 +176,18 @@
                     var max_count = dados.length;
                     var count = 0;
                     if(dados.length > 0){
+                        var listaLinhas = [];
                         _.each(dados, function(linha){
+                            listaLinhas.push({});
                             getMontadora(linha['id_monta']).done(function(montadora){
                                 linha['montadora'] = montadora;
                                 var html = template(linha);
-                                $(dados_tabela).append(html);
+                                listaLinhas[dados.indexOf(linha)] = html;
                                 count++;
                                 if(max_count == count){
+                                    _.each(listaLinhas,function(linha){
+                                        $(dados_tabela).append(linha);
+                                    });
                                     loaded.resolve('');
                                 }
                             });

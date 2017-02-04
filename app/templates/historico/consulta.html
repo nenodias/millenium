@@ -281,7 +281,9 @@
                     var max_count = dados.length;
                     var count = 0;
                     if(dados.length > 0){
+                        var listaLinhas = [];
                         _.each(dados, function(linha){
+                            listaLinhas.push({});
                             $.when(getVeiculo(linha['id_veiculo']), getCliente(linha['id_cliente']), getTecnico(linha['id_tecnico']) )
                             .then(function(veiculo, cliente, tecnico){
                                 getModelo(veiculo['id_modelo']).done(function(modelo){
@@ -289,9 +291,12 @@
                                     linha['tecnico'] = tecnico;
                                     linha['veiculo'] = veiculo.id +SEPARADOR+veiculo.placa+SEPARADOR+modelo;
                                     var html = template(linha);
-                                    $(dados_tabela).append(html);
+                                    listaLinhas[dados.indexOf(linha)] = html;
                                     count++;
                                     if(max_count == count){
+                                        _.each(listaLinhas,function(linha){
+                                            $(dados_tabela).append(linha);
+                                        });
                                         loaded.resolve('');
                                     }
                                 });
