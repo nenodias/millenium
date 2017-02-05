@@ -76,6 +76,22 @@ class MixinSerialize():
             if _sort_direction == 'desc':
                 order = desc(order)
             fetch = fetch.order_by(order)
+        elif '.' in _sort_order:
+            order_list = _sort_order.split('.')
+            order = None
+            retorn_obj = cls
+            for order_item in order_list:
+                if order_item and _sort_direction and hasattr(retorn_obj, order_item):
+                    order = getattr(retorn_obj, order_item)
+                    if order and hasattr(order,'prop') and hasattr(order.property,'mapper'):
+                        retorn_obj = order.prop.mapper.class_
+                        fetch = fetch.join(retorn_obj)
+            if order:
+                if _sort_direction == 'desc':
+                    order = desc(order)
+                fetch = fetch.order_by(order)
+
+
         return fetch
 
 class Cliente(MixinSerialize, db.Model):
