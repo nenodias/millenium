@@ -140,26 +140,24 @@ def form(pk):
             else:
                 db.session.add(historico)
             pk_items = []
-            if list_items:
-                for item in list_items:
-                    # salvando os items
-                    item.ordem = len(pk_items)
-                    if item.id:
-                        db.session.merge(item)
-                    else:
-                        db.session.add(item)
-                    pk_items.append( item.id )
-                if pk_items:
-                    # excluindo os items apagados que não foram passados na requisição
-                    items_deletar = HistoricoItem.query.filter(
-                        and_( 
-                            ~HistoricoItem.id.in_( pk_items),
-                            HistoricoItem.id_historico==historico.id 
-                            )
-                        ).all()
-                    if items_deletar:
-                        for item_delete in items_deletar:
-                            db.session.delete(item_delete)
+            for item in list_items:
+                # salvando os items
+                item.ordem = len(pk_items)
+                if item.id:
+                    db.session.merge(item)
+                else:
+                    db.session.add(item)
+                pk_items.append( item.id )
+            # excluindo os items apagados que não foram passados na requisição
+            items_deletar = HistoricoItem.query.filter(
+                and_( 
+                    ~HistoricoItem.id.in_( pk_items),
+                    HistoricoItem.id_historico==historico.id 
+                    )
+                ).all()
+            if items_deletar:
+                for item_delete in items_deletar:
+                    db.session.delete(item_delete)
             db.session.commit()
             id_cadastro = historico.id
             if pk:
