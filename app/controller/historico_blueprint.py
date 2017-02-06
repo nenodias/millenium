@@ -182,6 +182,12 @@ def delete(pk):
     if data:
         vistoria = Vistoria.query.filter_by(id=pk).one()
         try:
+            items_deletar = HistoricoItem.query.filter(
+                HistoricoItem.id_historico==pk
+                ).all()
+            if items_deletar:
+                for item_delete in items_deletar:
+                    db.session.delete(item_delete)
             if vistoria:
                 db.session.delete(vistoria)
             db.session.delete(data)
