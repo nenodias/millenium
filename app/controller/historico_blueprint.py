@@ -182,7 +182,10 @@ def form(pk):
 def delete(pk):
     data = Historico.query.filter_by(id=pk).one()
     if data:
+        vistoria = Vistoria.query.filter_by(id=pk).one()
         try:
+            if vistoria:
+                db.session.delete(vistoria)
             db.session.delete(data)
             db.session.commit()
             return '', 200
