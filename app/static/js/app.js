@@ -2,26 +2,49 @@ _.templateSettings = {
   interpolate: /\[\{(.+?)\}\]/g
 };
 
+var fnValidField = function(valid, divField, error){
+    var pHelp = divField.find('.help');
+
+    var classAdd = 'is-success';
+    var classRemove = 'is-danger';
+    if(!valid){
+        classAdd = 'is-danger';
+        classRemove = 'is-success';
+    }
+    divField.removeClass(classRemove);
+    pHelp.removeClass(classRemove);
+
+    divField.addClass(classAdd);
+    pHelp.addClass(classAdd);
+
+    if(error){
+        pHelp.html(error);
+    }
+};
+
 var PADRAO = {
     errorPlacement: function ( error, element ) {
       if ( element.parent()[0].tagName === "TD" ) {
         error.insertBefore( element );
       } else {
-        error.insertBefore( element.closest('.form-group').find('label') );
+          var divField = element.closest('div.field');
+          fnValidField(false, $(divField), error);
       }
     },
     highlight: function ( element, errorClass, validClass ) {
       if ( $(element).parent()[0].tagName === "TD" ) {
         $( element ).closest( "td" ).addClass( "has-error" ).removeClass( "has-success" );
       }else{
-        $( element ).closest( ".form-group" ).addClass( "has-error" ).removeClass( "has-success" );
+          var divField = element.closest('div.field');
+          fnValidField(false, $(divField), null);
       }
     },
     unhighlight: function (element, errorClass, validClass) {
       if ( $(element).parent()[0].tagName === "TD" ) {
         $( element ).closest( "td" ).addClass( "has-success" ).removeClass( "has-error" );
       }else{
-        $( element ).closest( ".form-group" ).addClass( "has-success" ).removeClass( "has-error" );
+          var divField = element.closest('div.field');
+          fnValidField(true, $(divField), null);
       }
     }
 };
@@ -44,5 +67,20 @@ $(function() {
     });
     $(document).on('change','input.upper, textarea.upper',function(event) {
         eventoUpper(this);
+    });
+    //BULMA CSS
+    $(document).on('click','.menu-list a',function(){
+        var self = this;
+        var $menu = $(self).next();
+        if($menu.hasClass('is-hidden')){
+            $menu.addClass('is-active');
+            $menu.removeClass('is-hidden');
+        }else if($menu.hasClass('is-active')){
+            $menu.addClass('is-hidden');
+            $menu.removeClass('is-active');
+        }
+    });
+    $(document).on('click','button.delete',function(){
+        $(this).closest('.notification').remove();
     });
 });

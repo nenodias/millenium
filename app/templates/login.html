@@ -1,41 +1,40 @@
 {% extends 'base.html' %}
 {% block title %}Login{% endblock %}
 {% block base %}
-    <div class="container">
-        <form class="form-horizontal" method="post">
-            <fieldset>
-                    
-                {% if mensagem %}
-                <div class="alert alert-{{tipo_mensagem}}" role="alert">{{mensagem}}</div>
-                {% endif %}
-
-                <!-- Form Name -->
-                <legend align="center">Login</legend>
-
-                <!-- Text input-->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="usuario">Usuário:</label>  
-                    <div class="col-md-4">
-                        <input id="usuario" name="usuario" type="text" placeholder="Informe o usuários" class="form-control input-md upper" required="">
+<section class="hero is-fullheight is-dark is-bold">
+    <div class="hero-body">
+        <div class="container">
+            <div class="columns is-vcentered">
+                <div class="column is-4 is-offset-4">
+                    {% if mensagem %}
+                    <div class="notification is-{{tipo_mensagem}}">
+                        <button class="delete"></button>
+                        {{mensagem}}
                     </div>
-                </div>
-
-                <!-- Password input-->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="passwordSenha">Senha:</label>
-                    <div class="col-md-4">
-                        <input id="senha" name="senha" type="password" placeholder="Informe a senha" class="form-control input-md" required="">
+                    {% endif %}
+                    <form method="post">
+                    <h1 class="title">
+                        Login
+                    </h1>
+                    <div class="box">
+                        <label class="label">Login</label>
+                        <p class="control">
+                            <input class="input" type="text" name="usuario">
+                        </p>
+                        <label class="label">Password</label>
+                        <p class="control">
+                            <input class="input" type="password" name="senha">
+                        </p>
+                        <hr>
+                        <p class="control">
+                            <button class="button is-primary" type="submit">Login</button>
+                            <button class="button is-default">Cancel</button>
+                        </p>
                     </div>
+                </form>
                 </div>
-
-                <!-- Button -->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="btnLogin"></label>
-                    <div class="col-md-4">
-                        <button id="btnLogin" name="btnLogin" class="btn btn-primary">Login</button>
-                    </div>
-                </div>
-            </fieldset>
-        </form>
+            </div>
+        </div>
     </div>
+</section>
 {% endblock %}

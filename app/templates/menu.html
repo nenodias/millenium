@@ -1,0 +1,128 @@
+<aside class="menu">
+    <p>Início</p>
+    <ul class="menu-list">
+        <li>
+            <a href="{{ url_for('index') }}">
+                Home
+                <i class="fa fa-home"></i>
+            </a>
+        </li>
+    </ul>
+    <p class="menu-label">
+      Preferências
+    </p>
+    <ul class="menu-list">
+      <li>
+          <a>
+              Falhas
+              <i class="fa fa-exclamation-circle"></i>
+          </a>
+          <ul class="is-hidden">
+            <li><a href="{{ url_for('falha.form',pk=None) }}">Cadastro</a></li>
+            <li><a href="{{ url_for('falha.index') }}">Consulta</a></li>
+          </ul>
+      </li>
+      <li>
+          <a>
+              Peças
+              <i class="fa fa-cog"></i>
+          </a>
+          <ul class="is-hidden">
+            <li><a href="{{ url_for('peca.form',pk=None) }}">Cadastro</a></li>
+            <li><a href="{{ url_for('peca.index') }}">Consulta</a></li>
+          </ul>
+      </li>
+      <li>
+          <a>
+              Serviços
+              <i class="fa fa-wrench"></i>
+          </a>
+          <ul class="is-hidden">
+            <li><a href="{{ url_for('servico.form',pk=None) }}">Cadastro</a></li>
+            <li><a href="{{ url_for('servico.index') }}">Consulta</a></li>
+          </ul>
+      </li>
+    </ul>
+    <p class="menu-label">
+      Gerais
+    </p>
+    <ul class="menu-list">
+      <li>
+          <a>
+              Marcas
+              <i class="fa fa-shopping-cart"></i>
+          </a>
+          <ul class="is-hidden">
+            <li>
+                <a>Montadoras</a>
+                <ul class="is-hidden">
+                    <li>
+                        <a href="{{ url_for('montadora.form',pk=None) }}">Cadastro</a>
+                        <a href="{{ url_for('montadora.index') }}">Consulta</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a>Modelos</a>
+                <ul class="is-hidden">
+                    <li>
+                        <a href="{{ url_for('modelo.form',pk=None) }}">Cadastro</a>
+                        <a href="{{ url_for('modelo.index') }}">Consulta</a>
+                    </li>
+                </ul>
+            </li>
+          </ul>
+      </li>
+      <li>
+          <a class="is-anchor">
+              Técnicos
+              <i class="fa fa-user-md"></i>
+          </a>
+          <ul class="is-hidden">
+            <li><a href="{{ url_for('tecnico.form',pk=None) }}">Cadastro</a></li>
+            <li><a href="{{ url_for('tecnico.index') }}">Consulta</a></li>
+          </ul>
+      </li>
+      <li>
+          <a class="is-anchor">
+              Clientes
+              <i class="fa fa-users"></i>
+          </a>
+          <ul class="is-hidden">
+            <li><a href="{{ url_for('cliente.form',pk=None) }}">Cadastro</a></li>
+            <li><a href="{{ url_for('cliente.index') }}">Consulta</a></li>
+          </ul>
+      </li>
+      <li>
+          <a class="is-anchor">
+              Veículos
+              <i class="fa fa-car"></i>
+          </a>
+          <ul class="is-hidden">
+            <li><a href="{{ url_for('veiculo.form',pk=None) }}">Cadastro</a></li>
+            <li><a href="{{ url_for('veiculo.index') }}">Consulta</a></li>
+          </ul>
+      </li>
+      <li>
+          <a class="is-anchor">
+              Históricos
+              <i class="fa fa-suitcase"></i>
+          </a>
+          <ul class="is-hidden">
+            <li><a href="{{ url_for('historico.form',pk=None) }}">Cadastro</a></li>
+            <li><a href="{{ url_for('historico.index') }}">Consulta</a></li>
+          </ul>
+      </li>
+    </ul>
+    <p class="menu-label">
+      Logoff
+    </p>
+    <ul class="menu-list">
+      <li>
+          <a href="{{ url_for('logout') }}">
+              Sair
+              <i class="fa fa-lock"></i>
+          </a>
+      </li>
+    </ul>
+</aside>

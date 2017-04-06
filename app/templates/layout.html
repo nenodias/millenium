@@ -1,109 +1,28 @@
 {% extends 'base.html' %}
 {% block base %}
-    <nav class="navbar navbar-default navbar-fixed-top">
-      <div class="container">
-        <div class="navbar-header">
-          <button aria-controls="navbar" aria-expanded="false" data-target="#navbar" data-toggle="collapse" class="navbar-toggle collapsed" type="button">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a href="#" class="navbar-brand">Millenium</a>
-        </div>
-        <div class="navbar-collapse collapse" id="navbar" aria-expanded="false" style="height: 1px;">
-          <ul class="nav navbar-nav">
-            <li><a href="{{ url_for('index') }}"><i class="glyphicon glyphicon-home"></i></a></li>
-            <li class="dropdown">
-              <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown" href="#">Parâmetros<span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                  <li class="disabled"><a>Falhas</a></li>
-                  <li role="separator" class="divider"></li>
-                  <li><a href="{{ url_for('falha.form',pk=None) }}">Cadastro</a></li>
-                  <li><a href="{{ url_for('falha.index') }}">Consulta</a></li>
-                  <li role="separator" class="divider"></li>
-                  
-                  <li class="disabled"><a>Peças</a></li>
-                  <li role="separator" class="divider"></li>
-                  <li><a href="{{ url_for('peca.form',pk=None) }}">Cadastro</a></li>
-                  <li><a href="{{ url_for('peca.index') }}">Consulta</a></li>
-                  <li role="separator" class="divider"></li>
-
-                  <li class="disabled"><a>Serviços</a></li>
-                  <li role="separator" class="divider"></li>
-                  <li><a href="{{ url_for('servico.form',pk=None) }}">Cadastro</a></li>
-                  <li><a href="{{ url_for('servico.index') }}">Consulta</a></li>
-              </ul>
-            </li>
-
-            <li class="dropdown">
-              <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#">Marca <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li class="disabled"><a>Montadoras</a></li>
-                <li role="separator" class="divider"></li>
-                <li><a href="{{ url_for('montadora.form',pk=None) }}">Cadastro</a></li>
-                <li><a href="{{ url_for('montadora.index') }}">Consulta</a></li>
-                <li role="separator" class="divider"></li>
-                
-                <li class="disabled"><a>Modelos</a></li>
-                <li role="separator" class="divider"></li>
-                <li><a href="{{ url_for('modelo.form',pk=None) }}">Cadastro</a></li>
-                <li><a href="{{ url_for('modelo.index') }}">Consulta</a></li>
-              </ul>
-            </li>
-            
-            <li class="dropdown">
-              <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#">Técnicos <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li><a href="{{ url_for('tecnico.form',pk=None) }}">Cadastro</a></li>
-                <li><a href="{{ url_for('tecnico.index') }}">Consulta</a></li>
-              </ul>
-            </li>
-            <li class="dropdown">
-              <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#">Clientes <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li><a href="{{ url_for('cliente.form',pk=None) }}">Cadastro</a></li>
-                <li><a href="{{ url_for('cliente.index') }}">Consulta</a></li>
-              </ul>
-            </li>
-            <li class="dropdown">
-              <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#">Veículos <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li><a href="{{ url_for('veiculo.form',pk=None) }}">Cadastro</a></li>
-                <li><a href="{{ url_for('veiculo.index') }}">Consulta</a></li>
-              </ul>
-            </li>
-            <li class="dropdown">
-              <a aria-expanded="false" aria-haspopup="true" role="button" data-toggle="dropdown" class="dropdown-toggle" href="#">Histórico <span class="caret"></span></a>
-              <ul class="dropdown-menu">
-                <li><a href="{{ url_for('historico.form',pk=None) }}">Cadastro</a></li>
-                <li><a href="{{ url_for('historico.index') }}">Consulta</a></li>
-              </ul>
-            </li>
-          </ul>
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href="{{ url_for('logout') }}">Sair</a></li>
-          </ul>
-        </div>
+<div class="container is-fluid">
+    <div class="columns">
+      <div class="column is-2">
+          {% include 'menu.html' %}
       </div>
-    </nav>
-    <div class="container">
-        <div class="box-template">
-        {% with messages = get_flashed_messages(with_categories=true) %}
-          {% if messages %}
-            <ul class=flashes>
-            {% for alert_type, message in messages %}
-                {% if alert_type in ['info', 'success', 'danger','warning'] %}
-                    <div class="alert alert-{{alert_type}} alert-dismissible" role="alert">
-                      <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                      {{ message }}
-                    </div>
-                {% endif %}
-            {% endfor %}
-            </ul>
-          {% endif %}
-        {% endwith %}
-        {% block content %}{% endblock %}
-        </div>
+      <div class="column is-10">
+          {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+              <ul class=flashes>
+              {% for alert_type, message in messages %}
+                  {% if alert_type in ['info', 'success', 'danger','warning'] %}
+                      <div class="notification is-{{alert_type}}">
+                        <button class="delete"></button>
+                        {{ message }}
+                      </div>
+                  {% endif %}
+              {% endfor %}
+              </ul>
+            {% endif %}
+          {% endwith %}
+          {% block content %}{% endblock %}
+      </div>
     </div>
+</div>
+
 {% endblock %}
