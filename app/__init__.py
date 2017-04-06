@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from flask import (Flask, request, redirect, url_for, flash, 
+from flask import (Flask, request, redirect, url_for, flash,
     jsonify,render_template, Blueprint, session)
 from flask_sqlalchemy import SQLAlchemy
 

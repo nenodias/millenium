@@ -1,3 +1,4 @@
 flask
 flask-sqlalchemy
 git+https://github.com/reingart/pyfpdf.git
+pexpect

@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import pexpect
+import sys, time
 from app import app, request, render_template, redirect, session, auth_require, url_for
 from .falha_blueprint import falha_blueprint
 from .peca_blueprint import peca_blueprint
@@ -36,6 +38,23 @@ def logout():
 @auth_require()
 def index():
     return render_template('index.html'), 200
+
+@app.route('/backup')
+@auth_require()
+def backup():
+    uri = app.config['SQLALCHEMY_DATABASE_URI'].split('://')[1]
+    parte = uri.split('@')
+    usuario, senha = parte[0].split(':')
+    parte = parte[1].split(':')
+    host = parte[0]
+    porta, database = parte[1].split('/')
+    # executando o pg_dump
+    call = 'pg_dump -d '+database+' -p '+porta+' -U '+usuario+' -h '+host+' -W'
+    ps = pexpect.spawn(call)
+    ps.expect(':')
+    ps.send('%s\n' % (senha))
+    stdout = ps.read()
+    return stdout, 200
 
 app.register_blueprint(falha_blueprint, url_prefix='/falha')
 app.register_blueprint(peca_blueprint, url_prefix='/peca')
