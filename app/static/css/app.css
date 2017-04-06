@@ -25,3 +25,36 @@
     width: 80%;
     float: left;
 }
+
+/**
+ ResponsiveTable
+*/
+
+@media
+only screen and (max-width: 760px),
+(min-device-width: 768px) and (max-device-width: 1024px)  {
+
+    .responsive-stacked-table thead {
+    	display: none;
+    }
+    .responsive-stacked-table tr,
+    .responsive-stacked-table th,
+    .responsive-stacked-table td {
+    	display: block;
+    }
+    .responsive-stacked-table td {
+    	border-top: none;
+    }
+    .responsive-stacked-table tr td:first-child {
+    	border-top: 1px solid #ddd;
+    	font-weight: bold;
+    }
+
+    .responsive-stacked-table.with-mobile-labels tr td:first-child {
+    	font-weight: 300;
+    }
+    .responsive-stacked-table.with-mobile-labels td:before {
+    	display: block;
+    	font-weight: bold;
+    }
+}

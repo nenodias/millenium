@@ -2,6 +2,9 @@ _.templateSettings = {
   interpolate: /\[\{(.+?)\}\]/g
 };
 
+var classSortAsc = "fa fa-sort-up";
+var classSortDesc = "fa fa-sort-desc";
+
 var fnValidField = function(valid, divField, error){
     var pHelp = divField.find('.help');
 

@@ -1,49 +1,63 @@
 {% extends inherit %}
 {% block title %}Consulta de Falhas{% endblock %}
 {% block content %}
-        <form class="form-horizontal">
-            <fieldset>
+<div class="hero ">
+    <div class="hero-body">
+        <h1 class="title">Consulta de falhas</h1>
+        <form>
 
-                <!-- Form Name -->
-                <legend>Consulta de falhas</legend>
-                
-                <input type="hidden" id="limit" name="limit" value="10" />
-                <input type="hidden" id="offset" name="offset" value="0" />
-                <input type="hidden" id="sort_order" name="sort_order" value="0" />
-                <input type="hidden" id="sort_direction" name="sort_direction" value="asc" />
+            <input type="hidden" id="limit" name="limit" value="10" />
+            <input type="hidden" id="offset" name="offset" value="0" />
+            <input type="hidden" id="sort_order" name="sort_order" value="0" />
+            <input type="hidden" id="sort_direction" name="sort_direction" value="asc" />
 
-                <!-- Search input-->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="descricao">Nome da falha</label>
-                    <div class="col-md-5 input-group">
-                        <span class="input-group-addon">
-                            <span class="glyphicon">&#xe003;</span>
-                        </span>
-                        <input id="descricao" name="descricao" type="search" placeholder="Informe a falha" class="form-control input-md upper" value="{{ model['descricao'] }}">
-                    </div>
-                </div>
+            <div class="field">
+                <label class="label">Nome da falha:</label>
+                <p class="control has-icon has-icon-right">
+                    <input id="descricao" name="descricao" type="text" value="{{ model['descricao'] }}" placeholder="Informe a falha" class="input upper" />
+                    <span class="icon is-small">
+                        <i class="fa fa-check"></i>
+                    </span>
+                </p>
+                <p class="help"></p>
+            </div>
 
-                <!-- Button (Double) -->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="btnPesquisar"></label>
-                    <div class="col-md-8">
-                        <button type="button" id="btnPesquisar" class="btn btn-primary">
-                        <span class="glyphicon glyphicon-search"></span>&nbsp;
-                        Pesquisar
-                        </button>
-                    </div>
-                    <div class="col-md-12">
-                        <a class="btn btn-info" role="button" href="{{ url_for('falha.form',pk=None)}}">
-                        <span class="glyphicon glyphicon-plus"></span>&nbsp;
-                        Inserir
-                        </a>
-                    </div>
-                </div>
-            </fieldset>
+            <div class="field is-grouped">
+              <p class="control">
+                <button class="button is-success">
+                    Pesquisar
+                    &nbsp;
+                    <i class="fa fa-search"></i>
+                </button>
+              </p>
+              <p class="control">
+                <a class="button" href="{{ url_for('falha.form',pk=None)}}">
+                    Inserir
+                    &nbsp;
+                    <i class="fa fa-plus"></i>
+                </a>
+              </p>
+            </div>
         </form>
+
         <hr />
-        <table id="falha" class="table table-bordered table-striped">
-            <thead class="thead-inverse">
+        <style>
+        @media only screen and (max-width: 760px),
+        (min-device-width: 768px) and (max-device-width: 1024px)  {
+
+            .responsive-stacked-table.with-mobile-labels td:nth-of-type(1):before {
+                content: "Id:";
+            }
+            .responsive-stacked-table.with-mobile-labels td:nth-of-type(2):before {
+                content: "Descrição:";
+            }
+            .responsive-stacked-table.with-mobile-labels td:nth-of-type(3):before {
+                content: "Ações:";
+            }
+        }
+        </style>
+        <table id="falha" class="table is-bordered is-striped is-narrow responsive-stacked-table with-mobile-labels">
+            <thead>
                 <tr>
                     <th class="sortable" data-sort="id">Id</th>
                     <th class="sortable" data-sort="descricao">Descrição</th>
@@ -51,11 +65,13 @@
                 </tr>
             </thead>
             <tbody class="dados-tabela">
-                
+
             </tbody>
         </table>
         <div class="div-paginacao">
         </div>
+    </div>
+</div>
         <template id="linha-template">
             <tr>
                 <td>[{id}]</td>
@@ -73,12 +89,12 @@
             </tr>
         </template>
         <template id="paginacao-template">
-            <nav aria-label="...">
-              <ul class="pager">
-                <li><a href="#paginacao-template" class="[{prev}]" data-target="-[{limit}]">Previous</a></li>
-                <li><a href="#paginacao-template" class="[{next}]" data-target="+[{limit}]">Next</a></li>
-                <li class="pull-right">Total: [{count}]</li>
-              </ul>
+            <nav class="pagination is-centered">
+              <a class="pagination-previous [{prev}]" data-target="-[{limit}]">Anterior</a>
+              <a class="pagination-next [{next}]" data-target="+[{limit}]">Próximo</a>
+                <ul class="pagination-list">
+                    <li class="pull-right">Total: [{count}]</li>
+                </ul>
             </nav>
         </template>
         <template id="loading">
@@ -106,7 +122,7 @@
 
             var carregarDados = function(){
                 var dados = $('form').serialize();
-                
+
                 var loading_tpl = _.template( $("#loading").html() );
                 $('.dados-tabela').html(loading_tpl());
 
@@ -219,18 +235,18 @@
                     direction = direction == 'asc' ? 'desc' : 'asc';
                     $("#sort_direction").val(direction);
                 }
-                var iconClass = 'pull-right glyphicon';
-                    iconClass = direction == 'asc' ? iconClass+' glyphicon-triangle-bottom' : iconClass+' glyphicon-triangle-top';
+                var iconClass = 'is-pulled-right';
+                    iconClass = direction == 'asc' ? iconClass+' '+classSortDesc : iconClass+' '+classSortAsc;
                     $th.html( $th.html() + '<i class="'+iconClass+'"></i>' );
                 $("#sort_order").val(sort);
                 carregarDados();
             });
-            
+
             $(document).ready(function(){
                 carregarDados();
                 $("#btnPesquisar").click(carregarDados);
                 $('#falha.table').on('click','.btn-danger', eventoExcluir);
-                $('.div-paginacao').on('click','.pager a', eventoPage);
+                $('.div-paginacao').on('click','.pagination a', eventoPage);
             });
             $(document).on('keypress',function(e){
                 var code = e.keyCode || e.which;
