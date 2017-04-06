@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import pexpect
 import sys, time
+from flask import Response
 from app import app, request, render_template, redirect, session, auth_require, url_for
 from .falha_blueprint import falha_blueprint
 from .peca_blueprint import peca_blueprint
@@ -54,7 +55,7 @@ def backup():
     ps.expect(':')
     ps.send('%s\n' % (senha))
     stdout = ps.read()
-    return stdout, 200
+    return Response(stdout, content_type='text/plain; charset=utf-8')
 
 app.register_blueprint(falha_blueprint, url_prefix='/falha')
 app.register_blueprint(peca_blueprint, url_prefix='/peca')
