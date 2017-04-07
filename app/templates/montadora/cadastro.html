@@ -18,36 +18,38 @@
             </div>
             {% else %}
 
-              <!-- Text input-->
-              <div class="form-group">
-                <label class="col-md-4 control-label" for="nome">* Nome da montadora:</label>
-                <div class="col-md-5 input-group">
-                    <span class="input-group-addon">
-                      <span class="glyphicon">&#xe139;</span>
+            <div class="field">
+                <label class="label">* Nome da montadora:</label>
+                <p class="control has-icon has-icon-right">
+                    <input id="nome" name="nome" type="text" value="{{ model['nome'] }}" placeholder="Informe o nome" class="input upper" />
+                    <span class="icon is-small">
+                        <i class="fa fa-check"></i>
                     </span>
-                    <input id="nome" name="nome" type="text" value="{{ model['nome'] }}" placeholder="Informe o nome" class="form-control input-md upper" />
-                </div>
-              </div>
+                </p>
+                <p class="help"></p>
+            </div>
 
-              <div class="form-group">
-                <label class="col-md-4 control-label" for="origem">* Origem da montadora:</label>
-                <div class="col-md-5 input-group">
-                    <span class="input-group-addon">
-                      <span class="glyphicon">&#xe139;</span>
+            <div class="field">
+                <label class="label">* Origem da montadora:</label>
+                <p class="control has-icon has-icon-right">
+                    <input id="origem" name="origem" type="text" value="{{ model['origem'] }}" placeholder="Informe a origem" class="input origem" />
+                    <span class="icon is-small">
+                        <i class="fa fa-check"></i>
                     </span>
-                    <input id="origem" name="origem" type="text" value="{{ model['origem'] }}" placeholder="Informe a origem" class="form-control input-md origem" />
-                </div>
-              </div>
+                </p>
+                <p class="help"></p>
+            </div>
 
-              <div class="form-group">
-                <label class="col-md-4 control-label" for="codmon_ea"> Código da montadora EA:</label>
-                <div class="col-md-5 input-group">
-                    <span class="input-group-addon">
-                      <span class="glyphicon">&#xe139;</span>
+            <div class="field">
+                <label class="label"> Código da montadora EA:</label>
+                <p class="control has-icon has-icon-right">
+                    <input id="codmon_ea" name="codmon_ea" type="text" value="{{ model['codmon_ea'] }}" placeholder="Informe o código" class="input" />
+                    <span class="icon is-small">
+                        <i class="fa fa-check"></i>
                     </span>
-                    <input id="codmon_ea" name="codmon_ea" type="text" value="{{ model['codmon_ea'] }}" placeholder="Informe o código" class="form-control input-md" />
-                </div>
-              </div>
+                </p>
+                <p class="help"></p>
+            </div>
 
               <div class="field is-grouped">
                 <p class="control">
