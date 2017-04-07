@@ -1,59 +1,66 @@
 {% extends 'layout.html' %}
 {% block title %}Cadastro de Peças{% endblock %}
 {% block content %}
-        <form class="form-horizontal" method="post">
-            <fieldset>
+    <div class="hero ">
+        <div class="hero-body">
+            <h1 class="title">Cadastro de peças</h1>
+            <h2 class="subtitle">
+                Os campos sinalizados com asterisco (*) são obrigatórios.
+            </h2>
 
-            <!-- Form Name -->
-            <legend>Cadastro de peças</legend>
+            <form method="post">
 
-            {% if mensagem %}
-            <div class="alert alert-{{tipo_mensagem}}" role="alert">{{mensagem}}</div>
-            {% else %}
 
-              <!-- Alerta obrigatoriedade -->
-              <div class ="alert-info">Os campos sinalizados com asterisco (*) são obrigatórios.
-              </div><br><br>
-
-              <!-- Text input-->
-              <div class="form-group">
-                <label class="col-md-4 control-label" for="descricao">* Nome da peça:</label>  
-                <div class="col-md-5 input-group">
-                    <span class="input-group-addon">
-                      <span class="glyphicon">&#xe139;</span>
-                    </span>
-                    <input id="descricao" name="descricao" type="text" value="{{ model['descricao'] }}" placeholder="Informe a peça" class="form-control input-md upper" />
+                {% if mensagem %}
+                <div class="notification is-{{tipo_mensagem}}">
+                    <button class="delete"></button>
+                    {{mensagem}}
                 </div>
-              </div>
+                {% else %}
 
-              <!-- Text input-->
-              <div class="form-group">
-                <label class="col-md-4 control-label" for="descricao">* Valor da peça:</label>  
-                <div class="col-md-5 input-group">
-                    <span class="input-group-addon">
-                      <span class="glyphicon">&#xe139;</span>
-                    </span>
-                    <input id="valor" name="valor" type="text" value="{{ model['valor'] }}" placeholder="Informe o valor" class="form-control input-md" />
-                </div>
-              </div>
+                  <div class="field">
+                      <label class="label">* Nome da peça:</label>
+                      <p class="control has-icon has-icon-right">
+                          <input id="descricao" name="descricao" type="text" value="{{ model['descricao'] }}" placeholder="Informe a peça" class="input upper" />
+                          <span class="icon is-small">
+                              <i class="fa fa-check"></i>
+                          </span>
+                      </p>
+                      <p class="help"></p>
+                  </div>
 
-                            <!-- Button (Double) -->
-              <div class="form-group">
-                <label class="col-md-4 control-label" for="btnSalvar"></label>
-                <div class="col-md-8">
-                  <button id="btnSalvar" type="submit" class="btn btn-success">
-                  <span class="glyphicon glyphicon-ok"></span>&nbsp;
-                  Salvar
-                  </button>
-                  <a id="btnCancelar" class="btn btn-danger" href="{{ url_for('peca.index') }}">
-                  <span class="glyphicon glyphicon-remove"></span>&nbsp;
-                  Cancelar
-                  </a>
-                </div>
-              </div>
-            {% endif %}
-            </fieldset>
-        </form>
+                  <div class="field">
+                      <label class="label">* Valor da peça:</label>
+                      <p class="control has-icon has-icon-right">
+                          <input id="valor" name="valor" type="text" value="{{ model['valor'] }}" placeholder="Informe o valor" class="input" />
+                          <span class="icon is-small">
+                              <i class="fa fa-check"></i>
+                          </span>
+                      </p>
+                      <p class="help"></p>
+                  </div>
+
+                  <div class="field is-grouped">
+                    <p class="control">
+                      <button class="button is-success">
+                          <i class="fa fa-save"></i>
+                          &nbsp;
+                          Salvar
+                      </button>
+                    </p>
+                    <p class="control">
+                      <a class="button is-danger" href="{{ url_for('peca.index') }}">
+                          <i class="fa fa-window-close"></i>
+                          &nbsp;
+                          Cancelar
+                      </a>
+                    </p>
+                  </div>
+
+                  {% endif %}
+              </form>
+          </div>
+      </div>
         <script type="text/javascript">
           $(document).ready(function(){
             $("form").validate( {
