@@ -333,8 +333,8 @@
                     direction = direction == 'asc' ? 'desc' : 'asc';
                     $("#sort_direction").val(direction);
                 }
-                var iconClass = 'pull-right glyphicon';
-                    iconClass = direction == 'asc' ? iconClass+' glyphicon-triangle-bottom' : iconClass+' glyphicon-triangle-top';
+                var iconClass = 'is-pulled-right';
+                    iconClass = direction == 'asc' ? iconClass+' '+classSortDesc : iconClass+' '+classSortAsc;
                     $th.html( $th.html() + '<i class="'+iconClass+'"></i>' );
                 $("#sort_order").val(sort);
                 carregarDados();
@@ -344,7 +344,7 @@
                 carregarDados();
                 $("#btnPesquisar").click(carregarDados);
                 $('table').on('click','.btn-danger', eventoExcluir);
-                $('.div-paginacao').on('click','.pager a', eventoPage);
+                $('.div-paginacao').on('click','.pagination a', eventoPage);
             });
 
             $("#id_cliente").selectSearch({
