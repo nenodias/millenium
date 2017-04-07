@@ -40,6 +40,27 @@
                 </div>
             </form>
         <hr />
+        <style>
+        @media only screen and (max-width: 760px),
+        (min-device-width: 768px) and (max-device-width: 1024px)  {
+
+            #montadora.responsive-stacked-table.with-mobile-labels td:nth-of-type(1):before {
+                content: "Id:";
+            }
+            #montadora.responsive-stacked-table.with-mobile-labels td:nth-of-type(2):before {
+                content: "Nome:";
+            }
+            #montadora.responsive-stacked-table.with-mobile-labels td:nth-of-type(3):before {
+                content: "Origem:";
+            }
+            #montadora.responsive-stacked-table.with-mobile-labels td:nth-of-type(4):before {
+                content: "EA:";
+            }
+            #montadora.responsive-stacked-table.with-mobile-labels td:nth-of-type(5):before {
+                content: "Ações:";
+            }
+        }
+        </style>
         <table id="montadora" class="table is-bordered is-striped is-narrow responsive-stacked-table with-mobile-labels">
             <thead>
                 <tr>
