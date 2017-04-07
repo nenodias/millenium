@@ -92,12 +92,12 @@
                 <td>[{bairro}]</td>
                 <td>[{telefone_comercial}]</td>
                 <td>
-                    <a class="btn btn-warning" href="{{url_for('cliente.form')}}[{id}]">
-                    <span class="glyphicon glyphicon-pencil"></span>&nbsp;
+                    <a class="tag is-warning" href="{{url_for('cliente.form')}}[{id}]">
+                    <span class="fa fa-edit"></span>&nbsp;
                     Editar
                     </a>
-                    <a class="btn btn-danger" href="#" data-target="{{url_for('cliente.delete',pk='')}}[{id}]">
-                    <span class="glyphicon glyphicon-trash"></span>&nbsp;
+                    <a class="tag is-danger" href="#" data-target="{{url_for('cliente.delete',pk='')}}[{id}]">
+                    <span class="fa fa-trash"></span>&nbsp;
                     Excluir
                     </a>
                 </td>

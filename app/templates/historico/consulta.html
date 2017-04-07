@@ -129,16 +129,16 @@
                 <td>[{valor_total}]</td>
                 <td>[{tipo}]</td>
                 <td>
-                    <a class="btn btn-warning" href="{{url_for('historico.form')}}[{id}]">
-                    <span class="glyphicon glyphicon-pencil"></span>&nbsp;
+                    <a class="tag is-warning" href="{{url_for('historico.form')}}[{id}]">
+                    <span class="fa fa-edit"></span>&nbsp;
                     Editar
                     </a>
-                    <a class="btn btn-danger" href="#" data-target="{{url_for('historico.delete',pk='')}}[{id}]">
-                    <span class="glyphicon glyphicon-trash"></span>&nbsp;
+                    <a class="tag is-danger" href="#" data-target="{{url_for('historico.delete',pk='')}}[{id}]">
+                    <span class="fa fa-trash"></span>&nbsp;
                     Excluir
                     </a>
-                    <a class="btn btn-primary" href="{{url_for('historico.report',pk='')}}[{id}]">
-                    <span class="glyphicon glyphicon-print"></span>&nbsp;
+                    <a class="tag is-info" href="{{url_for('historico.report',pk='')}}[{id}]">
+                    <span class="fa fa-print"></span>&nbsp;
                     Imprimir
                     </a>
                 </td>
