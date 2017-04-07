@@ -24,17 +24,17 @@
 
             <div class="field is-grouped">
               <p class="control">
-                <button class="button is-success">
-                    Pesquisar
-                    &nbsp;
+                <button class="button is-search">
                     <i class="fa fa-search"></i>
+                    &nbsp;
+                    Pesquisar
                 </button>
               </p>
               <p class="control">
-                <a class="button" href="{{ url_for('falha.form',pk=None)}}">
-                    Inserir
-                    &nbsp;
+                <a class="button is-info" href="{{ url_for('falha.form',pk=None)}}">
                     <i class="fa fa-plus"></i>
+                    &nbsp;
+                    Inserir
                 </a>
               </p>
             </div>
@@ -45,13 +45,13 @@
         @media only screen and (max-width: 760px),
         (min-device-width: 768px) and (max-device-width: 1024px)  {
 
-            .responsive-stacked-table.with-mobile-labels td:nth-of-type(1):before {
+            #falha.responsive-stacked-table.with-mobile-labels td:nth-of-type(1):before {
                 content: "Id:";
             }
-            .responsive-stacked-table.with-mobile-labels td:nth-of-type(2):before {
+            #falha.responsive-stacked-table.with-mobile-labels td:nth-of-type(2):before {
                 content: "Descrição:";
             }
-            .responsive-stacked-table.with-mobile-labels td:nth-of-type(3):before {
+            #falha.responsive-stacked-table.with-mobile-labels td:nth-of-type(3):before {
                 content: "Ações:";
             }
         }
@@ -77,12 +77,12 @@
                 <td>[{id}]</td>
                 <td>[{descricao}]</td>
                 <td>
-                    <a class="btn btn-warning" href="{{url_for('falha.form')}}[{id}]">
-                    <span class="glyphicon glyphicon-pencil"></span>&nbsp;
+                    <a class="tag is-warning" href="{{url_for('falha.form')}}[{id}]">
+                    <span class="fa fa-edit"></span>&nbsp;
                     Editar
                     </a>
-                    <a class="btn btn-danger" href="#" data-target="{{url_for('falha.delete',pk='')}}[{id}]">
-                    <span class="glyphicon glyphicon-trash"></span>&nbsp;
+                    <a class="tag is-danger" href="#" data-target="{{url_for('falha.delete',pk='')}}[{id}]">
+                    <span class="fa fa-trash"></span>&nbsp;
                     Excluir
                     </a>
                 </td>
@@ -90,8 +90,16 @@
         </template>
         <template id="paginacao-template">
             <nav class="pagination is-centered">
-              <a class="pagination-previous [{prev}]" data-target="-[{limit}]">Anterior</a>
-              <a class="pagination-next [{next}]" data-target="+[{limit}]">Próximo</a>
+              <a class="pagination-previous [{prev}]" data-target="-[{limit}]">
+                  <i class="fa fa-arrow-left"></i>
+                  &nbsp;
+                  Anterior
+              </a>
+              <a class="pagination-next [{next}]" data-target="+[{limit}]">
+                  Próximo
+                  &nbsp;
+                  <i class="fa fa-arrow-right"></i>
+              </a>
                 <ul class="pagination-list">
                     <li class="pull-right">Total: [{count}]</li>
                 </ul>

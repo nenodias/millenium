@@ -3,8 +3,9 @@
     <ul class="menu-list">
         <li>
             <a href="{{ url_for('index') }}">
-                Home
                 <i class="fa fa-home"></i>
+                &nbsp;
+                Home
             </a>
         </li>
     </ul>
@@ -14,8 +15,9 @@
     <ul class="menu-list">
       <li>
           <a>
-              Falhas
               <i class="fa fa-exclamation-circle"></i>
+              &nbsp;
+              Falhas
           </a>
           <ul class="is-hidden">
             <li><a href="{{ url_for('falha.form',pk=None) }}">Cadastro</a></li>
@@ -24,8 +26,9 @@
       </li>
       <li>
           <a>
-              Peças
               <i class="fa fa-cog"></i>
+              &nbsp;
+              Peças
           </a>
           <ul class="is-hidden">
             <li><a href="{{ url_for('peca.form',pk=None) }}">Cadastro</a></li>
@@ -34,8 +37,9 @@
       </li>
       <li>
           <a>
-              Serviços
               <i class="fa fa-wrench"></i>
+              &nbsp;
+              Serviços
           </a>
           <ul class="is-hidden">
             <li><a href="{{ url_for('servico.form',pk=None) }}">Cadastro</a></li>
@@ -49,8 +53,9 @@
     <ul class="menu-list">
       <li>
           <a>
-              Marcas
               <i class="fa fa-shopping-cart"></i>
+              &nbsp;
+              Marcas
           </a>
           <ul class="is-hidden">
             <li>
@@ -75,8 +80,9 @@
       </li>
       <li>
           <a class="is-anchor">
-              Técnicos
               <i class="fa fa-user-md"></i>
+              &nbsp;
+              Técnicos
           </a>
           <ul class="is-hidden">
             <li><a href="{{ url_for('tecnico.form',pk=None) }}">Cadastro</a></li>
@@ -85,8 +91,9 @@
       </li>
       <li>
           <a class="is-anchor">
-              Clientes
               <i class="fa fa-users"></i>
+              &nbsp;
+              Clientes
           </a>
           <ul class="is-hidden">
             <li><a href="{{ url_for('cliente.form',pk=None) }}">Cadastro</a></li>
@@ -95,8 +102,9 @@
       </li>
       <li>
           <a class="is-anchor">
-              Veículos
               <i class="fa fa-car"></i>
+              &nbsp;
+              Veículos
           </a>
           <ul class="is-hidden">
             <li><a href="{{ url_for('veiculo.form',pk=None) }}">Cadastro</a></li>
@@ -105,8 +113,9 @@
       </li>
       <li>
           <a class="is-anchor">
-              Históricos
               <i class="fa fa-suitcase"></i>
+              &nbsp;
+              Históricos
           </a>
           <ul class="is-hidden">
             <li><a href="{{ url_for('historico.form',pk=None) }}">Cadastro</a></li>
@@ -120,8 +129,9 @@
     <ul class="menu-list">
       <li>
           <a href="{{ url_for('logout') }}">
-              Sair
               <i class="fa fa-lock"></i>
+              &nbsp;
+              Sair
           </a>
       </li>
     </ul>
