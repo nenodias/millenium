@@ -58,7 +58,7 @@
             }
         }
         </style>
-        <table id="falha" class="table is-bordered is-striped is-narrow responsive-stacked-table with-mobile-labels">
+        <table id="servico" class="table is-bordered is-striped is-narrow responsive-stacked-table with-mobile-labels">
             <thead>
                 <tr>
                     <th class="sortable" data-sort="id">Id</th>
@@ -219,7 +219,7 @@
             $(document).ready(function(){
                 carregarDados();
                 $("#btnPesquisar").click(carregarDados);
-                $('#servico.table').on('click','.btn-danger', eventoExcluir);
+                $('#servico.table').on('click','.is-danger', eventoExcluir);
                 $('.div-paginacao').on('click','.pagination a', eventoPage);
             });
             $(document).on('keypress',function(e){

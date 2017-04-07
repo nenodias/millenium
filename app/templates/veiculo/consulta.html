@@ -63,7 +63,7 @@
             </fieldset>
         </form>
         <hr />
-        <table class="table table-bordered table-striped">
+        <table id="veiculo" class="table table-bordered table-striped">
             <thead class="thead-inverse">
                 <tr>
                     <th class="sortable" data-sort="id">Id</th>
@@ -269,7 +269,7 @@
             $(document).ready(function(){
                 carregarDados();
                 $("#btnPesquisar").click(carregarDados);
-                $('table').on('click','.btn-danger', eventoExcluir);
+                $('#veiculo.table').on('click','.is-danger', eventoExcluir);
                 $('.div-paginacao').on('click','.pagination a', eventoPage);
             });
             $("#id_cliente").selectSearch({

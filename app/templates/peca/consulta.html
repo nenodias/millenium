@@ -220,7 +220,7 @@
             $(document).ready(function(){
                 carregarDados();
                 $("#btnPesquisar").click(carregarDados);
-                $('#peca.table').on('click','.btn-danger', eventoExcluir);
+                $('#peca.table').on('click','.is-danger', eventoExcluir);
                 $('.div-paginacao').on('click','.pagination a', eventoPage);
             });
             $(document).on('keypress',function(e){
