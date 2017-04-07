@@ -1,11 +1,10 @@
 {% extends 'layout.html' %}
 {% block title %}Consulta de Clientes{% endblock %}
 {% block content %}
-        <form class="form-horizontal">
-            <fieldset>
-
-                <!-- Form Name -->
-                <legend>Consulta de Clientes</legend>
+<div class="hero ">
+    <div class="hero-body">
+        <h1 class="title">Consulta de Clientes</h1>
+        <form>
 
                 <input type="hidden" id="limit" name="limit" value="10" />
                 <input type="hidden" id="offset" name="offset" value="0" />
@@ -44,24 +43,23 @@
                     </div>
                 </div>
 
-                <!-- Button (Double) -->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="btnPesquisar"></label>
-                    <div class="col-md-8">
-                        <button type="button" id="btnPesquisar" class="btn btn-primary">
-                        <span class="glyphicon glyphicon-search"></span>&nbsp;
+                <div class="field is-grouped">
+                  <p class="control">
+                    <button id="btnPesquisar" class="button is-search">
+                        <i class="fa fa-search"></i>
+                        &nbsp;
                         Pesquisar
-                        </button>
-                    </div>
-                    <div class="col-md-12">
-                        <a class="btn btn-info" role="button" href="{{ url_for('cliente.form',pk=None)}}">
-                        <span class="glyphicon glyphicon-plus"></span>&nbsp;
+                    </button>
+                  </p>
+                  <p class="control">
+                    <a class="button is-info" href="{{ url_for('cliente.form',pk=None)}}">
+                        <i class="fa fa-plus"></i>
+                        &nbsp;
                         Inserir
-                        </a>
-                    </div>
+                    </a>
+                  </p>
                 </div>
-            </fieldset>
-        </form>
+            </form>
         <hr />
         <table id="cliente" class="table is-bordered is-striped is-narrow responsive-stacked-table with-mobile-labels">
             <thead>
@@ -82,6 +80,8 @@
         </table>
         <div class="div-paginacao">
         </div>
+    </div>
+</div>
         <template id="linha-template">
             <tr>
                 <td>[{id}]</td>
