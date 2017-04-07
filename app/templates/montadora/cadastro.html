@@ -19,7 +19,7 @@
             {% else %}
 
             <div class="field">
-                <label class="label">* Nome da montadora:</label>
+                <label class="label" for="nome">* Nome da montadora:</label>
                 <p class="control has-icon has-icon-right">
                     <input id="nome" name="nome" type="text" value="{{ model['nome'] }}" placeholder="Informe o nome" class="input upper" />
                     <span class="icon is-small">
@@ -30,7 +30,7 @@
             </div>
 
             <div class="field">
-                <label class="label">* Origem da montadora:</label>
+                <label class="label" for="origem">* Origem da montadora:</label>
                 <p class="control has-icon has-icon-right">
                     <input id="origem" name="origem" type="text" value="{{ model['origem'] }}" placeholder="Informe a origem" class="input origem" />
                     <span class="icon is-small">
@@ -41,7 +41,7 @@
             </div>
 
             <div class="field">
-                <label class="label"> Código da montadora EA:</label>
+                <label class="label" for="codmon_ea"> Código da montadora EA:</label>
                 <p class="control has-icon has-icon-right">
                     <input id="codmon_ea" name="codmon_ea" type="text" value="{{ model['codmon_ea'] }}" placeholder="Informe o código" class="input" />
                     <span class="icon is-small">

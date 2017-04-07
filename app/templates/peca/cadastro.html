@@ -19,7 +19,7 @@
                 {% else %}
 
                   <div class="field">
-                      <label class="label">* Nome da peça:</label>
+                      <label class="label" for="descricao">* Nome da peça:</label>
                       <p class="control has-icon has-icon-right">
                           <input id="descricao" name="descricao" type="text" value="{{ model['descricao'] }}" placeholder="Informe a peça" class="input upper" />
                           <span class="icon is-small">
@@ -30,7 +30,7 @@
                   </div>
 
                   <div class="field">
-                      <label class="label">* Valor da peça:</label>
+                      <label class="label" for="valor">* Valor da peça:</label>
                       <p class="control has-icon has-icon-right">
                           <input id="valor" name="valor" type="text" value="{{ model['valor'] }}" placeholder="Informe o valor" class="input" />
                           <span class="icon is-small">
