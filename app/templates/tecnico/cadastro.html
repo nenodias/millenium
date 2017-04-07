@@ -1,48 +1,55 @@
 {% extends 'layout.html' %}
 {% block title %}Cadastro de Técnicos{% endblock %}
 {% block content %}
-        <form class="form-horizontal" method="post">
-            <fieldset>
+<div class="hero ">
+    <div class="hero-body">
+        <h1 class="title">Cadastro de técnicos</h1>
+        <h2 class="subtitle">
+            Os campos sinalizados com asterisco (*) são obrigatórios.
+        </h2>
 
-            <!-- Form Name -->
-            <legend>Cadastro de técnicos</legend>
+        <form method="post">
+
 
             {% if mensagem %}
-            <div class="alert alert-{{tipo_mensagem}}" role="alert">{{mensagem}}</div>
+            <div class="notification is-{{tipo_mensagem}}">
+                <button class="delete"></button>
+                {{mensagem}}
+            </div>
             {% else %}
 
-              <!-- Alerta obrigatoriedade -->
-              <div class ="alert-info">Os campos sinalizados com asterisco (*) são obrigatórios.
-              </div><br><br>
-
-              <!-- Text input-->
-              <div class="form-group">
-                <label class="col-md-4 control-label" for="nome">* Nome do técnico:</label>  
-                <div class="col-md-5 input-group">
-                    <span class="input-group-addon">
-                      <span class="glyphicon">&#xe139;</span>
-                    </span>
-                    <input id="nome" name="nome" type="text" value="{{ model['nome'] }}" placeholder="Informe o nome" class="form-control input-md upper" />
+                <div class="field">
+                    <label class="label">* Nome do técnico:</label>
+                    <p class="control has-icon has-icon-right">
+                        <input id="nome" name="nome" type="text" value="{{ model['nome'] }}" placeholder="Informe o nome" class="input upper" />
+                        <span class="icon is-small">
+                            <i class="fa fa-check"></i>
+                        </span>
+                    </p>
+                    <p class="help"></p>
                 </div>
-              </div>
 
-              <!-- Button (Double) -->
-              <div class="form-group">
-                <label class="col-md-4 control-label" for="btnSalvar"></label>
-                <div class="col-md-8">
-                  <button id="btnSalvar" type="submit" class="btn btn-success">
-                  <span class="glyphicon glyphicon-ok"></span>&nbsp;
-                  Salvar
+              <div class="field is-grouped">
+                <p class="control">
+                  <button class="button is-success">
+                      <i class="fa fa-save"></i>
+                      &nbsp;
+                      Salvar
                   </button>
-                  <a id="btnCancelar" class="btn btn-danger" href="{{ url_for('tecnico.index') }}">
-                  <span class="glyphicon glyphicon-remove"></span>&nbsp;
-                  Cancelar
+                </p>
+                <p class="control">
+                  <a class="button is-danger" href="{{ url_for('tecnico.index') }}">
+                      <i class="fa fa-window-close"></i>
+                      &nbsp;
+                      Cancelar
                   </a>
-                </div>
+                </p>
               </div>
-            {% endif %}
-            </fieldset>
-        </form>
+
+              {% endif %}
+              </form>
+          </div>
+      </div>
         <script type="text/javascript">
           $(document).ready(function(){
             $("form").validate( {
