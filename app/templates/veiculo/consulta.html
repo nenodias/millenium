@@ -11,36 +11,38 @@
                 <input type="hidden" id="sort_order" name="sort_order" value="0" />
                 <input type="hidden" id="sort_direction" name="sort_direction" value="asc" />
 
-                <!-- Search input-->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="id_cliente">Cliente</label>
-                    <div class="col-md-5 input-group">
-                        <span class="input-group-addon">
-                            <span class="glyphicon">&#xe003;</span>
+
+                <div class="field">
+                    <label class="label" for="id_cliente">Cliente:</label>
+                    <p class="control has-icon has-icon-right">
+                        <input id="id_cliente" name="id_cliente" type="text" placeholder="Informe o cliente" class="input" value="{{ model['id_cliente'] }}">
+                        <span class="icon is-small">
+                            <i class="fa fa-check"></i>
                         </span>
-                        <input id="id_cliente" name="id_cliente" type="search" placeholder="Informe o cliente" class="form-control input-md" value="{{ model['id_cliente'] }}">
-                    </div>
+                    </p>
+                    <p class="help"></p>
                 </div>
 
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="id_modelo">Modelo</label>
-                    <div class="col-md-5 input-group">
-                        <span class="input-group-addon">
-                            <span class="glyphicon">&#xe003;</span>
+                <div class="field">
+                    <label class="label" for="id_modelo">Modelo:</label>
+                    <p class="control has-icon has-icon-right">
+                        <input id="id_modelo" name="id_modelo" type="text" placeholder="Informe o modelo" class="input" value="{{ model['id_modelo'] }}">
+                        <span class="icon is-small">
+                            <i class="fa fa-check"></i>
                         </span>
-                        <input id="id_modelo" name="id_modelo" type="search" placeholder="Informe o modelo" class="form-control input-md" value="{{ model['id_modelo'] }}">
-                    </div>
+                    </p>
+                    <p class="help"></p>
                 </div>
 
-
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="placa">Placa</label>
-                    <div class="col-md-5 input-group">
-                        <span class="input-group-addon">
-                            <span class="glyphicon">&#xe003;</span>
+                <div class="field">
+                    <label class="label" for="placa">Placa:</label>
+                    <p class="control has-icon has-icon-right">
+                        <input id="placa" name="placa" type="text" placeholder="Informe a placa" class="input upper" value="{{ model['placa'] }}">
+                        <span class="icon is-small">
+                            <i class="fa fa-check"></i>
                         </span>
-                        <input id="placa" name="placa" type="search" placeholder="Informe a placa" class="form-control input-md upper" value="{{ model['placa'] }}">
-                    </div>
+                    </p>
+                    <p class="help"></p>
                 </div>
 
                 <div class="field is-grouped">
@@ -61,6 +63,42 @@
                 </div>
             </form>
         <hr />
+        <style>
+        @media only screen and (max-width: 760px),
+        (min-device-width: 768px) and (max-device-width: 1024px)  {
+
+            #veiculo.responsive-stacked-table.with-mobile-labels td:nth-of-type(1):before {
+                content: "Id:";
+            }
+            #veiculo.responsive-stacked-table.with-mobile-labels td:nth-of-type(2):before {
+                content: "Cliente:";
+            }
+            #veiculo.responsive-stacked-table.with-mobile-labels td:nth-of-type(3):before {
+                content: "Modelo:";
+            }
+            #veiculo.responsive-stacked-table.with-mobile-labels td:nth-of-type(4):before {
+                content: "Placa:";
+            }
+            #veiculo.responsive-stacked-table.with-mobile-labels td:nth-of-type(5):before {
+                content: "Ano:";
+            }
+            #veiculo.responsive-stacked-table.with-mobile-labels td:nth-of-type(6):before {
+                content: "Cor:";
+            }
+            #veiculo.responsive-stacked-table.with-mobile-labels td:nth-of-type(7):before {
+                content: "Combustível:";
+            }
+            #veiculo.responsive-stacked-table.with-mobile-labels td:nth-of-type(8):before {
+                content: "Chassis:";
+            }
+            #veiculo.responsive-stacked-table.with-mobile-labels td:nth-of-type(9):before {
+                content: "Renavam:";
+            }
+            #veiculo.responsive-stacked-table.with-mobile-labels td:nth-of-type(10):before {
+                content: "Ações:";
+            }
+        }
+        </style>
         <table id="veiculo" class="table is-bordered is-striped is-narrow responsive-stacked-table with-mobile-labels">
             <thead>
                 <tr>
