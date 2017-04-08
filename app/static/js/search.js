@@ -110,7 +110,7 @@
                 $(divContainer).show();
             }
         };
-        
+
         labelField = elemento.createLabelField(el);
         $(this).after(labelField);
         var fieldSearch = elemento.createSearchField(el);
@@ -121,7 +121,7 @@
         elemento.clearItems();
         var limit = config.limit || 10;
         var offset = 0;
-        
+
         var divList = document.createElement('DIV');
         divList.className = 'nn-list';
         divList.appendChild(itemsList);
@@ -202,5 +202,5 @@
             });
         }
         return this;
-   }; 
+   };
 })( jQuery );
