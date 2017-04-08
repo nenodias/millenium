@@ -11,36 +11,37 @@
                 <input type="hidden" id="sort_order" name="sort_order" value="0" />
                 <input type="hidden" id="sort_direction" name="sort_direction" value="asc" />
 
-                <!-- Search input-->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="nome">Nome do cliente</label>
-                    <div class="col-md-5 input-group">
-                        <span class="input-group-addon">
-                            <span class="glyphicon">&#xe003;</span>
+                <div class="field">
+                    <label class="label" for="nome">Nome do cliente:</label>
+                    <p class="control has-icon has-icon-right">
+                        <input id="nome" name="nome" type="text" placeholder="Informe o nome" class="input" value="{{ model['nome'] }}">
+                        <span class="icon is-small">
+                            <i class="fa fa-check"></i>
                         </span>
-                        <input id="nome" name="nome" type="search" placeholder="Informe o nome" class="form-control input-md upper" value="{{ model['nome'] }}">
-                    </div>
+                    </p>
+                    <p class="help"></p>
                 </div>
 
-
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="telefone">Telefone</label>
-                    <div class="col-md-5 input-group">
-                        <span class="input-group-addon">
-                            <span class="glyphicon">&#xe003;</span>
+                <div class="field">
+                    <label class="label" for="telefone">Telefone:</label>
+                    <p class="control has-icon has-icon-right">
+                        <input id="telefone" name="telefone" type="text" placeholder="Informe o telefone" class="input" value="{{ model['telefone'] }}">
+                        <span class="icon is-small">
+                            <i class="fa fa-check"></i>
                         </span>
-                        <input id="telefone" name="telefone" type="search" placeholder="Informe o telefone" class="form-control input-md upper" value="{{ model['telefone'] }}">
-                    </div>
+                    </p>
+                    <p class="help"></p>
                 </div>
 
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="celular">Celular</label>
-                    <div class="col-md-5 input-group">
-                        <span class="input-group-addon">
-                            <span class="glyphicon">&#xe003;</span>
+                <div class="field">
+                    <label class="label" for="celular">Celular:</label>
+                    <p class="control has-icon has-icon-right">
+                        <input id="celular" name="celular" type="text" placeholder="Informe o celular" class="input" value="{{ model['celular'] }}">
+                        <span class="icon is-small">
+                            <i class="fa fa-check"></i>
                         </span>
-                        <input id="celular" name="celular" type="search" placeholder="Informe o celular" class="form-control input-md upper" value="{{ model['celular'] }}">
-                    </div>
+                    </p>
+                    <p class="help"></p>
                 </div>
 
                 <div class="field is-grouped">
@@ -61,6 +62,36 @@
                 </div>
             </form>
         <hr />
+        <style>
+        @media only screen and (max-width: 760px),
+        (min-device-width: 768px) and (max-device-width: 1024px)  {
+
+            #cliente.responsive-stacked-table.with-mobile-labels td:nth-of-type(1):before {
+                content: "Id:";
+            }
+            #cliente.responsive-stacked-table.with-mobile-labels td:nth-of-type(2):before {
+                content: "Nome:";
+            }
+            #cliente.responsive-stacked-table.with-mobile-labels td:nth-of-type(3):before {
+                content: "Telefone:";
+            }
+            #cliente.responsive-stacked-table.with-mobile-labels td:nth-of-type(4):before {
+                content: "Celular:";
+            }
+            #cliente.responsive-stacked-table.with-mobile-labels td:nth-of-type(5):before {
+                content: "Endereço:";
+            }
+            #cliente.responsive-stacked-table.with-mobile-labels td:nth-of-type(6):before {
+                content: "Bairro:";
+            }
+            #cliente.responsive-stacked-table.with-mobile-labels td:nth-of-type(7):before {
+                content: "Telefone Comercial:";
+            }
+            #cliente.responsive-stacked-table.with-mobile-labels td:nth-of-type(8):before {
+                content: "Ações:";
+            }
+        }
+        </style>
         <table id="cliente" class="table is-bordered is-striped is-narrow responsive-stacked-table with-mobile-labels">
             <thead>
                 <tr>
