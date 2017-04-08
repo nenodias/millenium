@@ -61,7 +61,7 @@
                 <tr>
                     <th class="sortable" data-sort="id">Id</th>
                     <th class="sortable" data-sort="descricao">Descrição</th>
-                    <th>Ações</th>
+                    <th class="options">Ações</th>
                 </tr>
             </thead>
             <tbody class="dados-tabela">
@@ -76,7 +76,7 @@
             <tr>
                 <td>[{id}]</td>
                 <td>[{descricao}]</td>
-                <td>
+                <td class="options">
                     <a class="tag is-warning" href="{{url_for('falha.form')}}[{id}]">
                     <span class="fa fa-edit"></span>&nbsp;
                     Editar

@@ -11,69 +11,74 @@
                 <input type="hidden" id="sort_order" name="sort_order" value="0" />
                 <input type="hidden" id="sort_direction" name="sort_direction" value="asc" />
 
-                <!-- Search input-->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="numero_ordem">N° Ordem</label>
-                    <div class="col-md-5 input-group">
-                        <span class="input-group-addon">
-                            <span class="glyphicon">&#xe003;</span>
+                <div class="field">
+                    <label class="label" for="numero_ordem">Nº Ordem:</label>
+                    <p class="control has-icon has-icon-right">
+                        <input id="numero_ordem" name="numero_ordem" type="text" value="{{ model['numero_ordem'] }}" placeholder="Informe o nº" class="input upper" />
+                        <span class="icon is-small">
+                            <i class="fa fa-check"></i>
                         </span>
-                        <input id="numero_ordem" name="numero_ordem" type="search" placeholder="Informe o n" class="form-control input-md" value="{{ model['numero_ordem'] }}">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="id_cliente">Cliente</label>
-                    <div class="col-md-5 input-group">
-                        <span class="input-group-addon">
-                            <span class="glyphicon">&#xe003;</span>
-                        </span>
-                        <input id="id_cliente" name="id_cliente" type="search" placeholder="Informe o cliente" class="form-control input-md" value="{{ model['id_cliente'] }}">
-                    </div>
+                    </p>
+                    <p class="help"></p>
                 </div>
 
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="id_veiculo">Veículo</label>
-                    <div class="col-md-5 input-group">
-                        <span class="input-group-addon">
-                            <span class="glyphicon">&#xe003;</span>
+                <div class="field">
+                    <label class="label" for="id_cliente">Cliente:</label>
+                    <p class="control has-icon has-icon-right">
+                        <input id="id_cliente" name="id_cliente" type="text" value="{{ model['id_cliente'] }}" placeholder="Informe o cliente" class="input upper" />
+                        <span class="icon is-small">
+                            <i class="fa fa-check"></i>
                         </span>
-                        <input id="id_veiculo" name="id_veiculo" type="search" placeholder="Informe o veículo" class="form-control input-md" value="{{ model['id_veiculo'] }}">
-                    </div>
+                    </p>
+                    <p class="help"></p>
                 </div>
 
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="id_tecnico">Técnico</label>
-                    <div class="col-md-5 input-group">
-                        <span class="input-group-addon">
-                            <span class="glyphicon">&#xe003;</span>
+                <div class="field">
+                    <label class="label" for="id_veiculo">Veículo:</label>
+                    <p class="control has-icon has-icon-right">
+                        <input id="id_veiculo" name="id_veiculo" type="text" value="{{ model['id_veiculo'] }}" placeholder="Informe o veículo" class="input upper" />
+                        <span class="icon is-small">
+                            <i class="fa fa-check"></i>
                         </span>
-                        <input id="id_tecnico" name="id_tecnico" type="search" placeholder="Informe o técnico" class="form-control input-md" value="{{ model['id_tecnico'] }}">
-                    </div>
+                    </p>
+                    <p class="help"></p>
                 </div>
 
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="data">Data</label>
-                    <div class="col-md-5 input-group">
-                        <span class="input-group-addon">
-                            <span class="glyphicon">&#xe003;</span>
+                <div class="field">
+                    <label class="label" for="id_tecnico">Técnico:</label>
+                    <p class="control has-icon has-icon-right">
+                        <input id="id_tecnico" name="id_tecnico" type="text" value="{{ model['id_tecnico'] }}" placeholder="Informe o técnico" class="input upper" />
+                        <span class="icon is-small">
+                            <i class="fa fa-check"></i>
                         </span>
-                        <input id="data" name="data" type="date" placeholder="Informe a data" class="form-control input-md" value="{{ model['data'] }}">
-                    </div>
+                    </p>
+                    <p class="help"></p>
                 </div>
 
-                <!-- Select Basic -->
-                <div class="form-group">
-                    <label class="col-md-4 control-label" for="tipo">Tipo</label>
-                    <div class="col-md-4 input-group">
-                        <span class="input-group-addon">
-                            <span class="glyphicon">&#xe003;</span>
+                <div class="field">
+                    <label class="label" for="data">Data:</label>
+                    <p class="control has-icon has-icon-right">
+                        <input id="data" name="data" type="date" value="{{ model['data'] }}" placeholder="Informe a data" class="input upper" />
+                        <span class="icon is-small">
+                            <i class="fa fa-check"></i>
                         </span>
-                        <select id="tipo" name="tipo" class="form-control">
+                    </p>
+                    <p class="help"></p>
+                </div>
+
+                <div class="field">
+                    <label class="label" for="tipo">Tipo:</label>
+                    <p class="control has-icon has-icon-right">
+                        <select id="tipo" name="tipo" class="input">
                             {% for item in tupla_tipo_historico %}
                                 <option value="{{ item[0] }}">{{ item[1] }}</option>
                             {% endfor %}
                         </select>
-                    </div>
+                        <span class="icon is-small">
+                            <i class="fa fa-check"></i>
+                        </span>
+                    </p>
+                    <p class="help"></p>
                 </div>
 
                 <div class="field is-grouped">
@@ -94,6 +99,39 @@
                 </div>
             </form>
         <hr />
+        <style>
+        @media only screen and (max-width: 760px),
+        (min-device-width: 768px) and (max-device-width: 1024px)  {
+
+            #historico.responsive-stacked-table.with-mobile-labels td:nth-of-type(1):before {
+                content: "Id:";
+            }
+            #historico.responsive-stacked-table.with-mobile-labels td:nth-of-type(2):before {
+                content: "Cliente:";
+            }
+            #historico.responsive-stacked-table.with-mobile-labels td:nth-of-type(3):before {
+                content: "Veículo / Placa / Modelo:";
+            }
+            #historico.responsive-stacked-table.with-mobile-labels td:nth-of-type(4):before {
+                content: "Técnico:";
+            }
+            #historico.responsive-stacked-table.with-mobile-labels td:nth-of-type(5):before {
+                content: "N° Ordem:";
+            }
+            #historico.responsive-stacked-table.with-mobile-labels td:nth-of-type(6):before {
+                content: "Data:";
+            }
+            #historico.responsive-stacked-table.with-mobile-labels td:nth-of-type(7):before {
+                content: "Valor Total:";
+            }
+            #historico.responsive-stacked-table.with-mobile-labels td:nth-of-type(8):before {
+                content: "Tipo:";
+            }
+            #historico.responsive-stacked-table.with-mobile-labels td:nth-of-type(9):before {
+                content: "Ações:";
+            }
+        }
+        </style>
         <table id="historico" class="table is-bordered is-striped is-narrow responsive-stacked-table with-mobile-labels">
             <thead>
                 <tr>
@@ -105,7 +143,7 @@
                     <th class="sortable" data-sort="data">Data</th>
                     <th class="sortable" data-sort="valor_total">Valor Total</th>
                     <th>Tipo</th>
-                    <th class="sortable" data-sort="">Ações</th>
+                    <th class="options" data-sort="">Ações</th>
                 </tr>
             </thead>
             <tbody class="dados-tabela">
@@ -124,11 +162,11 @@
                 <td>[{tecnico}]</td>
                 <td>[{numero_ordem}]</td>
                 <td>
-                    <input id="data" name="data" type="datetime-local" placeholder="Informe a data" class="form-control input-md" value="[{data}]" readonly="readonly" />
+                    <input id="data" name="data" type="datetime-local" placeholder="Informe a data" class="input" value="[{data}]" readonly="readonly" />
                 </td>
                 <td>[{valor_total}]</td>
                 <td>[{tipo}]</td>
-                <td>
+                <td class="options">
                     <a class="tag is-warning" href="{{url_for('historico.form')}}[{id}]">
                     <span class="fa fa-edit"></span>&nbsp;
                     Editar

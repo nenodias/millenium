@@ -64,7 +64,7 @@
                     <th class="sortable" data-sort="id">Id</th>
                     <th class="sortable" data-sort="descricao">Descrição</th>
                     <th class="sortable" data-sort="valor">Valor</th>
-                    <th>Ações</th>
+                    <th class="options">Ações</th>
                 </tr>
             </thead>
             <tbody class="dados-tabela">
@@ -80,7 +80,7 @@
                 <td>[{id}]</td>
                 <td>[{descricao}]</td>
                 <td>[{valor}]</td>
-                <td>
+                <td class="options">
                     <a class="tag is-warning" href="{{url_for('peca.form')}}[{id}]">
                     <span class="fa fa-edit"></span>&nbsp;
                     Editar

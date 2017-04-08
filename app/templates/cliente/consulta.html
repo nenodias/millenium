@@ -102,7 +102,7 @@
                     <th class="sortable" data-sort="endereco">Endereço</th>
                     <th class="sortable" data-sort="bairro">Bairro</th>
                     <th class="sortable" data-sort="telefone_comercial">Telefone Comercial</th>
-                    <th>Ações</th>
+                    <th class="options">Ações</th>
                 </tr>
             </thead>
             <tbody class="dados-tabela">
@@ -122,7 +122,7 @@
                 <td>[{endereco}]</td>
                 <td>[{bairro}]</td>
                 <td>[{telefone_comercial}]</td>
-                <td>
+                <td class="options">
                     <a class="tag is-warning" href="{{url_for('cliente.form')}}[{id}]">
                     <span class="fa fa-edit"></span>&nbsp;
                     Editar

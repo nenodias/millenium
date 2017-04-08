@@ -1,6 +1,5 @@
 .input-td {
     width: 80%;
-    float: left;
 }
 
 body {
@@ -47,7 +46,10 @@ body > .container.is-fluid.box{
     border-color: transparent;
     color: #fff;
 }
-
+.tag.is-search {
+    background-color: #5bc0de;
+    color: rgb(255, 255, 255);
+}
 /**
  ResponsiveTable
 */
@@ -70,6 +72,10 @@ only screen and (max-width: 760px),
     .responsive-stacked-table tr td:first-child {
     	border-top: 1px solid #ddd;
     	font-weight: bold;
+    }
+
+    .responsive-stacked-table.with-headers thead{
+        display: block;
     }
 
     .responsive-stacked-table.with-mobile-labels tr td:first-child {
