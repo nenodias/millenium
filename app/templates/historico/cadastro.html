@@ -20,94 +20,100 @@
 
               <input type="hidden" name="items" id="items" />
 
-              <!-- Text input-->
-              <div class="form-group">
-                <label class="col-md-4 control-label" for="id_veiculo">* Veículo:</label>
-                <div class="col-md-5 input-group">
-                  <span class="input-group-addon">
-                    <span class="glyphicon">&#xe139;</span>
-                  </span>
-                  <input id="id_veiculo" name="id_veiculo" type="text" value="{{ model['id_veiculo'] }}" placeholder="Informe o veículo" class="form-control input-md" />
-                </div>
+              <div class="field">
+                  <label class="label" for="id_veiculo">* Veículo:</label>
+                  <p class="control has-icon has-icon-right">
+                      <input id="id_veiculo" name="id_veiculo" type="text" value="{{ model['id_veiculo'] }}" placeholder="Informe o veículo" class="input upper" />
+                      <span class="icon is-small">
+                          <i class="fa fa-check"></i>
+                      </span>
+                  </p>
+                  <p class="help"></p>
               </div>
 
-              <div class="form-group">
-                <label class="col-md-4 control-label" for="id_cliente">* Cliente:</label>
-                <div class="col-md-5 input-group">
-                  <span class="input-group-addon">
-                    <span class="glyphicon">&#xe139;</span>
-                  </span>
-                  <input id="id_cliente" name="id_cliente" type="text" value="{{ model['id_cliente'] }}" placeholder="Informe o cliente" class="form-control input-md" />
-                </div>
+              <div class="field">
+                  <label class="label" for="id_cliente">* Cliente:</label>
+                  <p class="control has-icon has-icon-right">
+                      <input id="id_cliente" name="id_cliente" type="text" value="{{ model['id_cliente'] }}" placeholder="Informe o cliente" class="input upper" />
+                      <span class="icon is-small">
+                          <i class="fa fa-check"></i>
+                      </span>
+                  </p>
+                  <p class="help"></p>
               </div>
 
-              <div class="form-group">
-                <label class="col-md-4 control-label" for="id_tecnico"> Técnico:</label>
-                <div class="col-md-5 input-group">
-                  <span class="input-group-addon">
-                    <span class="glyphicon">&#xe139;</span>
-                  </span>
-                  <input id="id_tecnico" name="id_tecnico" type="text" value="{{ model['id_tecnico'] }}" placeholder="Informe o técnico" class="form-control input-md" />
-                </div>
+              <div class="field">
+                  <label class="label" for="id_tecnico"> Técnico:</label>
+                  <p class="control has-icon has-icon-right">
+                      <input id="id_tecnico" name="id_tecnico" type="text" value="{{ model['id_tecnico'] }}" placeholder="Informe o técnico" class="input upper" />
+                      <span class="icon is-small">
+                          <i class="fa fa-check"></i>
+                      </span>
+                  </p>
+                  <p class="help"></p>
               </div>
 
-              <div class="form-group">
-                <label class="col-md-4 control-label" for="numero_ordem"> Nº Ordem:</label>
-                <div class="col-md-5 input-group">
-                  <span class="input-group-addon">
-                    <span class="glyphicon">&#xe139;</span>
-                  </span>
-                  <input id="numero_ordem" name="numero_ordem" type="text" value="{{ model['numero_ordem'] }}" placeholder="Informe o número da ordem" class="form-control input-md" readonly="readonly" />
-                </div>
+              <div class="field">
+                  <label class="label" for="numero_ordem"> Nº Ordem:</label>
+                  <p class="control has-icon has-icon-right">
+                      <input id="numero_ordem" name="numero_ordem" type="text" value="{{ model['numero_ordem'] }}" placeholder="Informe o número da ordem" class="input upper" />
+                      <span class="icon is-small">
+                          <i class="fa fa-check"></i>
+                      </span>
+                  </p>
+                  <p class="help"></p>
               </div>
 
-              <div class="form-group">
-                <label class="col-md-4 control-label" for="kilometragem">* Kilometragem:</label>
-                <div class="col-md-5 input-group">
-                  <span class="input-group-addon">
-                    <span class="glyphicon">&#xe139;</span>
-                  </span>
-                  <input id="kilometragem" name="kilometragem" type="text" value="{{ model['vistoria']['kilometragem'] }}" placeholder="Informe a kilometragem" class="form-control input-md" />
-                </div>
+              <div class="field">
+                  <label class="label" for="kilometragem">* Kilometragem:</label>
+                  <p class="control has-icon has-icon-right">
+                      <input id="kilometragem" name="kilometragem" type="text" value="{{ model['vistoria']['kilometragem'] }}" placeholder="Informe a kilometragem" class="input upper" />
+                      <span class="icon is-small">
+                          <i class="fa fa-check"></i>
+                      </span>
+                  </p>
+                  <p class="help"></p>
               </div>
 
-              <div class="form-group">
-                <label class="col-md-4 control-label" for="data">* Data:</label>
-                <div class="col-md-5 input-group">
-                  <span class="input-group-addon">
-                    <span class="glyphicon">&#xe139;</span>
-                  </span>
-                  <input id="data" name="data" type="datetime-local" placeholder="Informe a data" class="form-control input-md" value="{{ model['data'] }}" >
-                </div>
+              <div class="field">
+                  <label class="label" for="data">* Data:</label>
+                  <p class="control has-icon has-icon-right">
+                      <input id="data" name="data" type="datetime-local" value="{{ model['data'] }}" placeholder="Informe a data" class="input upper" />
+                      <span class="icon is-small">
+                          <i class="fa fa-check"></i>
+                      </span>
+                  </p>
+                  <p class="help"></p>
               </div>
 
-              <div class="form-group">
-                <label class="col-md-4 control-label" for="tipo">* Tipo</label>
-                <div class="col-md-4 input-group">
-                    <span class="input-group-addon">
-                      <span class="glyphicon">&#xe055;</span>
-                    </span>
-                    <select id="tipo" name="tipo" class="form-control input-md" >
-                      {% for item in tupla_tipo_historico %}
-                        <option value="{{ item[0] }}"
-                        {{ 'selected="selected"' if (item[0] == model['tipo']) }}
-                        >
-                          {{ item[1] }}
-                        </option>
-                      {% endfor %}
-                    </select>
-                </div>
+              <div class="field">
+                  <label class="label" for="data">* Tipo:</label>
+                  <p class="control has-icon has-icon-right">
+                      <select id="tipo" name="tipo" class="input" >
+                        {% for item in tupla_tipo_historico %}
+                          <option value="{{ item[0] }}"
+                          {{ 'selected="selected"' if (item[0] == model['tipo']) }}
+                          >
+                            {{ item[1] }}
+                          </option>
+                        {% endfor %}
+                      </select>
+                      <span class="icon is-small">
+                          <i class="fa fa-check"></i>
+                      </span>
+                  </p>
+                  <p class="help"></p>
               </div>
 
-
-              <div class="form-group">
-                <label class="col-md-4 control-label" for="observacao"> Observações:</label>
-                <div class="col-md-5 input-group">
-                  <span class="input-group-addon">
-                    <span class="glyphicon">&#xe139;</span>
-                  </span>
-                  <textarea id="observacao" name="observacao" placeholder="Informe as observações" class="form-control input-md upper">{{ model['observacao'] }}</textarea>
-                </div>
+              <div class="field">
+                  <label class="label" for="observacao"> Observações:</label>
+                  <p class="control has-icon has-icon-right">
+                      <input id="observacao" name="observacao" type="text" value="{{ model['observacao'] }}" placeholder="Informe as observações" class="input upper" />
+                      <span class="icon is-small">
+                          <i class="fa fa-check"></i>
+                      </span>
+                  </p>
+                  <p class="help"></p>
               </div>
 
               <style>
