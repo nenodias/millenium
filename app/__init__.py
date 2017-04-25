@@ -7,8 +7,11 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = 'millenium'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:postgres@localhost:5432/millenium'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+
 db = SQLAlchemy(app)
 
 
 from .authentication import auth_require
 from app import controller
+from .schedule import start
+start()

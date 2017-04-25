@@ -6,6 +6,7 @@ DATETIME_FORMAT = '%d/%m/%Y %H:%M:%S'
 HTML_DATE_FORMAT = '%Y-%m-%d'
 DATE_FORMAT = '%d/%m/%Y'
 FINAL_MOMENT_OF_DAY = '23:59:59'
+START_MOMENT_OF_DAY = '00:00:00'
 
 def from_datetime_to_str(value):
 	if value:
@@ -33,6 +34,13 @@ def format_date(value):
 def final_date_day(value):
 	date = value.strftime(DATE_FORMAT)
 	date += ' '+ FINAL_MOMENT_OF_DAY
+	return datetime.strptime(date, DATETIME_FORMAT)
+
+
+def get_now():
+	value = datetime.now()
+	date = value.strftime(DATE_FORMAT)
+	date += ' '+ START_MOMENT_OF_DAY
 	return datetime.strptime(date, DATETIME_FORMAT)
 
 def to_int_or_none(value):
