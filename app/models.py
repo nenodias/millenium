@@ -27,6 +27,8 @@ modelo_colunas = [ 'id', 'nome', 'codvei_ea', 'id_monta' ]
 
 montadora_colunas = [ 'id', 'origem', 'nome', 'codmon_ea' ]
 
+lembrete_colunas = ['id', 'id_cliente', 'id_veiculo', 'texto', 'data_notificacao']
+
 class MixinSerialize():
 
     @classmethod
@@ -149,7 +151,7 @@ class HistoricoItem(MixinSerialize, db.Model):
     tipo = db.Column(db.String(1))
     descricao = db.Column('historico',db.String(75))
     quantidade = db.Column('qtd',db.Integer)
-    valor = db.Column(db.Float(53))    
+    valor = db.Column(db.Float(53))
 
     #historico = db.relationship('Historico', backref='items', lazy="dynamic")
 
@@ -241,6 +243,17 @@ class Vistoria(db.Model):
     outro2_descricao = db.Column('outro2descr',db.String(20))
     observacao = db.Column('obs',db.String(500))
 
+class Lembrete(MixinSerialize, db.Model):
+    __tablename__ = 'lembretes'
+
+    id = db.Column(db.BigInteger, primary_key=True, server_default=text("nextval('lembretes_id_seq'::regclass)"))
+    id_veiculo = db.Column('id_veiculo', db.ForeignKey('veiculo.codveiculo'))
+    id_cliente = db.Column('id_cliente', db.ForeignKey('clientes.codigo_cliente'))
+    texto = db.Column(db.String(5000))
+    data_notificacao = db.Column(db.DateTime)
+
+    cliente = db.relationship('Cliente')
+    veiculo = db.relationship('Veiculo')
 
 
 class Tipoitem(MixinSerialize, db.Model):

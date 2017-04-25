@@ -13,6 +13,17 @@
       Preferências
     </p>
     <ul class="menu-list">
+        <li>
+            <a>
+                <i class="fa fa-sticky-note-o"></i>
+                &nbsp;
+                Lembretes
+            </a>
+            <ul class="is-hidden">
+              <li><a href="{{ url_for('lembrete.form',pk=None) }}">Cadastro</a></li>
+              <li><a href="{{ url_for('lembrete.index') }}">Consulta</a></li>
+            </ul>
+        </li>
       <li>
           <a>
               <i class="fa fa-exclamation-circle"></i>

@@ -7,7 +7,7 @@ from app import auth_require, db
 from app.utils import (to_int_or_none, from_str_to_datetime_or_none, from_str_to_date_or_none,
  final_date_day, to_float_or_zero)
 from app.models import (Historico, HistoricoItem, Vistoria, Cliente, Veiculo, Modelo, Montadora, or_, and_,
-    tupla_tipo_historico, tupla_tipo_item, items_colunas, historico_colunas, cliente_colunas, desc, 
+    tupla_tipo_historico, tupla_tipo_item, items_colunas, historico_colunas, cliente_colunas, desc,
     veiculo_colunas, modelo_colunas, montadora_colunas)
 
 historico_blueprint = Blueprint('historico', __name__)
@@ -57,7 +57,7 @@ def form(pk):
     contexto['tipo_falha'] = tupla_tipo_item[1][0]
     contexto['tipo_peca'] = tupla_tipo_item[2][0]
     if request.method == 'POST':
-        
+
         id_cliente = to_int_or_none( request.form.get("id_cliente") )
         id_veiculo = to_int_or_none( request.form.get("id_veiculo") )
         id_tecnico = to_int_or_none( request.form.get("id_tecnico") )
@@ -71,7 +71,7 @@ def form(pk):
         veiculo = Veiculo.query.filter_by(id=id_veiculo).one()
         if veiculo:
             placa = veiculo.placa
-     
+
         #Criar dicionário com os dados
         dicionario = {
             'id_cliente':id_cliente,
@@ -110,7 +110,7 @@ def form(pk):
                     descricao = request.form.get('item_descricao_'+idx)
                     quantidade = to_int_or_none( request.form.get('item_quantidade_'+idx) )
                     valor = to_float_or_zero( request.form.get('item_valor_'+idx) )
-                    item_dict = { 
+                    item_dict = {
                             'id':id,
                             'ordem':ordem,
                             'tipo':tipo,
@@ -123,7 +123,7 @@ def form(pk):
 
         mensagem = None
         try:
-            
+
             dados_vistoria = {
                 'id':historico.id,
                 'kilometragem':kilometragem,
@@ -150,9 +150,9 @@ def form(pk):
                 pk_items.append( item.id )
             # excluindo os items apagados que não foram passados na requisição
             items_deletar = HistoricoItem.query.filter(
-                and_( 
+                and_(
                     ~HistoricoItem.id.in_( pk_items),
-                    HistoricoItem.id_historico==historico.id 
+                    HistoricoItem.id_historico==historico.id
                     )
                 ).all()
             if items_deletar:
@@ -161,13 +161,13 @@ def form(pk):
             db.session.commit()
             id_cadastro = historico.id
             if pk:
-                flash( u'Historico {0} atualizado com sucesso.'.format(id_cadastro), 'success')
+                flash( u'Histórico {0} atualizado com sucesso.'.format(id_cadastro), 'success')
             else:
-                flash( u'Historico {0} cadastrado com sucesso.'.format(id_cadastro), 'success')
+                flash( u'Histórico {0} cadastrado com sucesso.'.format(id_cadastro), 'success')
             return redirect(url_for('historico.index'))
         except Exception as ex:
             print(ex)
-            contexto['mensagem'] = u'Erro ao cadastrar historico.'
+            contexto['mensagem'] = u'Erro ao cadastrar histórico.'
             contexto['tipo_mensagem'] = 'danger'
     elif pk:
         data = Historico.query.filter_by(id=pk).one()

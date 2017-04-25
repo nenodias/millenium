@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import pexpect
-import sys, time
 from flask import Response
-from app import app, request, render_template, redirect, session, auth_require, url_for
+from app import (
+    app, request, render_template, redirect, session, auth_require, url_for)
 from .falha_blueprint import falha_blueprint
 from .peca_blueprint import peca_blueprint
 from .servico_blueprint import servico_blueprint
@@ -12,6 +12,8 @@ from .modelo_blueprint import modelo_blueprint
 from .cliente_blueprint import cliente_blueprint
 from .veiculo_blueprint import veiculo_blueprint
 from .historico_blueprint import historico_blueprint
+from .lembrete_blueprint import lembrete_blueprint
+
 
 @app.route('/login', methods=['POST', 'GET'])
 def login():
@@ -35,10 +37,12 @@ def logout():
         del session['login']
     return redirect(url_for('login'))
 
+
 @app.route('/')
 @auth_require()
 def index():
     return render_template('index.html'), 200
+
 
 @app.route('/backup')
 @auth_require()
@@ -63,6 +67,7 @@ def backup():
     stdout = ps.read()
     return Response(stdout, content_type='text/plain; charset=utf-8')
 
+
 app.register_blueprint(falha_blueprint, url_prefix='/falha')
 app.register_blueprint(peca_blueprint, url_prefix='/peca')
 app.register_blueprint(servico_blueprint, url_prefix='/servico')
@@ -72,3 +77,4 @@ app.register_blueprint(modelo_blueprint, url_prefix='/modelo')
 app.register_blueprint(cliente_blueprint, url_prefix='/cliente')
 app.register_blueprint(veiculo_blueprint, url_prefix='/veiculo')
 app.register_blueprint(historico_blueprint, url_prefix='/historico')
+app.register_blueprint(lembrete_blueprint, url_prefix='/lembrete')
