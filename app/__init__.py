@@ -13,5 +13,3 @@ db = SQLAlchemy(app)
 
 from .authentication import auth_require
 from app import controller
-from .schedule import start
-start()

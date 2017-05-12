@@ -286,5 +286,10 @@ def report(pk):
     dados['modelo'] = Modelo.to_dict(modelo, modelo_colunas)
     montadora = Montadora.query.filter_by(id=modelo.id_monta).one()
     dados['montadora'] = Modelo.to_dict(montadora, montadora_colunas)
-    pdf_buffer = gerar_pdf( dados )
-    return send_file(pdf_buffer, attachment_filename='relatorio.pdf',mimetype='application/pdf')
+    pdf_buffer = gerar_pdf(dados)
+    return send_file(
+        pdf_buffer,
+        attachment_filename='relatorio.pdf',
+        mimetype='application/pdf',
+        cache_timeout=0
+    )
