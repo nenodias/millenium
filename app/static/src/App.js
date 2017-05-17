@@ -1,7 +1,7 @@
 const template = `<section class="todoapp">
     <header class="header">
       <h1>Tarefas {{ $route.params.id }}</h1>
-      {{ msg }}
+      <p>{{ msg }}</p>
     </header>
   </section>
 `
