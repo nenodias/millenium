@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import pexpect
 from flask import (
-    Response, jsonify, request, render_template, redirect, session, url_for
+    Response, jsonify, request, render_template, redirect, session, url_for,
+    current_app
     )
 from app import (
     config, auth_require, app)
@@ -50,15 +51,14 @@ def logout():
 
 
 @app.route('/')
-@auth_require()
 def index():
-    return render_template('index.html'), 200
+    return current_app.send_static_file('index.html'), 200
 
 
 @app.route('/backup')
 @auth_require()
 def backup():
-    uri = app.config['SQLALCHEMY_DATABASE_URI'].split('://')[1]
+    uri = config.SQLALCHEMY_DATABASE_URI.split('://')[1]
     parte = uri.split('@')
     usuario, senha = parte[0].split(':')
     parte = parte[1].split(':')
