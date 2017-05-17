@@ -1,8 +1,11 @@
 # -*- coding: utf-8 -*-
 import pexpect
-from flask import Response
+from flask import (
+    Response, jsonify, request, render_template, redirect, session, url_for
+    )
 from app import (
-    app, request, render_template, redirect, session, auth_require, url_for)
+    config, auth_require, app)
+from app.utils import generate_hash
 from .falha_blueprint import falha_blueprint
 from .peca_blueprint import peca_blueprint
 from .servico_blueprint import servico_blueprint
@@ -21,7 +24,15 @@ def login():
     if request.method == 'POST':
         usuario = request.form.get('usuario')
         senha = request.form.get('senha')
-        if usuario == 'ADMIN' and senha == '123':
+        def_user = config.DEFAULT_USERNAME
+        def_pass = config.DEFAULT_PASSWORD
+        user_valid = usuario == def_user
+        pass_valid = senha == def_pass
+        is_json = 'json' in request.content_type
+        if is_json:
+            retorno = {"token": generate_hash(def_user, def_pass)}
+            return jsonify(retorno)
+        if user_valid and pass_valid:
             session['login'] = True
             return redirect(url_for('index'))
         else:
