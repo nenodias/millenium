@@ -115,7 +115,22 @@
         $(this).after(labelField);
         var fieldSearch = elemento.createSearchField(el);
         var labelSearch = elemento.createLabelSearch("Pesquisar");
-        var divField = elemento.createDiv('form-group', [labelSearch, fieldSearch]);
+        var divInputGroup = document.createElement('DIV');
+        // Clear Button
+        var clearButton = document.createElement('A');
+        clearButton.className = 'nn-clear button is-danger';
+        var iconeI = document.createElement('I');
+        iconeI.className = 'fa fa-close';
+        clearButton.appendChild(iconeI);
+        clearButton.addEventListener('click',function(){
+            valueField.value = "";
+            labelField.value = "";
+            $(divContainer).hide();
+        });
+        // Clear Button
+        divInputGroup.appendChild(fieldSearch);
+        divInputGroup.appendChild(clearButton);
+        var divField = elemento.createDiv('form-group', [labelSearch, divInputGroup]);
         var itemsList = document.createElement('UL');
         itemsList.className = 'list-group';
         elemento.clearItems();
