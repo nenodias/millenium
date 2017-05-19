@@ -71,7 +71,9 @@
                     <p class="control has-icon has-icon-right">
                         <select id="tipo" name="tipo" class="input">
                             {% for item in tupla_tipo_historico %}
-                                <option value="{{ item[0] }}">{{ item[1] }}</option>
+                                <option value="{{ item[0] }}"
+                                {{ 'selected="selected"' if (item[0] == model['tipo']) }}
+                                >{{ item[1] }}</option>
                             {% endfor %}
                         </select>
                         <span class="icon is-small">
