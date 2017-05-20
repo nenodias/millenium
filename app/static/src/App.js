@@ -1,36 +1,22 @@
-const template = `<section class="todoapp">
-    <header class="header">
-      <h1>Tarefas {{ $route.params.id }}</h1>
-      <p>{{ msg }}</p>
-    </header>
+import login from './login'
+import index from './components/index'
+
+const template = `<section class="app">
+    <login v-if="!logged"></login>
+    <index v-if="logged"></index>
   </section>
 `
 
-async function getContent () {
-    try {
-      let config = {
-        method: 'GET'
-      }
-      let response = await fetch('https://api.icndb.com/jokes/random', config)
-      console.log(response)
-      return await response.json()
-    } catch (err) {
-      console.log(err)
-    }
-}
-
 export default {
-  name: 'app',
-  data () {
-    return {
-        msg:''
-    }
+  name: 'App',
+  components:	{
+    login,
+    index
   },
-  beforeMount () {
-    getContent().then((data) => {
-      console.log(data)
-      this.msg = data.value.joke
-    })
+  computed: {
+    logged: function () {
+      return this.$store.getters.token != null
+    }
   },
   template: template
 }

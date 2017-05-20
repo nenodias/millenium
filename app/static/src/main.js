@@ -4,8 +4,9 @@ import Vue from 'vue'
 import App from './App'
 import VueRouter from 'vue-router'
 import routes from './routes'
+import store from './store'
 
-Vue.config.productionTip = false
+//Vue.config.productionTip = false //uncomment to make a prod
 Vue.use(VueRouter)
 
 const router = new VueRouter({
@@ -16,6 +17,7 @@ const router = new VueRouter({
 /* eslint-disable no-new */
 new Vue({
   router,
+  store,
   el: '#app',
   template: `
   <div id="app">
