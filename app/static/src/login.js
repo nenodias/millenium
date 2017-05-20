@@ -1,19 +1,25 @@
+import * as actions from './store/modules/login/actions'
+
 const template = `<section class="hero is-fullheight is-dark is-bold">
     <div class="hero-body">
         <div class="container">
             <div class="columns is-vcentered">
                 <div class="column is-4 is-offset-4">
+                    <div v-if="hasMessage" :class="{'notification': true, [message.type]: true }">
+                        <button @click="clearMessage" class="delete"></button>
+                        {{ message.text }}
+                    </div>
                     <h1 class="title">
                         Login
                     </h1>
                     <div class="box">
                         <label class="label">Login</label>
                         <p class="control">
-                            <input class="input upper" v-model="usuario" type="text" name="usuario">
+                            <input class="input upper" @keyup.enter="login" v-model="usuario" type="text" name="usuario">
                         </p>
                         <label class="label">Password</label>
                         <p class="control">
-                            <input class="input upper" type="password" v-model="senha" name="senha">
+                            <input class="input upper" @keyup.enter="login" type="password" v-model="senha" name="senha">
                         </p>
                         <hr>
                         <p class="control">
@@ -38,7 +44,18 @@ export default {
   },
   computed: {
     loading: function () {
-      return this.$store.getters.processing
+      return this.$store.getters.login_processing
+    },
+    hasMessage: function () {
+      return this.$store.getters.login_message != null
+    },
+    message: function () {
+      if (this.$store.getters.token) {
+        let tomorrow = new Date.today()
+        tomorrow.addDays(1)
+        this.$cookies.set('token', this.$store.getters.token, { expires: tomorrow })
+      }
+      return this.$store.getters.login_message
     }
   },
   methods: {
@@ -49,11 +66,19 @@ export default {
         usuario,
         senha
       }
-      console.log(this.$store)
-      this.$store.dispatch('doLogin', dados)
+      this.$store.dispatch(actions.LOGIN_DO_LOGIN, dados)
+    },
+    clearMessage (){
+      this.$store.dispatch(actions.LOGIN_CLEAR_MESSAGE)
     },
     redirect () {
       window.location.href = "http://google.com"
+    }
+  },
+  beforeMount () {
+    // Verificar cookie pegar token
+    if(this.$cookies.get('token')){
+      this.$store.dispatch(actions.LOGIN_VERIFY_COOKIE, this.$cookies.get('token'))
     }
   },
   template: template

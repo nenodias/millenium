@@ -3,11 +3,13 @@
 import Vue from 'vue'
 import App from './App'
 import VueRouter from 'vue-router'
+import VueUtils from './plugins/utils'
 import routes from './routes'
 import store from './store'
 
 //Vue.config.productionTip = false //uncomment to make a prod
 Vue.use(VueRouter)
+Vue.use(VueUtils)
 
 const router = new VueRouter({
   mode: 'hash',//mode: 'history',

@@ -2,9 +2,9 @@ import login from './login'
 import index from './components/index'
 
 const template = `<section class="app">
-    <login v-if="!logged"></login>
-    <index v-if="logged"></index>
-  </section>
+  <login v-if="!logged"></login>
+  <index v-if="logged"></index>
+</section>
 `
 
 export default {
@@ -15,7 +15,7 @@ export default {
   },
   computed: {
     logged: function () {
-      return this.$store.getters.token != null
+      return this.$store.getters.login_done
     }
   },
   template: template

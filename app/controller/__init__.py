@@ -23,15 +23,26 @@ from .lembrete_blueprint import lembrete_blueprint
 def login():
     contexto = {}
     if request.method == 'POST':
-        usuario = request.form.get('usuario')
-        senha = request.form.get('senha')
+        usuario = None
+        senha = None
+        is_json = 'json' in request.content_type
+        if is_json:
+            dados = request.json
+            usuario = dados['usuario']
+            senha = dados['senha']
+        else:
+            usuario = request.form.get('usuario')
+            senha = request.form.get('senha')
         def_user = config.DEFAULT_USERNAME
         def_pass = config.DEFAULT_PASSWORD
         user_valid = usuario == def_user
         pass_valid = senha == def_pass
-        is_json = 'json' in request.content_type
-        if is_json:
+
+        if is_json and user_valid and pass_valid:
             retorno = {"token": generate_hash(def_user, def_pass)}
+            return jsonify(retorno)
+        elif is_json:
+            retorno = {"message": "Failed to login"}
             return jsonify(retorno)
         if user_valid and pass_valid:
             session['login'] = True

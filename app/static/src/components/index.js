@@ -12,10 +12,9 @@ async function getContent () {
         method: 'GET'
       }
       let response = await fetch('https://api.icndb.com/jokes/random', config)
-      console.log(response)
       return await response.json()
     } catch (err) {
-      console.log(err)
+      console.error(err)
     }
 }
 
@@ -28,7 +27,6 @@ export default {
   },
   beforeMount () {
     getContent().then((data) => {
-      console.log(data)
       this.msg = data.value.joke
     })
   },

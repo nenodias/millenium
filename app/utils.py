@@ -1,5 +1,6 @@
-from datetime import datetime, date
+import hashlib
 import time
+from datetime import datetime, date
 from werkzeug.security import generate_password_hash, \
      check_password_hash
 
@@ -69,9 +70,10 @@ def to_float_or_zero(value):
 
 def generate_hash(usuario, senha):
     str_hash = format_date(date.today()) + usuario+senha
-    return generate_password_hash(str_hash)
+    h = hashlib.md5(bytes(str_hash, 'utf-8'))
+    return h.hexdigest()
 
 
-def check_password(usuario, senha, password):
+def check_password(usuario, senha, password_hash):
     hashed = generate_hash(usuario, senha)
-    return check_password_hash(hashed, password)
+    return hashed == password_hash
