@@ -1,7 +1,10 @@
 """JOBS."""
 import smtplib
+import pytz
 from datetime import datetime
 from email.mime.text import MIMEText
+
+sao_paulo_tz = pytz.timezone('America/SaoPaulo')
 
 
 def create_email_job():
@@ -10,7 +13,14 @@ def create_email_job():
     from app.models import Lembrete
 
     def send_email():
-        agora = datetime.now()
+        sp = datetime.now(tz=sao_paulo_tz)
+        agora = datetime(
+            year=sp.year,
+            month=sp.month,
+            day=sp.day,
+            hour=sp.hour,
+            minute=sp.minute
+        )
         lembretes = Lembrete.query.filter(
             Lembrete.data_notificacao <= agora
         ).all()
