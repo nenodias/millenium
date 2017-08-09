@@ -4,7 +4,7 @@ import pytz
 from datetime import datetime
 from email.mime.text import MIMEText
 
-sao_paulo_tz = pytz.timezone('America/SaoPaulo')
+sao_paulo_tz = pytz.timezone('America/Sao_Paulo')
 
 
 def create_email_job():
