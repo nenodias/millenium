@@ -1,7 +1,7 @@
 """JOBS."""
 import smtplib
 from datetime import datetime
-from email.message import EmailMessage
+from email.mime.text import MIMEText
 
 
 def create_email_job():
@@ -17,20 +17,40 @@ def create_email_job():
         print('Enviando emails')
         if lembretes:
             for lembrete in lembretes:
-                email = EmailMessage()
                 texto = lembrete.texto
                 nome = ''
                 veiculo = ''
+                telefone = ''
+                celular = ''
+                telefone_comercial = ''
+                e_mail = ''
                 if lembrete.cliente is not None:
                     nome = lembrete.cliente.nome
+                    telefone = lembrete.cliente.telefone
+                    celular = lembrete.cliente.celular
+                    telefone_comercial = lembrete.cliente.telefone_comercial
+                    e_mail = lembrete.cliente.email
                 if lembrete.cliente is not None:
                     veiculo = lembrete.veiculo.descricao()
 
                 mensagem = """
-                {0}
-                {1}
-                {2}""".format(texto, nome, veiculo)
-                email.set_content(mensagem)
+                Nome: {0}
+                Telefone: {1}
+                Celular: {2}
+                Telefone Comercial: {3}
+                E-mail: {4}
+                Veículo: {5}
+                Lembrete: {6}
+                """.format(
+                    nome,
+                    telefone,
+                    celular,
+                    telefone_comercial,
+                    e_mail,
+                    veiculo,
+                    texto
+                )
+                email = MIMEText(mensagem)
 
                 me = app.config['EMAIL_ME']
                 you = app.config['EMAIL_YOU']
