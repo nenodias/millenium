@@ -8,7 +8,7 @@ from app.utils import from_str_to_datetime_or_none, format_date, to_float_or_zer
 class DadosOficina():
 
     def __init__(self):
-       self.nome = 'AUTO MECÂNICA CARRIT' 
+       self.nome = 'AUTO MECÂNICA CARRIT'
        self.endereco = 'R: Rio Grande do Sul, 460 - J.D.CRUZIERO - Lençóis Paulista - SP - 186806-380'
        self.telefone = '(14)3264-4598'
        self.celular = '(14)991262313'
@@ -17,7 +17,7 @@ class DadosOficina():
 
 
 class MyPDF(FPDF):
-    
+
     def __init__(self,dados):
         super(MyPDF, self).__init__()
         self.oficina = DadosOficina()
@@ -50,7 +50,7 @@ class MyPDF(FPDF):
         veiculo += ' - Km: '+ '%.0f'%( to_float_or_zero(dados['vistoria']['kilometragem']) )
         self.veiculo = veiculo
         self.data = format_date( from_str_to_datetime_or_none(dados['data']) )
-        
+
 
         self.falhas = []
         self.servicos = []
@@ -71,7 +71,7 @@ class MyPDF(FPDF):
 
         self.total = self.sub_total_servicos + self.sub_total_pecas
         self.observacoes = dados['observacao']
-     
+
     #----------------------------------------------------------------------
     def header(self):
         base = os.path.dirname(os.path.abspath(__file__))
@@ -84,25 +84,25 @@ class MyPDF(FPDF):
         self.set_font("Arial", style="B", size=12)
         self.cell(w=100, h = 4, txt = self.oficina.nome, border = 0, ln = 0, align = 'L')
         self.ln(4)
-        
+
         self.set_font("Arial", style="", size=9)
         self.cell(w=25, h = 0, txt = '', border = 0, ln = 0, align = '', fill = False, link = '')
         self.cell(w=100, h = 4, txt = self.oficina.endereco, border = 0, ln = 0, align = 'L')
         self.ln(4)
-        
+
         self.cell(w=25, h = 0, txt = '', border = 0, ln = 0, align = '', fill = False, link = '')
         self.cell(w=80, h = 4, txt = 'Fone: %s'%(self.oficina.telefone), border = 0, ln = 0, align = 'L')
         self.cell(w=80, h = 4, txt = 'Celular: %s'%(self.oficina.celular), border = 0, ln = 0, align = 'L')
         self.ln(4)
-        
+
         self.cell(w=25, h = 0, txt = '', border = 0, ln = 0, align = '', fill = False, link = '')
         self.cell(w=100, h = 4, txt = 'E-mail: %s'%(self.oficina.email), border = 0, ln = 0, align = 'L')
         self.ln(4)
 
         self.line(5, 27, 205, 27)
-        
+
         # Dados Cliente
-        
+
         self.ln(1)
         self.set_font("Arial", style="B", size=10)
         self.cell(w=20, h = 7, txt ='Cliente      :', border = 0, ln = 0, align = 'L')
@@ -156,18 +156,18 @@ class MyPDF(FPDF):
         self.cell(w=110, h = 8, txt =self.numero_ordem, border = 0, ln = 0, align = 'L')
         self.cell(w=20, h = 8, txt =self.data, border = 0, ln = 0, align = 'L')
         self.line(5, 64, 205, 64)
-        
+
         self.ln(10)
 
         # Margem
         self.rect(5, 5, 200, 287, 'D')
- 
+
     #----------------------------------------------------------------------
     def footer(self):
         self.set_y(-15)
- 
+
         self.set_font("Arial", style="I", size=8)
- 
+
         pageNum = "%s/{nb}" % self.page_no()
         self.cell(0, 10, pageNum, align="C")
 
@@ -258,12 +258,12 @@ def gerar_pdf(dados):
     pdf.alias_nb_pages()
     pdf.set_font('Arial', 'B', 16)
     pdf.add_page()
-    
+
     pdf.draw_falhas()
     pdf.draw_pecas()
     pdf.draw_servicos()
     pdf.draw_observacoes()
 
     byte_string = pdf.output(dest="S")  # Probably what you want
-    stream = BytesIO(byte_string) 
+    stream = BytesIO(byte_string)
     return stream
