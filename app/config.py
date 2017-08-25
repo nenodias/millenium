@@ -3,8 +3,8 @@ import os
 service = os.getenv('DATABASE_SERVICE_NAME', '').upper().replace('-', '_')
 
 POSTGRESQL_DATABASE = os.getenv('DATABASE_NAME')
-POSTGRESQL_DB_HOST = os.getenv('{}_SERVICE_HOST'.format(service_name))
-POSTGRESQL_DB_PORT = os.getenv('{}_SERVICE_PORT'.format(service_name))
+POSTGRESQL_DB_HOST = os.getenv('{}_SERVICE_HOST'.format(POSTGRESQL_DATABASE))
+POSTGRESQL_DB_PORT = os.getenv('{}_SERVICE_PORT'.format(POSTGRESQL_DATABASE))
 POSTGRESQL_USER = os.getenv('DATABASE_USER')
 POSTGRESQL_PASSWORD = os.getenv('DATABASE_PASSWORD')
 
