@@ -1,5 +1,5 @@
 DEFAULT_USERNAME = 'ADMIN'
 DEFAULT_PASSWORD = '123'
 SECRET_KEY = 'millenium'
-SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:postgres@172.30.67.86:5432/millenium'
+SQLALCHEMY_DATABASE_URI = 'postgresql://postgres@172.30.67.86:5432/millenium'
 SQLALCHEMY_TRACK_MODIFICATIONS = True
