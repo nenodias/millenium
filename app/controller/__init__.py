@@ -61,9 +61,17 @@ def logout():
     return redirect(url_for('login'))
 
 
+'''
 @app.route('/')
 def index():
     return current_app.send_static_file('index.html'), 200
+'''
+
+
+@app.route('/')
+@auth_require()
+def index():
+    return render_template('index.html'), 200
 
 
 @app.route('/backup')
