@@ -92,6 +92,7 @@ lembrete_colunas = [
     'data_notificacao'
 ]
 
+
 class MixinSerialize():
 
     @classmethod
@@ -139,7 +140,6 @@ class MixinSerialize():
 
         return item
 
-
     @classmethod
     def sorting_data(cls, fetch, _sort_order, _sort_direction):
         if _sort_order and _sort_direction and hasattr(cls, _sort_order):
@@ -172,6 +172,7 @@ class MixinSerialize():
 
         return fetch
 
+
 class Cliente(MixinSerialize, db.Model):
     __tablename__ = 'clientes'
 
@@ -200,6 +201,7 @@ class Cliente(MixinSerialize, db.Model):
     bip = db.Column('bip_cod', db.String(30))
     data_nascimento = db.Column('dtnasc', db.DateTime)
     mes = db.Column(db.Integer)
+
 
 class Historico(MixinSerialize, db.Model):
     __tablename__ = 'historico'
@@ -283,6 +285,7 @@ class Montadora(MixinSerialize, db.Model):
     nome = db.Column('nome_montadora', db.String(20), nullable=False)
     codmon_ea = db.Column(db.Integer)
 
+
 class Falha(MixinSerialize, db.Model):
     __tablename__ = 'falhas'
 
@@ -292,6 +295,7 @@ class Falha(MixinSerialize, db.Model):
         server_default=text("nextval('falhas_id_seq'::regclass)")
     )
     descricao = db.Column(db.String(60))
+
 
 class Peca(MixinSerialize, db.Model):
     __tablename__ = 'pecas'
@@ -362,6 +366,7 @@ class Veiculo(MixinSerialize, db.Model):
                 retorno += ' - ' + self.modelo.montadora.nome
         return retorno
 
+
 class Vistoria(db.Model):
     __tablename__ = 'vistoria'
 
@@ -386,6 +391,7 @@ class Vistoria(db.Model):
     outro2 = db.Column(db.SmallInteger, server_default=text("0"))
     outro2_descricao = db.Column('outro2descr', db.String(20))
     observacao = db.Column('obs', db.String(500))
+
 
 class Lembrete(MixinSerialize, db.Model):
     __tablename__ = 'lembretes'
@@ -416,6 +422,7 @@ class Tipoitem(MixinSerialize, db.Model):
     tipo = db.Column(db.String(1), primary_key=True)
     descricao = db.Column(db.String(15))
 
+
 class Histsinal(db.Model):
     __tablename__ = 'histsinal'
 
@@ -425,10 +432,15 @@ class Histsinal(db.Model):
     descricao = db.Column(db.String(500))
     leitura = db.Column(db.String(20))
 
+
 class Carrovistoria(db.Model):
     __tablename__ = 'carrovistoria'
 
-    codigo = db.Column(db.Integer, primary_key=True, server_default=text("nextval('carrovistoria_codigo_seq'::regclass)"))
+    codigo = db.Column(
+        db.Integer,
+        primary_key=True,
+        server_default=text("nextval('carrovistoria_codigo_seq'::regclass)")
+    )
     nome = db.Column(db.String(13), nullable=False)
     arquivo = db.Column(db.String(30), nullable=False)
 
@@ -437,7 +449,11 @@ class Contfalha(db.Model):
     __tablename__ = 'contfalha'
 
     index_pk = db.Column(db.Integer, primary_key=True, nullable=False)
-    continuo_fk = db.Column(db.ForeignKey('continuo.continuo_pk'), primary_key=True, nullable=False)
+    continuo_fk = db.Column(
+        db.ForeignKey('continuo.continuo_pk'),
+        primary_key=True,
+        nullable=False
+    )
     codigo = db.Column(db.Integer)
     descricao = db.Column(db.String(70))
     estado = db.Column(db.String(8))
@@ -449,7 +465,11 @@ class Contg4(db.Model):
     __tablename__ = 'contg4'
 
     leitura_pk = db.Column(db.Integer, primary_key=True, nullable=False)
-    continuo_fk = db.Column(db.ForeignKey('continuo.continuo_pk'), primary_key=True, nullable=False)
+    continuo_fk = db.Column(
+        db.ForeignKey('continuo.continuo_pk'),
+        primary_key=True,
+        nullable=False
+    )
     cocorr = db.Column(db.String(8))
     dil = db.Column(db.String(8))
     co = db.Column(db.String(8))
@@ -466,7 +486,11 @@ class Contg4(db.Model):
 class Continuo(db.Model):
     __tablename__ = 'continuo'
 
-    continuo_pk = db.Column(db.Integer, primary_key=True, server_default=text("nextval('continuo_continuo_pk_seq'::regclass)"))
+    continuo_pk = db.Column(
+        db.Integer,
+        primary_key=True,
+        server_default=text("nextval('continuo_continuo_pk_seq'::regclass)")
+    )
     codigo_cliente = db.Column(db.ForeignKey('clientes.codigo_cliente'))
     codveiculo = db.Column(db.ForeignKey('veiculo.codveiculo'))
     nr_ordem = db.Column(db.Integer)
@@ -480,7 +504,11 @@ class Contparam(db.Model):
     __tablename__ = 'contparam'
 
     index_pk = db.Column(db.Integer, primary_key=True, nullable=False)
-    continuo_fk = db.Column(db.ForeignKey('continuo.continuo_pk'), primary_key=True, nullable=False)
+    continuo_fk = db.Column(
+        db.ForeignKey('continuo.continuo_pk'),
+        primary_key=True,
+        nullable=False
+    )
     tipo = db.Column(db.String(1))
     descricao = db.Column(db.String(40))
     un = db.Column(db.String(6))
@@ -500,7 +528,11 @@ class Contstatu(db.Model):
     __tablename__ = 'contstatus'
 
     index_pk = db.Column(db.Integer, primary_key=True, nullable=False)
-    continuo_fk = db.Column(db.ForeignKey('continuo.continuo_pk'), primary_key=True, nullable=False)
+    continuo_fk = db.Column(
+        db.ForeignKey('continuo.continuo_pk'),
+        primary_key=True,
+        nullable=False
+    )
     descricao = db.Column(db.String(40))
     un = db.Column(db.String(6))
     vlrlido = db.Column(db.String(20))
@@ -512,7 +544,11 @@ class Conttabg4(db.Model):
     __tablename__ = 'conttabg4'
 
     index_pk = db.Column(db.Integer, primary_key=True, nullable=False)
-    continuo_fk = db.Column(db.ForeignKey('continuo.continuo_pk'), primary_key=True, nullable=False)
+    continuo_fk = db.Column(
+        db.ForeignKey('continuo.continuo_pk'),
+        primary_key=True,
+        nullable=False
+    )
     string = db.Column(db.String(70))
 
     continuo = db.relationship('Continuo')
@@ -521,7 +557,11 @@ class Conttabg4(db.Model):
 class NewPeca(db.Model):
     __tablename__ = 'new_pecas'
 
-    ind_pecas = db.Column(db.Integer, primary_key=True, server_default=text("nextval('pecas_ind_pecas_seq'::regclass)") )
+    ind_pecas = db.Column(
+        db.Integer,
+        primary_key=True,
+        server_default=text("nextval('pecas_ind_pecas_seq'::regclass)")
+    )
     descricao = db.Column(db.String(60), nullable=False)
     qtd = db.Column(db.Integer)
     valor = db.Column(db.Float)
@@ -530,7 +570,11 @@ class NewPeca(db.Model):
 class NewServico(db.Model):
     __tablename__ = 'new_servicos'
 
-    ind_servicos = db.Column(db.Integer, primary_key=True, server_default=text("nextval('servicos_ind_servicos_seq'::regclass)"))
+    ind_servicos = db.Column(
+        db.Integer,
+        primary_key=True,
+        server_default=text("nextval('servicos_ind_servicos_seq'::regclass)")
+    )
     descricao = db.Column(db.String(60), nullable=False)
     qtd = db.Column(db.Integer)
     valor = db.Column(db.Float)

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import pexpect
+import logging
 from flask import (
     Response, jsonify, request, render_template, redirect, session, url_for,
     current_app
@@ -71,6 +72,7 @@ def index():
 @app.route('/')
 @auth_require()
 def index():
+    logging.info(config.SQLALCHEMY_DATABASE_URI)
     return render_template('index.html'), 200
 
 

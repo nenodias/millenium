@@ -1,15 +1,24 @@
 # -*- coding: utf-8 -*-
 import json
 from pdb import set_trace
-from flask import (Blueprint, render_template, request, redirect, url_for, flash, 
-    jsonify, render_template, Response)
-from app import auth_require
-from app import db
+from flask import (
+    Blueprint,
+    render_template,
+    request,
+    redirect,
+    url_for,
+    flash,
+    jsonify,
+    render_template,
+    Response
+)
+from app import auth_require, db
 from app.models import Peca, desc
 
 peca_blueprint = Blueprint('peca', __name__)
 
-peca_colunas = [ col.name for col in Peca.__table__._columns ]
+peca_colunas = [col.name for col in Peca.__table__._columns]
+
 
 @peca_blueprint.route('/')
 @auth_require()
@@ -43,7 +52,7 @@ def form(pk):
     if request.method == 'POST':
         descricao = request.form.get("descricao")
         valor = float(request.form.get("valor"))
-      
+
         #Criar dicionário com os dados
         dicionario = {
             "descricao":descricao,

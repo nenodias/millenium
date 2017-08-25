@@ -11,8 +11,11 @@ app = Flask(__name__)
 app.config.from_pyfile('config.py')
 db = SQLAlchemy(app)
 
-from .authentication import auth_require
-from app import controller
+try:
+    from .authentication import auth_require
+    from app import controller
+except:
+    pass
 
 send_mail = jobs.create_email_job()
 

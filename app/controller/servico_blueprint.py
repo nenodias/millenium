@@ -1,15 +1,24 @@
 # -*- coding: utf-8 -*-
 import json
 from pdb import set_trace
-from flask import (Blueprint, render_template, request, redirect, url_for, flash, 
-    jsonify, render_template, Response)
-from app import auth_require
-from app import db
+from flask import (
+    Blueprint,
+    render_template,
+    request,
+    redirect,
+    url_for,
+    flash,
+    jsonify,
+    render_template,
+    Response
+)
+from app import auth_require, db
 from app.models import Servico, desc
 
 servico_blueprint = Blueprint('servico', __name__)
 
-servico_colunas = [ col.name for col in Servico.__table__._columns ]
+servico_colunas = [col.name for col in Servico.__table__._columns]
+
 
 @servico_blueprint.route('/')
 @auth_require()
@@ -43,7 +52,7 @@ def form(pk):
     if request.method == 'POST':
         descricao = request.form.get("descricao")
         valor = float(request.form.get("valor"))
-      
+
         #Criar dicionário com os dados
         dicionario = {
             "descricao":descricao,
@@ -96,7 +105,7 @@ def ajax():
     _offset = int(request.args.get('offset','0'))
     _sort_order = request.args.get('sort_order', '')
     _sort_direction = request.args.get('sort_direction', 'asc')
-    
+
     _descricao = request.args.get('descricao', '')
     _limit = _offset + _limit
     items = []

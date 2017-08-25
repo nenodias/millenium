@@ -1,16 +1,48 @@
 # -*- coding: utf-8 -*-
 import json
 from pdb import set_trace
-from flask import (Blueprint, render_template, request, redirect, url_for, flash, send_file,
-    jsonify, render_template, Response)
+from flask import (
+    Blueprint,
+    render_template,
+    request,
+    redirect,
+    url_for,
+    flash,
+    jsonify,
+    render_template,
+    Response
+)
 from app import auth_require, db
-from app.utils import (to_int_or_none, from_str_to_datetime_or_none, from_str_to_date_or_none,
- final_date_day, to_float_or_zero)
-from app.models import (Historico, HistoricoItem, Vistoria, Cliente, Veiculo, Modelo, Montadora, or_, and_,
-    tupla_tipo_historico, tupla_tipo_item, items_colunas, historico_colunas, cliente_colunas, desc,
-    veiculo_colunas, modelo_colunas, montadora_colunas)
+from app.utils import (
+    to_int_or_none,
+    from_str_to_datetime_or_none,
+    from_str_to_date_or_none,
+    final_date_day,
+    to_float_or_zero
+)
+from app.models import (
+    Historico,
+    HistoricoItem,
+    Vistoria,
+    Cliente,
+    Veiculo,
+    Modelo,
+    Montadora,
+    or_,
+    and_,
+    tupla_tipo_historico,
+    tupla_tipo_item,
+    items_colunas,
+    historico_colunas,
+    cliente_colunas,
+    desc,
+    veiculo_colunas,
+    modelo_colunas,
+    montadora_colunas
+)
 
 historico_blueprint = Blueprint('historico', __name__)
+
 
 def get_tipo(tipo):
     if tipo == 'F':
@@ -20,11 +52,12 @@ def get_tipo(tipo):
     else:
         return 'peca'
 
+
 @historico_blueprint.route('/')
 @auth_require()
 def index():
     contexto = {}
-    _numero_ordem = request.args.get("numero_ordem",'')
+    _numero_ordem = request.args.get("numero_ordem", '')
     _id_cliente = request.args.get('id_cliente', '')
     _id_veiculo = request.args.get('id_veiculo', '')
     _id_tecnico = request.args.get('id_tecnico', '')

@@ -1,13 +1,23 @@
 # -*- coding: utf-8 -*-
 import json
 from pdb import set_trace
-from flask import (Blueprint, render_template, request, redirect, url_for, flash, 
-    jsonify, render_template, Response)
+from flask import (
+    Blueprint,
+    render_template,
+    request,
+    redirect,
+    url_for,
+    flash,
+    jsonify,
+    render_template,
+    Response
+)
 from app import auth_require, db
 from app.utils import to_int_or_none, from_str_to_datetime_or_none
 from app.models import Veiculo, or_, and_, desc, veiculo_colunas
 
 veiculo_blueprint = Blueprint('veiculo', __name__)
+
 
 @veiculo_blueprint.route('/')
 @auth_require()
@@ -40,7 +50,7 @@ def form(pk):
         renavam = request.form.get('renavam')
         chassi = request.form.get('chassi')
         ano = request.form.get('ano')
-      
+
         #Criar dicionário com os dados
         dicionario = {
             'id_cliente':id_cliente,
@@ -112,7 +122,7 @@ def ajax():
     _offset = int(request.args.get('offset','0'))
     _sort_order = request.args.get('sort_order', '')
     _sort_direction = request.args.get('sort_direction', 'asc')
-    
+
     _id_cliente = to_int_or_none(request.args.get('id_cliente', ''))
     _id_modelo = to_int_or_none(request.args.get('id_modelo', ''))
     _placa = request.args.get('placa', '')
