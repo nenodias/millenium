@@ -24,9 +24,9 @@ url = 'postgresql://{user}:{senha}@{host}'.format(
     host=POSTGRESQL_DB_HOST
 )
 if POSTGRESQL_DB_PORT:
-    url += ':{port}'.format(POSTGRESQL_DB_PORT)
+    url += ':{port}'.format(port=POSTGRESQL_DB_PORT)
 if POSTGRESQL_DATABASE:
-    url += '/{database}'.format(POSTGRESQL_DATABASE)
+    url += '/{database}'.format(database=POSTGRESQL_DATABASE)
 
 SECRET_KEY = 'millenium'
 SQLALCHEMY_DATABASE_URI = url
