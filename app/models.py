@@ -221,6 +221,14 @@ class Veiculo(MixinSerialize, db.Model):
     cliente = db.relationship('Cliente')
     modelo = db.relationship('Modelo')
 
+    def descricao(self):
+        retorno = "{0} - {1}".format(self.placa, str(self.ano))
+        if self.modelo is not None:
+            retorno += ' - ' + self.modelo.nome
+            if self.modelo.montadora is not None:
+                retorno += ' - ' + self.modelo.montadora.nome
+        return retorno
+
 class Vistoria(db.Model):
     __tablename__ = 'vistoria'
 
