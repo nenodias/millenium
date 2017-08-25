@@ -18,14 +18,15 @@ POSTGRESQL_PASSWORD = os.getenv('POSTGRESQL_PASSWORD', 'postgres')
 POSTGRESQL_DB_HOST = os.getenv('OPENSHIFT_POSTGRESQL_DB_HOST', 'localhost')
 POSTGRESQL_DB_PORT = os.getenv('OPENSHIFT_POSTGRESQL_DB_PORT','5432')
 '''
-
-url = 'postgresql://{user}:{senha}@{host}:{port}/{database}'.format(
+url = 'postgresql://{user}:{senha}@{host}'.format(
     user=POSTGRESQL_USER,
     senha=POSTGRESQL_PASSWORD,
-    host=POSTGRESQL_DB_HOST,
-    port=POSTGRESQL_DB_PORT,
-    database=POSTGRESQL_DATABASE
+    host=POSTGRESQL_DB_HOST
 )
+if POSTGRESQL_DB_PORT:
+    url += ':{port}'.format(POSTGRESQL_DB_PORT)
+if POSTGRESQL_DATABASE:
+    url += '/{database}'.format(POSTGRESQL_DATABASE)
 
 SECRET_KEY = 'millenium'
 SQLALCHEMY_DATABASE_URI = url
