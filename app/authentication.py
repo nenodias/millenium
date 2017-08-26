@@ -9,8 +9,12 @@ def auth_require():
     def wrapper(f):
         @wraps(f)
         def wrapped(*args, **kwargs):
-            is_json = 'json' in request.content_type
-            has_authorization = 'Authorization' not in request.headers
+            is_json = False
+            if request.content_type and 'json' in request.content_type:
+                is_json = True
+            has_authorization = False
+            if request.headers and 'Authorization' not in request.headers:
+                has_authorization = True
             if is_json and has_authorization:
                 authorization = request.headers.get('Authorization') or ''
                 if not check_password(
