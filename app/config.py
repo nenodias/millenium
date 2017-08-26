@@ -30,6 +30,8 @@ if POSTGRESQL_DB_PORT:
 if POSTGRESQL_DATABASE:
     url += '/{database}'.format(database=POSTGRESQL_DATABASE)
 
+url = os.getenv('DATABASE_URL', url)
+
 logging.info(url)
 SECRET_KEY = 'millenium'
 SQLALCHEMY_DATABASE_URI = url
