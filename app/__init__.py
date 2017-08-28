@@ -38,5 +38,7 @@ app.config['EMAIL_YOU'] = 'you@teste.com.br'
 app.config['EMAIL_SMTP'] = 'smtps.teste.com.br'
 app.config['EMAIL_SMTP_PORT'] = 587
 
+db.create_all()
+
 scheduler = APScheduler()
 scheduler.init_app(app)
