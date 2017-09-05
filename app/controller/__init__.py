@@ -93,6 +93,8 @@ def backup():
     call = 'pg_dump -p '+porta+' -U '+usuario+' -h '+host+' -W'
     if not database:
         call += ' -C'
+    else:
+        call += ' -d ' + database
     ps = pexpect.spawn(call)
     ps.expect(':')
     ps.send('%s\n' % (senha))
