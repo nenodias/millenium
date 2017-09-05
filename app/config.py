@@ -10,9 +10,8 @@ POSTGRES_USER = os.getenv('POSTGRES_USER', 'dbuser')
 POSTGRES_PASSWORD = os.getenv('POSTGRES_USER', 'dbpassword')
 POSTGRES_DB = os.getenv('POSTGRES_DB', 'dbsample')
 
-PORT = os.getenv('DB_PORT', '5432')
-
-HOST = os.getenv('DB_HOST', 'postgres')
+PORT = os.getenv('POSTGRESQL_SERVICE_PORT', '5432')
+HOST = os.getenv('POSTGRESQL_SERVICE_HOST', 'postgres')
 
 DB = '{user}:{passw}@{host}:{port}/{database}'.format(
     user=POSTGRES_USER,
