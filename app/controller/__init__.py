@@ -90,11 +90,12 @@ def backup():
     else:
         porta = parte[1]
     # executando o pg_dump
-    call = 'pg_dump -p '+porta+' -U '+usuario+' -h '+host+' -W'
+    call = ' -p '+porta+' -U '+usuario+' -h '+host+' -W'
     if not database:
         call += ' -C'
+        call = 'pg_dump' + call
     else:
-        call += ' -d ' + database
+        call = 'pg_dump' + database + call
     ps = pexpect.spawn(call)
     ps.expect(':')
     ps.send('%s\n' % (senha))
