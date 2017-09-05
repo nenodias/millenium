@@ -95,7 +95,7 @@ def backup():
         call += ' -C'
         call = 'pg_dump' + call
     else:
-        call = 'pg_dump' + database + call
+        call = 'pg_dump ' + database + call
     ps = pexpect.spawn(call)
     ps.expect(':')
     ps.send('%s\n' % (senha))
