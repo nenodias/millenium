@@ -7,7 +7,7 @@ DEFAULT_PASSWORD = os.getenv('PASS_DEFAULT', '123')
 
 POSTGRES_DEFAULT_USER = 'postgres'
 POSTGRES_USER = os.getenv('POSTGRES_USER', 'dbuser')
-POSTGRES_PASSWORD = os.getenv('POSTGRES_USER', 'dbpassword')
+POSTGRES_PASSWORD = os.getenv('POSTGRES_PASSWORD', 'dbpassword')
 POSTGRES_DB = os.getenv('POSTGRES_DB', 'dbsample')
 
 PORT = os.getenv('POSTGRESQL_SERVICE_PORT', '5432')
