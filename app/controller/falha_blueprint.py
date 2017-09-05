@@ -1,15 +1,25 @@
 # -*- coding: utf-8 -*-
 import json
 from pdb import set_trace
-from flask import (Blueprint, render_template, request, redirect, url_for, flash, 
-    jsonify, render_template, Response)
+from flask import (
+    Blueprint,
+    render_template,
+    request,
+    redirect,
+    url_for,
+    flash,
+    jsonify,
+    render_template,
+    Response
+)
 from app import auth_require
 from app import db
 from app.models import Falha, desc
 
 falha_blueprint = Blueprint('falha', __name__)
 
-falha_colunas = [ col.name for col in Falha.__table__._columns ]
+falha_colunas = [col.name for col in Falha.__table__._columns]
+
 
 @falha_blueprint.route('/')
 @auth_require()
@@ -17,10 +27,11 @@ def index():
     contexto = {}
     _descricao = request.args.get('descricao', '')
     contexto['model'] = {
-        'descricao':_descricao,
+        'descricao': _descricao,
     }
-    contexto['inherit']='layout.html'
+    contexto['inherit'] = 'layout.html'
     return render_template('falha/consulta.html', **contexto)
+
 
 @falha_blueprint.route('/index/ajax')
 @auth_require()
@@ -42,7 +53,7 @@ def form(pk):
     contexto['model'] = {}
     if request.method == 'POST':
         descricao = request.form.get("descricao")
-      
+
         #Criar dicionário com os dados
         dicionario = {
             "descricao":descricao,
@@ -94,7 +105,7 @@ def ajax():
     _offset = int(request.args.get('offset','0'))
     _sort_order = request.args.get('sort_order', '')
     _sort_direction = request.args.get('sort_direction', 'asc')
-    
+
     _descricao = request.args.get('descricao', '')
     _limit = _offset + _limit
     items = []

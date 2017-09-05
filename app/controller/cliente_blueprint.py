@@ -1,8 +1,17 @@
 # -*- coding: utf-8 -*-
 import json
 from pdb import set_trace
-from flask import (Blueprint, render_template, request, redirect, url_for, flash,
-    jsonify, render_template, Response)
+from flask import (
+    Blueprint,
+    render_template,
+    request,
+    redirect,
+    url_for,
+    flash,
+    jsonify,
+    render_template,
+    Response
+)
 from app import auth_require, db
 from app.utils import to_int_or_none, from_str_to_datetime_or_none
 from app.models import Cliente, or_, and_, desc, cliente_colunas

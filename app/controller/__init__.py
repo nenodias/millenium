@@ -1,8 +1,13 @@
 # -*- coding: utf-8 -*-
 import pexpect
-from flask import Response
+import logging
+from flask import (
+    Response, jsonify, request, render_template, redirect, session, url_for,
+    current_app
+    )
 from app import (
-    app, request, render_template, redirect, session, auth_require, url_for)
+    config, auth_require, app)
+from app.utils import generate_hash
 from .falha_blueprint import falha_blueprint
 from .peca_blueprint import peca_blueprint
 from .servico_blueprint import servico_blueprint
@@ -19,9 +24,28 @@ from .lembrete_blueprint import lembrete_blueprint
 def login():
     contexto = {}
     if request.method == 'POST':
-        usuario = request.form.get('usuario')
-        senha = request.form.get('senha')
-        if usuario == 'ADMIN' and senha == '123':
+        usuario = None
+        senha = None
+        is_json = 'json' in request.content_type
+        if is_json:
+            dados = request.json
+            usuario = dados['usuario']
+            senha = dados['senha']
+        else:
+            usuario = request.form.get('usuario')
+            senha = request.form.get('senha')
+        def_user = config.DEFAULT_USERNAME
+        def_pass = config.DEFAULT_PASSWORD
+        user_valid = usuario == def_user
+        pass_valid = senha == def_pass
+
+        if is_json and user_valid and pass_valid:
+            retorno = {"token": generate_hash(def_user, def_pass)}
+            return jsonify(retorno)
+        elif is_json:
+            retorno = {"message": "Failed to login"}
+            return jsonify(retorno)
+        if user_valid and pass_valid:
             session['login'] = True
             return redirect(url_for('index'))
         else:
@@ -38,16 +62,24 @@ def logout():
     return redirect(url_for('login'))
 
 
+'''
+@app.route('/')
+def index():
+    return current_app.send_static_file('index.html'), 200
+'''
+
+
 @app.route('/')
 @auth_require()
 def index():
+    logging.info(config.SQLALCHEMY_DATABASE_URI)
     return render_template('index.html'), 200
 
 
 @app.route('/backup')
 @auth_require()
 def backup():
-    uri = app.config['SQLALCHEMY_DATABASE_URI'].split('://')[1]
+    uri = config.SQLALCHEMY_DATABASE_URI.split('://')[1]
     parte = uri.split('@')
     usuario, senha = parte[0].split(':')
     parte = parte[1].split(':')
