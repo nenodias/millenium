@@ -277,7 +277,7 @@ class MyPDF(FPDF):
                 self.cell(
                     w=25,
                     h=6,
-                    txt='%.2f' % (peca['quantidade']*peca['valor']),
+                    txt='%.2f' % (peca['quantidade'] * peca['valor']),
                     border=1,
                     ln=0,
                     align='R'
@@ -337,7 +337,7 @@ class MyPDF(FPDF):
                 self.cell(
                     w=25,
                     h=6,
-                    txt='%.2f' % (servico['quantidade']*servico['valor']),
+                    txt='%.2f' % (servico['quantidade'] * servico['valor']),
                     border=1,
                     ln=0,
                     align='R'
