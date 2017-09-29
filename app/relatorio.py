@@ -74,10 +74,10 @@ class MyPDF(FPDF):
                 self.falhas.append(item)
             elif item['tipo'] == 'P':
                 self.pecas.append(item)
-                self.sub_total_pecas += item['valor']
+                self.sub_total_pecas += item['quantidade'] * item['valor']
             elif item['tipo'] == 'S':
                 self.servicos.append(item)
-                self.sub_total_servicos += item['valor']
+                self.sub_total_servicos += item['quantidade'] * item['valor']
 
         self.total = self.sub_total_servicos + self.sub_total_pecas
         self.observacoes = dados['observacao']
