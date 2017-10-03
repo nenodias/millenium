@@ -22,7 +22,7 @@ DB = '{user}:{passw}@{host}:{port}/{database}'.format(
 )
 DATABASE_URI = 'postgresql://' + DB
 
-SECRET_KEY = binascii.hexlify(os.urandom(24))
+SECRET_KEY = os.getenv('SERVER_SECRET', binascii.hexlify(os.urandom(24)))
 SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', DATABASE_URI)
 SQLALCHEMY_TRACK_MODIFICATIONS = True
 
