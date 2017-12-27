@@ -8,11 +8,9 @@ from email.mime.text import MIMEText
 sao_paulo_tz = pytz.timezone('America/Sao_Paulo')
 
 
-def create_email_job():
+def create_email_job(app, db):
     """Method generate a method with no params to send mail."""
-    from app import app, db
     from app.models import Lembrete
-
     lock = threading.Lock()
 
     def send_email():

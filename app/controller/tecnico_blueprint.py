@@ -12,7 +12,8 @@ from flask import (
     render_template,
     Response
 )
-from app import auth_require, db
+from app.authentication import auth_require
+from app import db
 from app.models import Tecnico, desc
 
 tecnico_blueprint = Blueprint('tecnico', __name__)

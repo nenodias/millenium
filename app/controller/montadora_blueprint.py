@@ -12,7 +12,8 @@ from flask import (
     render_template,
     Response
 )
-from app import auth_require, db
+from app.authentication import auth_require
+from app import db
 from app.utils import to_int_or_none
 from app.models import Montadora, tupla_origem, desc, montadora_colunas
 

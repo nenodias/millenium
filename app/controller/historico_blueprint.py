@@ -13,7 +13,8 @@ from flask import (
     send_file,
     Response
 )
-from app import auth_require, db
+from app.authentication import auth_require
+from app import db
 from app.utils import (
     to_int_or_none,
     from_str_to_datetime_or_none,

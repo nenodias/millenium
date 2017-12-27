@@ -2,7 +2,7 @@
     <p>Início</p>
     <ul class="menu-list">
         <li>
-            <a href="{{ url_for('index') }}">
+            <a href="{{ url_for('sistema.index') }}">
                 <i class="fa fa-home"></i>
                 &nbsp;
                 Home
@@ -58,7 +58,7 @@
           </ul>
       </li>
       <li>
-          <a target="_blank" href="{{ url_for('backup') }}">
+          <a target="_blank" href="{{ url_for('sistema.backup') }}">
               <i class="fa fa-database"></i>
               &nbsp;
               Backup
@@ -146,7 +146,7 @@
     </p>
     <ul class="menu-list">
       <li>
-          <a href="{{ url_for('logout') }}">
+          <a href="{{ url_for('sistema.logout') }}">
               <i class="fa fa-lock"></i>
               &nbsp;
               Sair

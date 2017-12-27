@@ -25,7 +25,7 @@ def auth_require():
                     retorno = {"message": "must pass authorization header"}
                     return jsonify(retorno), 401
             elif not is_json and 'login' not in session.keys():
-                return redirect(url_for('login'))
+                return redirect(url_for('sistema.login'))
             return f(*args, **kwargs)
         return wrapped
     return wrapper

@@ -2,11 +2,11 @@
 import pexpect
 import logging
 from flask import (
-    Response, jsonify, request, render_template, redirect, session, url_for,
+    Blueprint, Response, jsonify, request, render_template, redirect, session, url_for,
     current_app
     )
-from app import (
-    config, auth_require, app)
+from app.authentication import auth_require
+from app import config
 from app.utils import generate_hash
 from .falha_blueprint import falha_blueprint
 from .peca_blueprint import peca_blueprint
@@ -19,8 +19,9 @@ from .veiculo_blueprint import veiculo_blueprint
 from .historico_blueprint import historico_blueprint
 from .lembrete_blueprint import lembrete_blueprint
 
+sistema = Blueprint('sistema', __name__)
 
-@app.route('/login', methods=['POST', 'GET'])
+@sistema.route('/login', methods=['POST', 'GET'])
 def login():
     contexto = {}
     if request.method == 'POST':
@@ -47,7 +48,7 @@ def login():
             return jsonify(retorno)
         if user_valid and pass_valid:
             session['login'] = True
-            return redirect(url_for('index'))
+            return redirect(url_for('sistema.index'))
         else:
             contexto['tipo_mensagem'] = u'danger'
             contexto['mensagem'] = u'Usuário ou senha inválidos'
@@ -55,28 +56,28 @@ def login():
     return render_template('login.html', **contexto), 200
 
 
-@app.route('/logout')
+@sistema.route('/logout')
 def logout():
     if 'login' in session:
         del session['login']
-    return redirect(url_for('login'))
+    return redirect(url_for('sistema.login'))
 
 
 '''
-@app.route('/')
+@sistema.route('/')
 def index():
     return current_app.send_static_file('index.html'), 200
 '''
 
 
-@app.route('/')
+@sistema.route('/')
 @auth_require()
 def index():
     logging.info(config.SQLALCHEMY_DATABASE_URI)
     return render_template('index.html'), 200
 
 
-@app.route('/backup')
+@sistema.route('/backup')
 @auth_require()
 def backup():
     uri = config.SQLALCHEMY_DATABASE_URI.split('://')[1]
@@ -103,13 +104,15 @@ def backup():
     return Response(stdout, content_type='text/plain; charset=utf-8')
 
 
-app.register_blueprint(falha_blueprint, url_prefix='/falha')
-app.register_blueprint(peca_blueprint, url_prefix='/peca')
-app.register_blueprint(servico_blueprint, url_prefix='/servico')
-app.register_blueprint(tecnico_blueprint, url_prefix='/tecnico')
-app.register_blueprint(montadora_blueprint, url_prefix='/montadora')
-app.register_blueprint(modelo_blueprint, url_prefix='/modelo')
-app.register_blueprint(cliente_blueprint, url_prefix='/cliente')
-app.register_blueprint(veiculo_blueprint, url_prefix='/veiculo')
-app.register_blueprint(historico_blueprint, url_prefix='/historico')
-app.register_blueprint(lembrete_blueprint, url_prefix='/lembrete')
+def init_app(app):
+    app.register_blueprint(sistema)
+    app.register_blueprint(falha_blueprint, url_prefix='/falha')
+    app.register_blueprint(peca_blueprint, url_prefix='/peca')
+    app.register_blueprint(servico_blueprint, url_prefix='/servico')
+    app.register_blueprint(tecnico_blueprint, url_prefix='/tecnico')
+    app.register_blueprint(montadora_blueprint, url_prefix='/montadora')
+    app.register_blueprint(modelo_blueprint, url_prefix='/modelo')
+    app.register_blueprint(cliente_blueprint, url_prefix='/cliente')
+    app.register_blueprint(veiculo_blueprint, url_prefix='/veiculo')
+    app.register_blueprint(historico_blueprint, url_prefix='/historico')
+    app.register_blueprint(lembrete_blueprint, url_prefix='/lembrete')
