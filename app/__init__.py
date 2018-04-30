@@ -1,13 +1,11 @@
 """App."""
 import logging
 from flask import Flask
-from flask_marshmallow import Marshmallow
 from flask_sqlalchemy import SQLAlchemy
 from flask_apscheduler import APScheduler
 from app import jobs
 
 db = SQLAlchemy()
-ma = Marshmallow()
 
 def create_app(debug=False):
     """Cria a aplicacao."""
@@ -19,7 +17,6 @@ def create_app(debug=False):
     logging.info(auth_require)
     logging.info(controller)
     controller.init_app(app)
-    ma.init_app(app)
     db.app = app
     db.init_app(app)
 

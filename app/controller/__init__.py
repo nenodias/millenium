@@ -19,8 +19,6 @@ from .veiculo_blueprint import veiculo_blueprint
 from .historico_blueprint import historico_blueprint
 from .lembrete_blueprint import lembrete_blueprint
 
-from .tecnico_rest import api as tecnico_rest
-
 sistema = Blueprint('sistema', __name__)
 
 @sistema.route('/login', methods=['POST', 'GET'])
@@ -118,4 +116,3 @@ def init_app(app):
     app.register_blueprint(veiculo_blueprint, url_prefix='/veiculo')
     app.register_blueprint(historico_blueprint, url_prefix='/historico')
     app.register_blueprint(lembrete_blueprint, url_prefix='/lembrete')
-    app.register_blueprint(tecnico_rest, url_prefix='/api/tecnico')
