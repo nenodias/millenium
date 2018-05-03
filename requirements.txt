@@ -1,6 +1,8 @@
 gunicorn
 flask
 flask-sqlalchemy
+flask_marshmallow
+marshmallow-sqlalchemy
 git+https://github.com/reingart/pyfpdf.git
 pexpect
 Flask-APScheduler
