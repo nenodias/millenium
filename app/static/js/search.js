@@ -163,7 +163,7 @@ const isMobile = function isMobile(){
         iconeSearch.className = 'fa fa-search';
         searchButton.appendChild(iconeSearch);
 
-        $(labelField).after(searchButton);
+        $(el).closest('p').after(searchButton);
         searchButton.addEventListener('click', function(){
             elemento.showBox();
         });
