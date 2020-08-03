@@ -41,6 +41,17 @@ const isMobile = function isMobile(){
                 labelFieldElement.innerHTML = labelSearch;
                 return labelFieldElement;
             },
+            createSearchButton(labelField){
+                var searchButton = document.createElement('DIV');
+                searchButton.className = 'nn-search-button button is-primary';
+                
+                var iconeSearch = document.createElement('I');
+                iconeSearch.className = 'fa fa-search';
+                searchButton.appendChild(iconeSearch);
+
+                $(labelField).after(searchButton);
+                searchButton.addEventListener('click', elemento.showBox);
+            },
             createDiv: function(classDiv, children){
                 var divField = document.createElement('DIV');
                 divField.className = classDiv;
@@ -156,15 +167,7 @@ const isMobile = function isMobile(){
             evento = 'click';
         }
 
-        var searchButton = document.createElement('DIV');
-        searchButton.className = 'nn-search-button button is-primary';
-        
-        var iconeSearch = document.createElement('I');
-        iconeSearch.className = 'fa fa-search';
-        searchButton.appendChild(iconeSearch);
-
-        $(el).closest('p').after(searchButton);
-        searchButton.addEventListener('click', elemento.showBox);
+        elemento.createSearchButton(labelField);
 
         el.addEventListener(evento, function(){
             elemento.showBox();
