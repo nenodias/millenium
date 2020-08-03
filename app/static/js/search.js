@@ -170,7 +170,7 @@ const isMobile = function isMobile(){
             evento = 'click';
         }
 
-        elemento.createSearchButton(labelField);
+        //elemento.createSearchButton(labelField);
 
         el.addEventListener(evento, function(){
             elemento.showBox();

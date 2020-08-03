@@ -53,6 +53,9 @@ var PADRAO = {
 };
 
 $(function() {
+    if(isMobile()){
+      $(document.body).addClass('mobile');
+    }
     $.validator.addMethod("time", function (value, element) {
         return this.optional(element) || /^\d{1,4}-\d{1,2}-\d{1,2}T\d{1,2}:\d{1,2}$/i.test(value);
     }, "Por favor digite uma data e hora válidas.");
