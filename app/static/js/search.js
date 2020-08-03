@@ -156,7 +156,7 @@ const isMobile = function isMobile(){
             evento = 'click';
         }
 
-        var searchButton = document.createElement('BUTTON');
+        var searchButton = document.createElement('DIV');
         searchButton.className = 'nn-search-button button is-primary';
         
         var iconeSearch = document.createElement('I');
