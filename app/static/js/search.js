@@ -157,7 +157,7 @@ const isMobile = function isMobile(){
         }
 
         var searchButton = document.createElement('A');
-        searchButton.className = 'nn-search-button button is-info';
+        searchButton.className = 'nn-search-button button is-link';
         
         var iconeSearch = document.createElement('I');
         iconeSearch.className = 'fa fa-search';
