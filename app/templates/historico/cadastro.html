@@ -683,13 +683,14 @@
               });
             };
 
-
+            var isMobile = $.isMobile();
             //Evento de busca do modal
             $(document).on('click','.search-modal',function(){
               var link = $(this).data('target');
               var $table_tr = $(this).closest('tr');
               modal(link,function(e){
-                  $(e.target).on('dblclick','td',function(ex){
+                  var event = isMobile ? 'dbltap' : 'dblclick';
+                  $(e.target).on(event,'td',function(ex){
                       var $tr = $(ex.target).closest('tr');
                       var $thead_tr = $(ex.target).closest('table').find('thead tr');
                       var dados = {};

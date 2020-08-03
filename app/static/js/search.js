@@ -1,4 +1,17 @@
  (function( $ ){
+     
+   const isMobile = function isMobile(){
+    return navigator.userAgent.match(/Android/i)
+    || navigator.userAgent.match(/webOS/i)
+    || navigator.userAgent.match(/iPhone/i)
+    || navigator.userAgent.match(/iPad/i)
+    || navigator.userAgent.match(/iPod/i)
+    || navigator.userAgent.match(/BlackBerry/i)
+    || navigat;or.userAgent.match(/Windows Phone/i);
+   };
+
+   $.fn.isMobile = isMobile;
+
    $.fn.selectSearch = function(config) {
         var el = this[0];
         var id = $(this).attr('id');
@@ -143,12 +156,18 @@
         var divContainer = elemento.createDivContainer([divField,divList]);
         $(el).after(divContainer);
         $(divContainer).hide();
-        el.addEventListener('focus',function(){
+        let evento = 'tap';
+        if(!isMobile()){
+            evento = 'focus';
+        }
+
+        el.addEventListener(evento,function(){
             elemento.showBox();
         });
-        labelField.addEventListener('focus',function(){
+        labelField.addEventListener(evento,function(){
             elemento.showBox();
         });
+
         var _throttleTimer = null;
         var _throttleDelay = 100;
         var ScrollHandler = function (e) {

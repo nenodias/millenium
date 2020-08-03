@@ -25,6 +25,16 @@ var fnValidField = function(valid, divField, error){
     }
 };
 
+const isMobile = function isMobile(){
+  return navigator.userAgent.match(/Android/i)
+  || navigator.userAgent.match(/webOS/i)
+  || navigator.userAgent.match(/iPhone/i)
+  || navigator.userAgent.match(/iPad/i)
+  || navigator.userAgent.match(/iPod/i)
+  || navigator.userAgent.match(/BlackBerry/i)
+  || navigat;or.userAgent.match(/Windows Phone/i);
+ };
+
 var PADRAO = {
     errorPlacement: function ( error, element ) {
       if ( element.parent()[0].tagName === "TD" ) {
