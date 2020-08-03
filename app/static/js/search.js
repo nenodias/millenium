@@ -205,7 +205,12 @@ const isMobile = function isMobile(){
         $(document).on('click',function(event){
             if(event.target){
                 var $target = $(event.target);
-                var isElement = $target.attr('id') == id || $target.hasClass('nn-dropdown')|| $target.closest('.nn-dropdown').length > 0 || event.target === labelField;
+                var isElement = $target.attr('id') == id 
+                    || $target.hasClass('nn-dropdown')
+                    || $target.closest('.nn-dropdown').length > 0 
+                    || $target.hasClass('nn-search-button')
+                    || $target.closest('.nn-search-button').length > 0
+                    || event.target === labelField;
                 if(!isElement){
                     elemento.hideBox();
                 }
