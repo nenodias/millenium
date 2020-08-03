@@ -138,6 +138,7 @@ const isMobile = function isMobile(){
         var fieldSearch = elemento.createSearchField(el);
         var labelSearch = elemento.createLabelSearch("Pesquisar");
         var divInputGroup = document.createElement('DIV');
+
         // Clear Button
         var clearButton = document.createElement('A');
         clearButton.className = 'nn-clear button is-danger';
@@ -149,9 +150,25 @@ const isMobile = function isMobile(){
             labelField.value = "";
             $(divContainer).hide();
         });
+
         // Clear Button
         divInputGroup.appendChild(fieldSearch);
         divInputGroup.appendChild(clearButton);
+        if(isMobile()){
+            //Do the search button
+            var searchButton = document.createElement('A');
+            clearButton.className = 'nn-clear button is-primary';
+            var iconeSearch = document.createElement('I');
+            iconeSearch.className = 'fa fa-search';
+            searchButton.appendChild(iconeSearch);
+            searchButton.addEventListener('click',function(){
+                elemento.clearItems();
+                offset = 0;
+                elemento.loaded = false;
+                elemento.loadData(itemsList, fieldSearch.value, limit, offset);
+            });
+            divInputGroup.appendChild(searchButton);
+        }
         var divField = elemento.createDiv('form-group', [labelSearch, divInputGroup]);
         var itemsList = document.createElement('UL');
         itemsList.className = 'list-group';
