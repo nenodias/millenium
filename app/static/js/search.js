@@ -1,6 +1,4 @@
- (function( $ ){
-
-   const isMobile = function isMobile(){
+const isMobile = function isMobile(){
     return navigator.userAgent.match(/Android/i)
     || navigator.userAgent.match(/webOS/i)
     || navigator.userAgent.match(/iPhone/i)
@@ -8,7 +6,9 @@
     || navigator.userAgent.match(/iPod/i)
     || navigator.userAgent.match(/BlackBerry/i)
     || navigator.userAgent.match(/Windows Phone/i);
-   };
+};
+
+ (function( $ ){
 
    $.fn.isMobile = isMobile;
 
@@ -156,9 +156,15 @@
         var divContainer = elemento.createDivContainer([divField,divList]);
         $(el).after(divContainer);
         $(divContainer).hide();
-        let evento = 'tap';
-        if(!isMobile()){
-            evento = 'focus';
+        let evento = 'focus';
+        if(isMobile()){
+            evento = 'tap';
+            var searchButton = document.createElement('A');
+            searchButton.className = 'nn-search-button button is-info';
+            $(labelField).after(searchButton);
+            searchButton.addEventListener('click', function(){
+                elemento.showBox();
+            });
         }
 
         el.addEventListener(evento,function(){
