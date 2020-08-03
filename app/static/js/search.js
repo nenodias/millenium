@@ -42,6 +42,7 @@ const isMobile = function isMobile(){
                 return labelFieldElement;
             },
             createSearchButton(labelField){
+                var self = this;
                 var searchButton = document.createElement('DIV');
                 searchButton.className = 'nn-search-button button is-primary';
                 
@@ -50,7 +51,9 @@ const isMobile = function isMobile(){
                 searchButton.appendChild(iconeSearch);
 
                 $(labelField).after(searchButton);
-                searchButton.addEventListener('click', elemento.showBox);
+                searchButton.addEventListener('click', function(){
+                    self.showBox();
+                });
             },
             createDiv: function(classDiv, children){
                 var divField = document.createElement('DIV');
