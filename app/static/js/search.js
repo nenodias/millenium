@@ -164,14 +164,12 @@ const isMobile = function isMobile(){
         searchButton.appendChild(iconeSearch);
 
         $(el).closest('p').after(searchButton);
-        searchButton.addEventListener('click', function(){
-            this.showBox();
-        }.bind(elemento));
+        searchButton.addEventListener('click', elemento.showBox);
 
-        el.addEventListener(evento,function(){
+        el.addEventListener(evento, function(){
             elemento.showBox();
         });
-        labelField.addEventListener(evento,function(){
+        labelField.addEventListener(evento, function(){
             elemento.showBox();
         });
 
