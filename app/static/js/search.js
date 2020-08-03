@@ -165,8 +165,8 @@ const isMobile = function isMobile(){
 
         $(el).closest('p').after(searchButton);
         searchButton.addEventListener('click', function(){
-            elemento.showBox();
-        });
+            this.showBox();
+        }.bind(elemento));
 
         el.addEventListener(evento,function(){
             elemento.showBox();
