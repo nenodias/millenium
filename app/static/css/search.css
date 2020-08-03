@@ -41,6 +41,9 @@
 input.nn-search {
     width: 90%;
 }
-button.nn-clear, a.nn-clear {
+button.nn-clear, a.nn-clear, button.nn-search-mobile, a.nn-search-mobile {
     width: 10%;
+}
+body.mobile input.nn-search {
+    width: 80%;
 }

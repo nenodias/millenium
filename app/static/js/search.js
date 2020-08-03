@@ -157,7 +157,7 @@ const isMobile = function isMobile(){
         if(isMobile()){
             //Do the search button
             var searchButton = document.createElement('A');
-            clearButton.className = 'nn-clear button is-primary';
+            searchButton.className = 'nn-search-mobile button is-primary';
             var iconeSearch = document.createElement('I');
             iconeSearch.className = 'fa fa-search';
             searchButton.appendChild(iconeSearch);
