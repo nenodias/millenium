@@ -156,6 +156,11 @@ const isMobile = function isMobile(){
             evento = 'tap';
             var searchButton = document.createElement('A');
             searchButton.className = 'nn-search-button button is-info';
+            
+            var iconeSearch = document.createElement('I');
+            iconeSearch.className = 'fa fa-search';
+            searchButton.appendChild(iconeSearch);
+
             $(labelField).after(searchButton);
             searchButton.addEventListener('click', function(){
                 elemento.showBox();
