@@ -73,7 +73,6 @@ def index():
 @sistema.route('/')
 @auth_require()
 def index():
-    logging.info(config.SQLALCHEMY_DATABASE_URI)
     return render_template('index.html'), 200
 
 

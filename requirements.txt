@@ -1,8 +1,9 @@
 gunicorn
 flask
 flask-sqlalchemy
+wheel
 git+https://github.com/reingart/pyfpdf.git
 pexpect
 Flask-APScheduler
 pytz
-psycopg2
+psycopg2-binary
