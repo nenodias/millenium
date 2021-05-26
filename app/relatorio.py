@@ -85,7 +85,7 @@ class MyPDF(FPDF):
     def header(self):
         base = os.path.dirname(os.path.abspath(__file__))
         logo = os.path.join(base, "static/img/logo.png")
-        self.image(logo, x=10, y=10, w=23)
+        self.image(logo, x=8, y=10, w=25)
         self.cell(
             w=25, h=0, txt='', border=0, ln=0, align='', fill=False, link=''
         )
