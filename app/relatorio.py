@@ -12,11 +12,11 @@ from app.utils import (
 class DadosOficina():
 
     def __init__(self):
-        self.nome = 'AUTO MECÂNICA CARRIT'
-        self.endereco = 'R: Rio Grande do Sul, 460 - J.D.CRUZIERO' \
-            ' - Lençóis Paulista - SP - 186806-380'
+        self.nome = 'AUTO MECÂNICA BAPTISTA'
+        self.endereco = 'R: São José, 32 - Vila Irerê' \
+            ' - Lençóis Paulista - SP - 18682-100'
         self.telefone = '(14)3264-4598'
-        self.celular = '(14)991262313'
+        self.celular = '(14) 9 9126-2313'
         self.email = 'mecanicacarrit@gmail.com'
 
 
