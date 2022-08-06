@@ -78,6 +78,7 @@ def create_email_job(app, db):
 
                     s = smtplib.SMTP(smtp, smtp_port)
                     s.login(me, password)
+                    s.starttls()
                     s.sendmail(me, [you], email.as_string())
                     s.quit()
                     # excluindo o lembrete
