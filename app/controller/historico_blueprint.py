@@ -325,6 +325,5 @@ def report(pk):
     return send_file(
         pdf_buffer,
         download_name='relatorio.pdf',
-        mimetype='application/pdf',
-        cache_timeout=0
+        mimetype='application/pdf'
     )
