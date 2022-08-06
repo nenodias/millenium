@@ -324,7 +324,7 @@ def report(pk):
     pdf_buffer = gerar_pdf(dados)
     return send_file(
         pdf_buffer,
-        attachment_filename='relatorio.pdf',
+        download_name='relatorio.pdf',
         mimetype='application/pdf',
         cache_timeout=0
     )
