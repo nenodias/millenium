@@ -32,4 +32,5 @@ EMAIL_ME_PASSWORD = os.getenv('EMAIL_ME_PASSWORD', 'senha')
 EMAIL_YOU = os.getenv('EMAIL_YOU', 'you@teste.com.br')
 EMAIL_SMTP = os.getenv('EMAIL_SMTP', 'smtps.teste.com.br')
 EMAIL_SMTP_PORT = os.getenv('EMAIL_SMTP_PORT', 587)
+
 SEND_FILE_MAX_AGE_DEFAULT = 0
