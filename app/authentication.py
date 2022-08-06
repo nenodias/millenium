@@ -19,7 +19,7 @@ def auth_require():
                 authorization = request.headers.get('Authorization') or ''
                 if not check_password(
                     config.DEFAULT_USERNAME,
-                    config.DEFAULT_USERNAME,
+                    config.DEFAULT_PASSWORD,
                     authorization
                 ):
                     retorno = {"message": "must pass authorization header"}
