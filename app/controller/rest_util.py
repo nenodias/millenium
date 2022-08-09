@@ -30,13 +30,13 @@ class PaginateRequest:
         except Exception as ex:
             logging.error(ex)
             return self.response({"message": str(ex)}, 500)
-        return self.success_response(items.data)
+        return self.success_response(items)
     
     def query_one(self, pk):
         try:
             record = self.model.query.filter_by(id=pk).one()
             if record:
-                return self.scheme.jsonify(record)
+                return self.success_response(self.scheme.dump(record))
         except Exception as ex:
             logging.error(ex)
         return self.not_found()
@@ -88,10 +88,10 @@ class PaginateRequest:
         return self.scheme.jsonify(data)
 
     def success_response(self, items):
-        return Response(response=json.dumps( items ), status=200, mimetype="application/json")
+        return Response(response=json.dumps( items, ensure_ascii=False ), status=200, mimetype="application/json")
     
     def response(self, items, status):
-        return Response(response=json.dumps( items ), status=status, mimetype="application/json")
+        return Response(response=json.dumps( items, ensure_ascii=False ), status=status, mimetype="application/json")
 
     def not_found(self):
         return self.response({"message": "Registro não encontrado"}, 404)

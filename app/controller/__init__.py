@@ -19,6 +19,7 @@ from .veiculo_blueprint import veiculo_blueprint
 from .historico_blueprint import historico_blueprint
 from .lembrete_blueprint import lembrete_blueprint
 
+from .historico_rest import api as historico_rest
 from .cliente_rest import api as cliente_rest
 from .tecnico_rest import api as tecnico_rest
 
@@ -119,5 +120,6 @@ def init_app(app):
     app.register_blueprint(veiculo_blueprint, url_prefix='/veiculo')
     app.register_blueprint(historico_blueprint, url_prefix='/historico')
     app.register_blueprint(lembrete_blueprint, url_prefix='/lembrete')
+    app.register_blueprint(historico_rest, url_prefix='/api/historico')
     app.register_blueprint(cliente_rest, url_prefix='/api/cliente')
     app.register_blueprint(tecnico_rest, url_prefix='/api/tecnico')
