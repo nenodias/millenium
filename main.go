@@ -1,7 +1,14 @@
 package main
 
-import "fmt"
+import (
+	"github.com/rs/zerolog/log"
+
+	"github.com/nenodias/millenium/config"
+	"github.com/nenodias/millenium/database"
+)
 
 func main() {
-	fmt.Println("Hello World")
+	config.Init()
+	database.Init()
+	log.Info().Msg("Hello World")
 }
