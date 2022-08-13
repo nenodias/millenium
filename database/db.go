@@ -19,11 +19,12 @@ func Init() {
 	host := config.GetEnv("POSTGRESQL_SERVICE_HOST", "localhost")
 	port := config.GetEnv("POSTGRES_PORT", "5432")
 	database := config.GetEnv("POSTGRES_DB", "carrit")
-	urlConnection := fmt.Sprintf("postgres://%s:%s@%s:%s/%s", username, password, host, port, database)
+	urlConnection := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable", username, password, host, port, database)
 	engine, err = xorm.NewEngine("postgres", urlConnection)
 	if err != nil {
 		log.Fatal().Stack().Err(err).Str("service", "database").Msgf("Cannot start connection with database")
 	}
+	engine.SetLogger(&CurrentLogger{logger: &log.Logger, showSQL: true})
 }
 
 func GetEngine() *xorm.Engine {

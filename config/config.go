@@ -15,6 +15,7 @@ func logStartConfig() {
 	debug := GetEnv("DEBUG", "false")
 	if debug == "true" {
 		zerolog.SetGlobalLevel(zerolog.DebugLevel)
+		log.Debug().Msg("Debug enabled.")
 	}
 }
 
