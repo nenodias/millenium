@@ -1,4 +1,4 @@
-package database
+package models
 
 type Peca struct {
 	Id        int64   `xorm:"'id' bigint pk autoincr not null"`

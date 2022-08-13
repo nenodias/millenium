@@ -5,13 +5,14 @@ import (
 
 	"github.com/nenodias/millenium/config"
 	"github.com/nenodias/millenium/database"
+	"github.com/nenodias/millenium/database/models"
 )
 
 func main() {
 	config.Init()
 	database.Init()
 	engine := database.GetEngine()
-	p := &database.Peca{Valor: 10.0, Descricao: "Peça Nova"}
+	p := &models.Peca{Valor: 10.0, Descricao: "Peça Nova"}
 	exists, err := engine.ID(6).Get(p)
 	if err != nil {
 		log.Error().Msg(err.Error())
