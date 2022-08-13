@@ -19,7 +19,7 @@ type Veiculo struct {
 	Pais        string      `xorm:"'pais' varchar(20)"`
 	Cor         string      `xorm:"'cor' varchar(20)"`
 	Combustivel Combustivel `xorm:"'combustivel' varchar(10)"`
-	Renavan     string      `xorm:"'renavan' varchar(40)"`
+	Renavam     string      `xorm:"'renavam' varchar(40)"`
 	Chassi      string      `xorm:"'chassi' varchar(40)"`
 	Ano         string      `xorm:"'ano' varchar(4)"`
 	IdModelo    int64       `xorm:"'id_modelo' bigint"`

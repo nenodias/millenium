@@ -12,7 +12,7 @@ func main() {
 	config.Init()
 	database.Init()
 	engine := database.GetEngine()
-	p := &models.Peca{Valor: 10.0, Descricao: "Peça Nova"}
+	p := &models.Peca{}
 	exists, err := engine.ID(6).Get(p)
 	if err != nil {
 		log.Error().Msg(err.Error())
