@@ -1,4 +1,4 @@
-package database
+package repositories
 
 import (
 	"fmt"
@@ -25,6 +25,10 @@ func Init() {
 		log.Fatal().Stack().Err(err).Str("service", "database").Msgf("Cannot start connection with database")
 	}
 	engine.SetLogger(&CurrentLogger{logger: &log.Logger, showSQL: true})
+}
+
+type DatabaseEngine struct {
+	xorm.Engine
 }
 
 func GetEngine() *xorm.Engine {

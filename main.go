@@ -1,33 +1,35 @@
 package main
 
 import (
-	"github.com/rs/zerolog/log"
+	"net/http"
 
+	"github.com/gorilla/mux"
 	"github.com/nenodias/millenium/config"
-	"github.com/nenodias/millenium/database"
-	"github.com/nenodias/millenium/database/models"
+	tDomain "github.com/nenodias/millenium/core/domain/tecnico"
+	tecnicoHandlers "github.com/nenodias/millenium/handlers/tecnico"
+	database "github.com/nenodias/millenium/repositories"
+	"github.com/nenodias/millenium/repositories/models"
+	"github.com/rs/zerolog/log"
 )
 
 func main() {
 	config.Init()
 	database.Init()
 	engine := database.GetEngine()
-	p := &models.Peca{}
-	exists, err := engine.ID(6).Get(p)
-	if err != nil {
-		log.Error().Msg(err.Error())
-	} else {
-		log.Info().Msgf("Registro encontrado: %v", exists)
-		log.Info().Msgf("Registro: %v", p)
+	var service tDomain.TecnicoService = models.NewTecnicoService(engine)
+	controller := tecnicoHandlers.NewTecnicoController(&service)
+
+	router := mux.NewRouter().StrictSlash(true)
+	router.HandleFunc("/api/tecnico/", controller.FindMany).Methods("GET")
+	router.HandleFunc("/api/tecnico/", controller.Save).Methods("POST")
+	router.HandleFunc("/api/tecnico/{id}", controller.FindOne).Methods("GET")
+	router.HandleFunc("/api/tecnico/{id}", controller.DeleteOne).Methods("DELETE")
+	router.HandleFunc("/api/tecnico/{id}", controller.Update).Methods("PUT")
+
+	srv := &http.Server{
+		Handler: router,
+		Addr:    "0.0.0.0:8080",
 	}
-	/*
-		ret, err := engine.Insert(p)
-		if err != nil {
-			log.Error().Msg(err.Error())
-		} else {
-			log.Info().Msgf("Linhas inseridas: %d", ret)
-			log.Info().Msgf("Id inserido: %d", p.Id)
-		}
-	*/
-	log.Info().Msg("Hello World")
+
+	log.Error().Msg(srv.ListenAndServe().Error())
 }
