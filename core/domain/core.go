@@ -9,12 +9,27 @@ type PagebleContent[T any] struct {
 	Number        int      `json:"number"`
 }
 
+type Identifiable interface {
+	GetId() int64
+}
+
 type SortDirection string
 
 const (
 	ASC  SortDirection = "ASC"
 	DESC SortDirection = "DESC"
 )
+
+func GetSortDirection(value string) SortDirection {
+	switch value {
+	case string(ASC):
+		return ASC
+	case string(DESC):
+		return DESC
+	default:
+		return ASC
+	}
+}
 
 type SortRequest struct {
 	SortColumn    string        `json:"sortColumn"`

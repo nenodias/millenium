@@ -22,32 +22,61 @@ func (p *Tecnico) TableName() string {
 }
 
 type TecnicoRepository struct {
-	DB *xorm.Engine
+	GenericRepository[domain.Tecnico, domain.TecnicoFilter, Tecnico]
 }
 
 func NewTecnicoService(engine *xorm.Engine) domain.TecnicoService {
-	return &TecnicoRepository{
-		DB: engine,
+	repository := TecnicoRepository{
+		GenericRepository: GenericRepository[domain.Tecnico, domain.TecnicoFilter, Tecnico]{
+			DB:             engine,
+			MapperToDTO:    mapperToDTO,
+			MapperToEntity: mapperToEntity,
+			CopyToDto:      copyToDto,
+		},
 	}
+	return domain.TecnicoService(&repository)
 }
 
 func (tf *TecnicoRepository) FindMany(filter *domain.TecnicoFilter) (core.PagebleContent[*domain.Tecnico], error) {
-	response := core.PagebleContent[*domain.Tecnico]{}
-	response.Number = filter.PageNumber
-	response.Pageable.PageNumber = filter.PageNumber
-	response.Pageable.PageSize = filter.PageSize
-	response.Pageable.Sort.SortColumn = filter.Sort.SortColumn
-	response.Pageable.Sort.SortDirection = filter.Sort.SortDirection
+	response := core.PagebleContent[*domain.Tecnico]{
+		Number: filter.PageNumber,
+
+		Pageable: core.Pageable{
+			PageNumber: filter.PageNumber,
+			PageSize:   filter.PageSize,
+			Sort:       filter.Sort,
+		},
+	}
+
 	orderBy := fmt.Sprintf("%s %s", filter.Sort.SortColumn, filter.Sort.SortDirection)
 	query := tf.DB.OrderBy(orderBy)
+
 	model := new(Tecnico)
+	var total int64
+	where := []string{}
 	if filter.Nome != "" && strings.TrimSpace(filter.Nome) != "" {
-		query = query.Where("nome Like ?", "%"+filter.Nome+"%")
+		where = []string{"nome Like ?", "%" + filter.Nome + "%"}
 	}
-	total, _ := query.Count(model)
+
+	if len(where) > 0 {
+		total, _ = query.Where(where[0], where[1]).Count(model)
+	} else {
+		total, _ = query.Count(model)
+	}
 	response.TotalElements = total
 	response.TotalPages = int64(math.Ceil(float64(total) / float64(filter.PageSize)))
-	rows, err := query.Limit(filter.PageSize, filter.PageNumber*filter.PageSize).Rows(model)
+
+	var rows *xorm.Rows
+	var err error
+	if len(where) > 0 {
+		rows, err = query.Where(where[0], where[1]).OrderBy(orderBy).Limit(
+			filter.PageSize, filter.PageNumber*filter.PageSize,
+		).Rows(model)
+	} else {
+		rows, err = query.OrderBy(orderBy).Limit(
+			filter.PageSize, filter.PageNumber*filter.PageSize,
+		).Rows(model)
+	}
 	if err != nil {
 		return response, err
 	}
@@ -65,57 +94,6 @@ func (tf *TecnicoRepository) FindMany(filter *domain.TecnicoFilter) (core.Pagebl
 	}
 	response.Size = count
 	return response, nil
-}
-
-func (tf *TecnicoRepository) FindOne(id int64) (*domain.Tecnico, error) {
-	p := new(Tecnico)
-	exists, err := tf.DB.ID(id).Get(p)
-	if err != nil {
-		return nil, err
-	}
-	if !exists {
-		return nil, nil
-	}
-	return mapperToDTO(p), nil
-}
-
-func (tf *TecnicoRepository) DeleteOne(id int64) (bool, error) {
-	model := new(Tecnico)
-	exists, err := tf.DB.ID(id).Exist(model)
-	if err != nil {
-		return false, err
-	}
-	if !exists {
-		return true, nil
-	} else {
-		rowsAffected, err := tf.DB.ID(id).Delete(model)
-		if err != nil {
-			return false, err
-		}
-		return rowsAffected == 1, nil
-	}
-}
-
-func (tf *TecnicoRepository) Save(dto *domain.Tecnico) (bool, error) {
-	entity := mapperToEntity(dto)
-	exists, err := tf.DB.ID(dto.Id).Exist(new(Tecnico))
-	if err != nil {
-		return false, err
-	}
-	if !exists {
-		rowsAffected, err := tf.DB.InsertOne(entity)
-		if err != nil {
-			return false, err
-		}
-		copyToDto(entity, dto)
-		return rowsAffected == 1, nil
-	}
-	rowsAffected, err := tf.DB.ID(entity.Id).Update(entity)
-	if err != nil {
-		return false, err
-	}
-	copyToDto(entity, dto)
-	return rowsAffected == 1, nil
 }
 
 func mapperToEntity(dto *domain.Tecnico) *Tecnico {

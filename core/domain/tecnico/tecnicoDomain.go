@@ -9,6 +9,10 @@ type Tecnico struct {
 	Nome string
 }
 
+func (t Tecnico) GetId() int64 {
+	return t.Id
+}
+
 type TecnicoFilter struct {
 	domain.Pageable
 	Nome string

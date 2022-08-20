@@ -6,6 +6,8 @@ import (
 	"strconv"
 
 	"github.com/gorilla/mux"
+	core "github.com/nenodias/millenium/core/domain"
+	"github.com/nenodias/millenium/core/domain/utils"
 	"github.com/rs/zerolog/log"
 
 	domain "github.com/nenodias/millenium/core/domain/tecnico"
@@ -22,7 +24,28 @@ func NewTecnicoController(service *domain.TecnicoService) *TecnicoController {
 }
 
 func (t *TecnicoController) FindMany(w http.ResponseWriter, r *http.Request) {
-	//t.Service.FindMany()
+	query := r.URL.Query()
+	page := utils.StringToInt(query.Get("page"), utils.DEFAULT_PAGE)
+	size := utils.StringToInt(query.Get("size"), utils.DEFAULT_SIZE)
+	sortColumn := utils.StringNormalized(query.Get("sortColumn"), "codigo_tecnico")
+	sortDirection := core.GetSortDirection(query.Get("sortDirection"))
+	nome := utils.StringNormalized(query.Get("nome"), "")
+	filter := domain.TecnicoFilter{
+		Nome: nome,
+		Pageable: core.Pageable{
+			PageSize: size, PageNumber: page,
+			Sort: core.SortRequest{
+				SortColumn: sortColumn, SortDirection: sortDirection,
+			},
+		},
+	}
+	response, err := (*t.Service).FindMany(&filter)
+	if err != nil {
+		log.Error().Msg(err.Error())
+		w.WriteHeader(500)
+	} else {
+		utils.WriteJson(response, w, 200, 500)
+	}
 }
 
 func (t *TecnicoController) Save(w http.ResponseWriter, r *http.Request) {
@@ -31,22 +54,18 @@ func (t *TecnicoController) Save(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Error().Msg(err.Error())
 		w.WriteHeader(400)
+		return
+	}
+	success, err := (*t.Service).Save(model)
+	if err != nil {
+		log.Error().Msg(err.Error())
+		w.WriteHeader(500)
+		return
+	}
+	if success {
+		utils.WriteJson(model, w, 200, 500)
 	} else {
-		success, err := (*t.Service).Save(model)
-		if err != nil {
-			log.Error().Msg(err.Error())
-			w.WriteHeader(500)
-		}
-		if success {
-			w.WriteHeader(200)
-			err := json.NewEncoder(w).Encode(model)
-			if err != nil {
-				log.Error().Msg(err.Error())
-				w.WriteHeader(500)
-			}
-		} else {
-			w.WriteHeader(400)
-		}
+		w.WriteHeader(400)
 	}
 }
 
@@ -57,30 +76,75 @@ func (t *TecnicoController) FindOne(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Error().Msg(err.Error())
 		w.WriteHeader(400)
+		return
+	}
+	model, err := (*t.Service).FindOne(id)
+	if err != nil {
+		log.Error().Msg(err.Error())
+		w.WriteHeader(500)
+		return
+	}
+	if model != nil {
+		utils.WriteJson(model, w, 200, 500)
 	} else {
-		model, err := (*t.Service).FindOne(id)
-		if err != nil {
-			log.Error().Msg(err.Error())
-			w.WriteHeader(500)
-		}
-		if model != nil {
-			w.WriteHeader(200)
-			err := json.NewEncoder(w).Encode(model)
-			if err != nil {
-				log.Error().Msg(err.Error())
-				w.WriteHeader(500)
-			}
-		} else {
-			w.WriteHeader(204)
-		}
+		w.WriteHeader(204)
 	}
 }
 
 func (t *TecnicoController) DeleteOne(w http.ResponseWriter, r *http.Request) {
-	//t.Service.DeleteOne()
+	params := mux.Vars(r)
+	txtId := params["id"]
+	id, err := strconv.ParseInt(txtId, 10, 64)
+	if err != nil {
+		log.Error().Msg(err.Error())
+		w.WriteHeader(400)
+		return
+	}
+
+	_, err = (*t.Service).DeleteOne(id)
+	if err != nil {
+		log.Error().Msg(err.Error())
+		w.WriteHeader(500)
+		return
+	}
+	w.WriteHeader(204)
 }
 
 func (t *TecnicoController) Update(w http.ResponseWriter, r *http.Request) {
-	//t.Service.FindOne()
-	//t.Service.Save()
+	model := new(domain.Tecnico)
+	params := mux.Vars(r)
+	txtId := params["id"]
+	id, err := strconv.ParseInt(txtId, 10, 64)
+	if err != nil {
+		log.Error().Msg(err.Error())
+		w.WriteHeader(400)
+		return
+	}
+	record, err := (*t.Service).FindOne(id)
+	if err != nil {
+		log.Error().Msg(err.Error())
+		w.WriteHeader(500)
+		return
+	}
+	if record != nil {
+		err := json.NewDecoder(r.Body).Decode(model)
+		if err != nil {
+			log.Error().Msg(err.Error())
+			w.WriteHeader(400)
+			return
+		}
+		success, err := (*t.Service).Save(model)
+		if err != nil {
+			log.Error().Msg(err.Error())
+			w.WriteHeader(500)
+			return
+		}
+		if success {
+			utils.WriteJson(model, w, 200, 500)
+		} else {
+			w.WriteHeader(400)
+		}
+	} else {
+		w.WriteHeader(404)
+	}
 }

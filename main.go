@@ -5,7 +5,6 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/nenodias/millenium/config"
-	tDomain "github.com/nenodias/millenium/core/domain/tecnico"
 	tecnicoHandlers "github.com/nenodias/millenium/handlers/tecnico"
 	database "github.com/nenodias/millenium/repositories"
 	"github.com/nenodias/millenium/repositories/models"
@@ -16,7 +15,8 @@ func main() {
 	config.Init()
 	database.Init()
 	engine := database.GetEngine()
-	var service tDomain.TecnicoService = models.NewTecnicoService(engine)
+	//var service tDomain.TecnicoService = models.NewTecnicoService(engine)
+	service := models.NewTecnicoService(engine)
 	controller := tecnicoHandlers.NewTecnicoController(&service)
 
 	router := mux.NewRouter().StrictSlash(true)
