@@ -36,10 +36,28 @@ type SortRequest struct {
 	SortDirection SortDirection `json:"sortDirection"`
 }
 
+type PageableFilter interface {
+	GetSort() SortRequest
+	GetPageSize() int
+	GetPageNumber() int
+}
+
 type Pageable struct {
 	Sort       SortRequest `json:"sort"`
 	PageSize   int         `json:"pageSize"`
 	PageNumber int         `json:"pageNumber"`
+}
+
+func (p Pageable) GetSort() SortRequest {
+	return p.Sort
+}
+
+func (p Pageable) GetPageSize() int {
+	return p.PageSize
+}
+
+func (p Pageable) GetPageNumber() int {
+	return p.PageNumber
 }
 
 type Service[T any, F any] interface {
