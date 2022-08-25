@@ -1,9 +1,10 @@
-package models
+package tecnico
 
 import (
 	"strings"
 
 	domain "github.com/nenodias/millenium/core/domain/tecnico"
+	models "github.com/nenodias/millenium/repositories/models"
 	"xorm.io/xorm"
 )
 
@@ -17,12 +18,12 @@ func (p *Tecnico) TableName() string {
 }
 
 type TecnicoRepository struct {
-	GenericRepository[domain.Tecnico, domain.TecnicoFilter, Tecnico]
+	models.GenericRepository[domain.Tecnico, domain.TecnicoFilter, Tecnico]
 }
 
 func NewTecnicoService(engine *xorm.Engine) domain.TecnicoService {
 	repository := TecnicoRepository{
-		GenericRepository: GenericRepository[domain.Tecnico, domain.TecnicoFilter, Tecnico]{
+		GenericRepository: models.GenericRepository[domain.Tecnico, domain.TecnicoFilter, Tecnico]{
 			DB:             engine,
 			MapperToDTO:    mapperToDTO,
 			MapperToEntity: mapperToEntity,

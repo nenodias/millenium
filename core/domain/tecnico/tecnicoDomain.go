@@ -5,8 +5,8 @@ import (
 )
 
 type Tecnico struct {
-	Id   int64
-	Nome string
+	Id   int64  `json:"id"`
+	Nome string `json:"nome"`
 }
 
 func (t Tecnico) GetId() int64 {

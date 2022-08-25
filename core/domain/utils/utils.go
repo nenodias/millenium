@@ -32,9 +32,9 @@ func StringToInt64(text string, fallback int64) int64 {
 
 func StringNormalized(raw string, fallback string) string {
 	if strings.TrimSpace(raw) == "" {
-		return fallback
+		return strings.ToUpper(fallback)
 	}
-	return raw
+	return strings.ToUpper(raw)
 }
 
 func WriteJson(data interface{}, w http.ResponseWriter, statusOk int, statusError int) {
