@@ -30,7 +30,7 @@ func (t *ModeloController) FindMany(w http.ResponseWriter, r *http.Request) {
 	sortColumn := utils.StringNormalized(query.Get("sortColumn"), "id")
 	sortDirection := core.GetSortDirection(query.Get("sortDirection"))
 	nome := utils.StringNormalized(query.Get("nome"), "")
-	idModelo := utils.StringToInt64(query.Get("id_montadora"), 0)
+	idModelo := utils.StringToInt64(query.Get("id_monta"), 0)
 	filter := domain.ModeloFilter{
 		Nome:     nome,
 		IdModelo: idModelo,
