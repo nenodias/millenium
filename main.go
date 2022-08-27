@@ -40,6 +40,6 @@ func main() {
 		Handler: router,
 		Addr:    "0.0.0.0:8080",
 	}
-
+	log.Info().Msg("Listening on port :8080")
 	log.Error().Msg(srv.ListenAndServe().Error())
 }
