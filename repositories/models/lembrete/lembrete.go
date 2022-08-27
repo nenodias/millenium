@@ -25,7 +25,7 @@ type LembreteRepository struct {
 	models.GenericRepository[domain.Lembrete, domain.LembreteFilter, Lembrete]
 }
 
-func NewLembreteService(engine *xorm.Engine) domain.LembreteService {
+func NewService(engine *xorm.Engine) domain.LembreteService {
 	repository := LembreteRepository{
 		GenericRepository: models.GenericRepository[domain.Lembrete, domain.LembreteFilter, Lembrete]{
 			DB:             engine,

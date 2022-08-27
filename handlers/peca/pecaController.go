@@ -14,7 +14,7 @@ type PecaController struct {
 	handlers.Controller[domain.Peca, domain.PecaFilter]
 }
 
-func NewPecaController(service *domain.PecaService) *PecaController {
+func NewController(service *domain.PecaService) *PecaController {
 	return &PecaController{
 		Controller: handlers.Controller[domain.Peca, domain.PecaFilter]{
 			Service:    *service,

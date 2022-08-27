@@ -22,7 +22,7 @@ type ServicoRepository struct {
 	models.GenericRepository[domain.Servico, domain.ServicoFilter, Servico]
 }
 
-func NewServicoService(engine *xorm.Engine) domain.ServicoService {
+func NewService(engine *xorm.Engine) domain.ServicoService {
 	repository := ServicoRepository{
 		GenericRepository: models.GenericRepository[domain.Servico, domain.ServicoFilter, Servico]{
 			DB:             engine,

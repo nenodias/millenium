@@ -15,7 +15,7 @@ type HistoricoController struct {
 	handlers.Controller[domain.Historico, domain.HistoricoFilter]
 }
 
-func NewHistoricoController(service *domain.HistoricoService) *HistoricoController {
+func NewController(service *domain.HistoricoService) *HistoricoController {
 	return &HistoricoController{
 		Controller: handlers.Controller[domain.Historico, domain.HistoricoFilter]{
 			Service:    *service,

@@ -23,7 +23,7 @@ type ModeloRepository struct {
 	models.GenericRepository[domain.Modelo, domain.ModeloFilter, Modelo]
 }
 
-func NewTecnicoService(engine *xorm.Engine) domain.ModeloService {
+func NewService(engine *xorm.Engine) domain.ModeloService {
 	repository := ModeloRepository{
 		GenericRepository: models.GenericRepository[domain.Modelo, domain.ModeloFilter, Modelo]{
 			DB:             engine,

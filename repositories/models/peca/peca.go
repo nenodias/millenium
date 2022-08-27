@@ -22,7 +22,7 @@ type PecaRepository struct {
 	models.GenericRepository[domain.Peca, domain.PecaFilter, Peca]
 }
 
-func NewPecaService(engine *xorm.Engine) domain.PecaService {
+func NewService(engine *xorm.Engine) domain.PecaService {
 	repository := PecaRepository{
 		GenericRepository: models.GenericRepository[domain.Peca, domain.PecaFilter, Peca]{
 			DB:             engine,

@@ -14,7 +14,7 @@ type LembreteController struct {
 	handlers.Controller[domain.Lembrete, domain.LembreteFilter]
 }
 
-func NewLembreteController(service *domain.LembreteService) *LembreteController {
+func NewController(service *domain.LembreteService) *LembreteController {
 	return &LembreteController{
 		Controller: handlers.Controller[domain.Lembrete, domain.LembreteFilter]{
 			Service:    *service,

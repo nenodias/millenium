@@ -21,7 +21,7 @@ type TecnicoRepository struct {
 	models.GenericRepository[domain.Tecnico, domain.TecnicoFilter, Tecnico]
 }
 
-func NewTecnicoService(engine *xorm.Engine) domain.TecnicoService {
+func NewService(engine *xorm.Engine) domain.TecnicoService {
 	repository := TecnicoRepository{
 		GenericRepository: models.GenericRepository[domain.Tecnico, domain.TecnicoFilter, Tecnico]{
 			DB:             engine,

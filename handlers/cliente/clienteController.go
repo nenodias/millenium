@@ -14,7 +14,7 @@ type ClienteController struct {
 	handlers.Controller[domain.Cliente, domain.ClienteFilter]
 }
 
-func NewClienteController(service *domain.ClienteService) *ClienteController {
+func NewController(service *domain.ClienteService) *ClienteController {
 	return &ClienteController{
 		Controller: handlers.Controller[domain.Cliente, domain.ClienteFilter]{
 			Service:    *service,

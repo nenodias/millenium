@@ -14,7 +14,7 @@ type TecnicoController struct {
 	handlers.Controller[domain.Tecnico, domain.TecnicoFilter]
 }
 
-func NewTecnicoController(service *domain.TecnicoService) *TecnicoController {
+func NewController(service *domain.TecnicoService) *TecnicoController {
 	return &TecnicoController{
 		Controller: handlers.Controller[domain.Tecnico, domain.TecnicoFilter]{
 			Service:    *service,

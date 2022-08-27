@@ -14,7 +14,7 @@ type FalhaController struct {
 	handlers.Controller[domain.Falha, domain.FalhaFilter]
 }
 
-func NewFalhaController(service *domain.FalhaService) *FalhaController {
+func NewController(service *domain.FalhaService) *FalhaController {
 	return &FalhaController{
 		Controller: handlers.Controller[domain.Falha, domain.FalhaFilter]{
 			Service:    *service,

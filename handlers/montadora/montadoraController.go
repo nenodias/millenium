@@ -14,7 +14,7 @@ type MontadoraController struct {
 	handlers.Controller[domain.Montadora, domain.MontadoraFilter]
 }
 
-func NewMontadoraController(service *domain.MontadoraService) *MontadoraController {
+func NewController(service *domain.MontadoraService) *MontadoraController {
 	return &MontadoraController{
 		Controller: handlers.Controller[domain.Montadora, domain.MontadoraFilter]{
 			Service:    *service,

@@ -14,7 +14,7 @@ type ServicoController struct {
 	handlers.Controller[domain.Servico, domain.ServicoFilter]
 }
 
-func NewServicoController(service *domain.ServicoService) *ServicoController {
+func NewController(service *domain.ServicoService) *ServicoController {
 	return &ServicoController{
 		Controller: handlers.Controller[domain.Servico, domain.ServicoFilter]{
 			Service:    *service,

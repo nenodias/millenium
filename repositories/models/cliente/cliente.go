@@ -40,7 +40,7 @@ type ClienteRepository struct {
 	models.GenericRepository[domain.Cliente, domain.ClienteFilter, Cliente]
 }
 
-func NewClienteService(engine *xorm.Engine) domain.ClienteService {
+func NewService(engine *xorm.Engine) domain.ClienteService {
 	repository := ClienteRepository{
 		GenericRepository: models.GenericRepository[domain.Cliente, domain.ClienteFilter, Cliente]{
 			DB:             engine,

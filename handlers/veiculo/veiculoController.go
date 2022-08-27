@@ -14,7 +14,7 @@ type VeiculoController struct {
 	handlers.Controller[domain.Veiculo, domain.VeiculoFilter]
 }
 
-func NewVeiculoController(service *domain.VeiculoService) *VeiculoController {
+func NewController(service *domain.VeiculoService) *VeiculoController {
 	return &VeiculoController{
 		Controller: handlers.Controller[domain.Veiculo, domain.VeiculoFilter]{
 			Service:    *service,

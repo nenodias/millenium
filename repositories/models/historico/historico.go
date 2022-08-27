@@ -68,7 +68,7 @@ type HistoricoRepository struct {
 	models.GenericRepository[domain.Historico, domain.HistoricoFilter, Historico]
 }
 
-func NewHistoricoService(engine *xorm.Engine) domain.HistoricoService {
+func NewService(engine *xorm.Engine) domain.HistoricoService {
 	repository := HistoricoRepository{
 		GenericRepository: models.GenericRepository[domain.Historico, domain.HistoricoFilter, Historico]{
 			DB:             engine,

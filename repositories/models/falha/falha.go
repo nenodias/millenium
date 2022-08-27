@@ -21,7 +21,7 @@ type FalhaRepository struct {
 	models.GenericRepository[domain.Falha, domain.FalhaFilter, Falha]
 }
 
-func NewFalhaService(engine *xorm.Engine) domain.FalhaService {
+func NewService(engine *xorm.Engine) domain.FalhaService {
 	repository := FalhaRepository{
 		GenericRepository: models.GenericRepository[domain.Falha, domain.FalhaFilter, Falha]{
 			DB:             engine,

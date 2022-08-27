@@ -23,7 +23,7 @@ type MontadoraRepository struct {
 	models.GenericRepository[domain.Montadora, domain.MontadoraFilter, Montadora]
 }
 
-func NewMontadoraService(engine *xorm.Engine) domain.MontadoraService {
+func NewService(engine *xorm.Engine) domain.MontadoraService {
 	repository := MontadoraRepository{
 		GenericRepository: models.GenericRepository[domain.Montadora, domain.MontadoraFilter, Montadora]{
 			DB:             engine,
