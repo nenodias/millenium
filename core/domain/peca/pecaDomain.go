@@ -19,6 +19,6 @@ type PecaFilter struct {
 	Descricao string
 }
 
-type VeiculoService interface {
+type PecaService interface {
 	domain.Service[*Peca, *PecaFilter]
 }

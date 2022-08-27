@@ -80,13 +80,12 @@ func (t HistoricoItem) GetId() int64 {
 
 type HistoricoFilter struct {
 	domain.Pageable
-	Texto       string
 	NumeroOrdem int
 	IdCliente   int64
 	IdVeiculo   int64
 	IdTecnico   int64
-	Tipo        TipoHistorico
-	data        time.Time
+	Tipo        *TipoHistorico
+	Data        time.Time
 }
 
 type HistoricoService interface {

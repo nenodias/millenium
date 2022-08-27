@@ -18,6 +18,6 @@ type FalhaFilter struct {
 	Descricao string
 }
 
-type VeiculoService interface {
+type FalhaService interface {
 	domain.Service[*Falha, *FalhaFilter]
 }

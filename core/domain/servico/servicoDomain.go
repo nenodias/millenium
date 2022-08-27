@@ -19,6 +19,6 @@ type ServicoFilter struct {
 	Descricao string
 }
 
-type VeiculoService interface {
+type ServicoService interface {
 	domain.Service[*Servico, *ServicoFilter]
 }

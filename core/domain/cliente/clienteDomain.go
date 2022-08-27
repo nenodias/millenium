@@ -40,6 +40,6 @@ type ClienteFilter struct {
 	Celular  string
 }
 
-type VeiculoService interface {
+type ClienteService interface {
 	domain.Service[*Cliente, *ClienteFilter]
 }

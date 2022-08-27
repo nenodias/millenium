@@ -4,6 +4,8 @@ import (
 	"time"
 
 	domain "github.com/nenodias/millenium/core/domain/historico"
+	models "github.com/nenodias/millenium/repositories/models"
+	"xorm.io/xorm"
 )
 
 type Historico struct {
@@ -60,4 +62,101 @@ type HistoricoVistoria struct {
 
 func (p *HistoricoVistoria) TableName() string {
 	return "vistoria"
+}
+
+type HistoricoRepository struct {
+	models.GenericRepository[domain.Historico, domain.HistoricoFilter, Historico]
+}
+
+func NewHistoricoService(engine *xorm.Engine) domain.HistoricoService {
+	repository := HistoricoRepository{
+		GenericRepository: models.GenericRepository[domain.Historico, domain.HistoricoFilter, Historico]{
+			DB:             engine,
+			MapperToDTO:    mapperToDTO,
+			MapperToEntity: mapperToEntity,
+			CopyToDto:      copyToDto,
+			HasWhere:       hasWhere,
+			DoWhere:        doWhere,
+		},
+	}
+	return domain.HistoricoService(&repository)
+}
+
+func hasWhere(filter *domain.HistoricoFilter) bool {
+	hasData := !filter.Data.IsZero()
+	hasTipo := filter.Tipo != nil
+	hasNumeroOrdem := filter.IdCliente != int64(0)
+	hasIdCliente := filter.IdCliente != int64(0)
+	hasIdVeiculo := filter.IdVeiculo != int64(0)
+	hasIdTecnico := filter.IdTecnico != int64(0)
+	return hasData || hasTipo || hasNumeroOrdem || hasIdCliente || hasIdVeiculo || hasIdTecnico
+}
+
+func doWhere(query *xorm.Session, filter *domain.HistoricoFilter) *xorm.Session {
+	hasData := !filter.Data.IsZero()
+	hasTipo := filter.Tipo != nil
+	hasNumeroOrdem := filter.IdCliente != int64(0)
+	hasIdCliente := filter.IdCliente != int64(0)
+	hasIdVeiculo := filter.IdVeiculo != int64(0)
+	hasIdTecnico := filter.IdTecnico != int64(0)
+	where := query.Where("1 = ?", 1)
+	if hasData {
+		where = where.And("data = ?", filter.Data)
+	}
+	if hasTipo {
+		where = where.And("tipo = ?", filter.Tipo)
+	}
+	if hasNumeroOrdem {
+		where = where.And("nr_ordem = ?", filter.NumeroOrdem)
+	}
+	if hasIdCliente {
+		where = where.And("codigo_cliente = ?", filter.IdCliente)
+	}
+	if hasIdVeiculo {
+		where = where.And("codveiculo = ?", filter.IdVeiculo)
+	}
+	if hasIdTecnico {
+		where = where.And("tecnico = ?", filter.IdTecnico)
+	}
+	return where
+}
+
+func mapperToEntity(dto *domain.Historico) *Historico {
+	entity := new(Historico)
+	copyToEntity(dto, entity)
+	return entity
+}
+
+func mapperToDTO(entity *Historico) *domain.Historico {
+	dto := new(domain.Historico)
+	copyToDto(entity, dto)
+	return dto
+}
+
+func copyToEntity(source *domain.Historico, destiny *Historico) {
+	destiny.Id = source.Id
+	destiny.IdCliente = source.IdCliente
+	destiny.IdVeiculo = source.IdVeiculo
+	destiny.IdTecnico = source.IdTecnico
+	destiny.NumeroOrdem = source.NumeroOrdem
+	destiny.Placa = source.Placa
+	destiny.Sistema = source.Sistema
+	destiny.Data = source.Data
+	destiny.Tipo = source.Tipo
+	destiny.ValorTotal = source.ValorTotal
+	destiny.Observacao = source.Observacao
+}
+
+func copyToDto(source *Historico, destiny *domain.Historico) {
+	destiny.Id = source.Id
+	destiny.IdCliente = source.IdCliente
+	destiny.IdVeiculo = source.IdVeiculo
+	destiny.IdTecnico = source.IdTecnico
+	destiny.NumeroOrdem = source.NumeroOrdem
+	destiny.Placa = source.Placa
+	destiny.Sistema = source.Sistema
+	destiny.Data = source.Data
+	destiny.Tipo = source.Tipo
+	destiny.ValorTotal = source.ValorTotal
+	destiny.Observacao = source.Observacao
 }
