@@ -5,6 +5,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/nenodias/millenium/config"
+	"github.com/nenodias/millenium/handlers"
 	modeloHandlers "github.com/nenodias/millenium/handlers/modelo"
 	tecnicoHandlers "github.com/nenodias/millenium/handlers/tecnico"
 	veiculoHandlers "github.com/nenodias/millenium/handlers/veiculo"
@@ -30,24 +31,9 @@ func main() {
 	veiculoController := veiculoHandlers.NewVeiculoController(&veiculoService)
 
 	router := mux.NewRouter().StrictSlash(true)
-
-	router.HandleFunc("/api/modelo/", modeloController.FindMany).Methods("GET")
-	router.HandleFunc("/api/modelo/", modeloController.Save).Methods("POST")
-	router.HandleFunc("/api/modelo/{id}", modeloController.FindOne).Methods("GET")
-	router.HandleFunc("/api/modelo/{id}", modeloController.DeleteOne).Methods("DELETE")
-	router.HandleFunc("/api/modelo/{id}", modeloController.Update).Methods("PUT")
-
-	router.HandleFunc("/api/tecnico/", tecnicoController.FindMany).Methods("GET")
-	router.HandleFunc("/api/tecnico/", tecnicoController.Save).Methods("POST")
-	router.HandleFunc("/api/tecnico/{id}", tecnicoController.FindOne).Methods("GET")
-	router.HandleFunc("/api/tecnico/{id}", tecnicoController.DeleteOne).Methods("DELETE")
-	router.HandleFunc("/api/tecnico/{id}", tecnicoController.Update).Methods("PUT")
-
-	router.HandleFunc("/api/veiculo/", veiculoController.FindMany).Methods("GET")
-	router.HandleFunc("/api/veiculo/", veiculoController.Save).Methods("POST")
-	router.HandleFunc("/api/veiculo/{id}", veiculoController.FindOne).Methods("GET")
-	router.HandleFunc("/api/veiculo/{id}", veiculoController.DeleteOne).Methods("DELETE")
-	router.HandleFunc("/api/veiculo/{id}", veiculoController.Update).Methods("PUT")
+	MappingApi(router, "tecnico", tecnicoController)
+	MappingApi(router, "modelo", modeloController)
+	MappingApi(router, "veiculo", veiculoController)
 
 	srv := &http.Server{
 		Handler: router,
@@ -55,4 +41,12 @@ func main() {
 	}
 	log.Info().Msg("Listening on port :8080")
 	log.Error().Msg(srv.ListenAndServe().Error())
+}
+
+func MappingApi(router *mux.Router, context string, controller handlers.CrudAPI) {
+	router.HandleFunc("/api/"+context+"/", controller.FindMany).Methods("GET")
+	router.HandleFunc("/api/"+context+"/", controller.Save).Methods("POST")
+	router.HandleFunc("/api/"+context+"/{id}", controller.FindOne).Methods("GET")
+	router.HandleFunc("/api/"+context+"/{id}", controller.DeleteOne).Methods("DELETE")
+	router.HandleFunc("/api/"+context+"/{id}", controller.Update).Methods("PUT")
 }

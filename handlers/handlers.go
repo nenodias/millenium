@@ -12,6 +12,14 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+type CrudAPI interface {
+	FindMany(w http.ResponseWriter, r *http.Request)
+	Save(w http.ResponseWriter, r *http.Request)
+	FindOne(w http.ResponseWriter, r *http.Request)
+	DeleteOne(w http.ResponseWriter, r *http.Request)
+	Update(w http.ResponseWriter, r *http.Request)
+}
+
 type Controller[T domain.Identifiable, F domain.PageableFilter] struct {
 	Service    core.Service[*T, *F]
 	GetFilters func(url.Values) F
