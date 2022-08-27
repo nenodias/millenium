@@ -1,6 +1,7 @@
 package historico
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/nenodias/millenium/core/domain"
@@ -12,6 +13,17 @@ const (
 	ORDEM_SERVICO TipoHistorico = "O.S."
 	ORCAMENTO     TipoHistorico = "Orç."
 )
+
+func GetTipoHistorico(t string) (TipoHistorico, error) {
+	switch t {
+	case ORCAMENTO.String():
+		return ORCAMENTO, nil
+	case ORDEM_SERVICO.String():
+		return ORDEM_SERVICO, nil
+	default:
+		return "", fmt.Errorf("Tipo: %s não existe", t)
+	}
+}
 
 func (t TipoHistorico) String() string {
 	switch t {

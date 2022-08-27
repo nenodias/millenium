@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+	"time"
 
 	"github.com/rs/zerolog/log"
 )
@@ -24,6 +25,18 @@ func StringToInt(text string, fallback int) int {
 
 func StringToInt64(text string, fallback int64) int64 {
 	value, err := strconv.ParseInt(text, 10, 32)
+	if err != nil {
+		return fallback
+	}
+	return value
+}
+
+func StringToDate(text string, fallback time.Time) time.Time {
+	return StringToDateFormat(text, "2006-01-02", fallback)
+}
+
+func StringToDateFormat(text string, format string, fallback time.Time) time.Time {
+	value, err := time.Parse(format, text)
 	if err != nil {
 		return fallback
 	}
