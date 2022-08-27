@@ -1,4 +1,4 @@
-package models
+package historico
 
 import "time"
 

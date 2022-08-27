@@ -1,4 +1,4 @@
-package models
+package montadora
 
 type Montadora struct {
 	Id                int64  `xorm:"'id' bigint pk autoincr not null"`

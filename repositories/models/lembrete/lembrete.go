@@ -1,4 +1,4 @@
-package models
+package lembrete
 
 import "time"
 

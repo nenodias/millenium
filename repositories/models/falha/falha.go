@@ -1,4 +1,4 @@
-package models
+package falha
 
 type Falha struct {
 	Id        int64  `xorm:"'id' bigint pk autoincr not null"`
