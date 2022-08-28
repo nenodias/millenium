@@ -80,6 +80,8 @@ func NewService(engine *xorm.Engine) domain.HistoricoService {
 			HasWhere:       hasWhere,
 			DoWhere:        doWhere,
 			AfterFind:      AfterFind,
+			AfterSave:      AfterSave,
+			AfterUpdate:    AfterSave,
 		},
 	}
 	return domain.HistoricoService(&repository)
@@ -100,6 +102,26 @@ func AfterFind(gr *models.GenericRepository[domain.Historico, domain.HistoricoFi
 				log.Error().Msgf("Error scanning item: %s", err.Error())
 			}
 			m.Items = append(m.Items, *model)
+		}
+	}
+}
+
+func AfterSave(gr *models.GenericRepository[domain.Historico, domain.HistoricoFilter, Historico], session *xorm.Session, m *Historico) {
+	if m.Id != 0 {
+		_, err := session.Exec("DELETE FROM historico_item WHERE sequencia = ?", m.Id)
+		if err != nil {
+			log.Error().Msg(err.Error())
+			session.Rollback()
+			return
+		}
+		for _, item := range m.Items {
+			item.IdHistorico = m.Id
+			_, err := session.Insert(&item)
+			if err != nil {
+				log.Error().Msg(err.Error())
+				session.Rollback()
+				return
+			}
 		}
 	}
 }

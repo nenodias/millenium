@@ -17,15 +17,16 @@ type GenericRepository[T core.Identifiable, F core.PageableFilter, MODEL any] st
 	DoWhere        func(*xorm.Session, *F) *xorm.Session
 	DB             *xorm.Engine
 	AfterFind      func(*GenericRepository[T, F, MODEL], *MODEL)
-	AfterSave      func(*GenericRepository[T, F, MODEL], *MODEL)
-	AfterUpdate    func(*GenericRepository[T, F, MODEL], *MODEL)
-	AfterDelete    func(*GenericRepository[T, F, MODEL], int64)
+	AfterSave      func(*GenericRepository[T, F, MODEL], *xorm.Session, *MODEL)
+	AfterUpdate    func(*GenericRepository[T, F, MODEL], *xorm.Session, *MODEL)
+	AfterDelete    func(*GenericRepository[T, F, MODEL], *xorm.Session, int64)
 }
 
 func (gr *GenericRepository[T, F, MODEL]) FindOne(id int64) (*T, error) {
 	p := new(MODEL)
 	exists, err := gr.DB.ID(id).Get(p)
 	if err != nil {
+		log.Error().Msg(err.Error())
 		return nil, err
 	}
 	if !exists {
@@ -41,47 +42,87 @@ func (gr *GenericRepository[T, F, MODEL]) Save(dto *T) (bool, error) {
 	entity := gr.MapperToEntity(dto)
 	model := new(MODEL)
 	id := (*dto).GetId()
-	exists, err := gr.DB.ID(id).Exist(model)
+	session := gr.DB.NewSession()
+	err := session.Begin()
 	if err != nil {
+		log.Error().Msg(err.Error())
+		session.Rollback()
+		return false, err
+	}
+	exists, err := session.ID(id).Exist(model)
+	if err != nil {
+		log.Error().Msg(err.Error())
+		session.Rollback()
 		return false, err
 	}
 	if !exists {
 		rowsAffected, err := gr.DB.InsertOne(entity)
 		if err != nil {
+			log.Error().Msg(err.Error())
+			session.Rollback()
 			return false, err
 		}
 		if gr.AfterSave != nil {
-			gr.AfterSave(gr, entity)
+			gr.AfterSave(gr, session, entity)
 		}
 		gr.CopyToDto(entity, dto)
+		err = session.Commit()
+		if err != nil {
+			log.Error().Msg(err.Error())
+			return false, err
+		}
 		return rowsAffected == 1, nil
 	}
 	rowsAffected, err := gr.DB.ID(id).Update(entity)
 	if gr.AfterUpdate != nil {
-		gr.AfterUpdate(gr, entity)
+		gr.AfterUpdate(gr, session, entity)
 	}
 	if err != nil {
+		log.Error().Msg(err.Error())
+		session.Rollback()
 		return false, err
 	}
 	gr.CopyToDto(entity, dto)
+	err = session.Commit()
+	if err != nil {
+		log.Error().Msg(err.Error())
+		return false, err
+	}
 	return rowsAffected == 1, nil
 }
 
 func (gr *GenericRepository[T, F, MODEL]) DeleteOne(id int64) (bool, error) {
 	model := new(MODEL)
-	exists, err := gr.DB.ID(id).Exist(model)
+	session := gr.DB.NewSession()
+	err := session.Begin()
 	if err != nil {
+		log.Error().Msg(err.Error())
+		session.Rollback()
+		return false, err
+	}
+	exists, err := session.ID(id).Exist(model)
+	if err != nil {
+		log.Error().Msg(err.Error())
+		session.Rollback()
 		return false, err
 	}
 	if !exists {
+		session.Rollback()
 		return true, nil
 	} else {
-		rowsAffected, err := gr.DB.ID(id).Delete(model)
+		rowsAffected, err := session.ID(id).Delete(model)
 		if err != nil {
+			log.Error().Msg(err.Error())
+			session.Rollback()
 			return false, err
 		}
 		if gr.AfterDelete != nil {
-			gr.AfterDelete(gr, id)
+			gr.AfterDelete(gr, session, id)
+		}
+		err = session.Commit()
+		if err != nil {
+			log.Error().Msg(err.Error())
+			return false, err
 		}
 		return rowsAffected == 1, nil
 	}
@@ -126,6 +167,7 @@ func (gr *GenericRepository[T, F, MODEL]) FindMany(filter *F) (core.PagebleConte
 		).Rows(model)
 	}
 	if err != nil {
+		log.Error().Msg(err.Error())
 		return response, err
 	}
 	defer rows.Close()
