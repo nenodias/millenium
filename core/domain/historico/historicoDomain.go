@@ -5,6 +5,11 @@ import (
 	"time"
 
 	"github.com/nenodias/millenium/core/domain"
+	clienteDomain "github.com/nenodias/millenium/core/domain/cliente"
+	modeloDomain "github.com/nenodias/millenium/core/domain/modelo"
+	montadoraDomain "github.com/nenodias/millenium/core/domain/montadora"
+	tecnicoDomain "github.com/nenodias/millenium/core/domain/tecnico"
+	veiculoDomain "github.com/nenodias/millenium/core/domain/veiculo"
 )
 
 type TipoHistorico string
@@ -101,6 +106,16 @@ type HistoricoFilter struct {
 	Data        time.Time
 }
 
+type HistoricoReport struct {
+	Historico Historico
+	Cliente   clienteDomain.Cliente
+	Veiculo   veiculoDomain.Veiculo
+	Modelo    modeloDomain.Modelo
+	Montadora montadoraDomain.Montadora
+	Tecnico   tecnicoDomain.Tecnico
+}
+
 type HistoricoService interface {
 	domain.Service[*Historico, *HistoricoFilter]
+	FindOneForReport(int64) (*HistoricoReport, error)
 }

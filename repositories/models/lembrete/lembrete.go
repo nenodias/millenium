@@ -29,8 +29,8 @@ func NewService(engine *xorm.Engine) domain.LembreteService {
 	repository := LembreteRepository{
 		GenericRepository: models.GenericRepository[domain.Lembrete, domain.LembreteFilter, Lembrete]{
 			DB:             engine,
-			MapperToDTO:    mapperToDTO,
-			MapperToEntity: mapperToEntity,
+			MapperToDTO:    MapperToDTO,
+			MapperToEntity: MapperToEntity,
 			CopyToDto:      copyToDto,
 			HasWhere:       hasWhere,
 			DoWhere:        doWhere,
@@ -69,13 +69,13 @@ func doWhere(query *xorm.Session, filter *domain.LembreteFilter) *xorm.Session {
 	}
 }
 
-func mapperToEntity(dto *domain.Lembrete) *Lembrete {
+func MapperToEntity(dto *domain.Lembrete) *Lembrete {
 	entity := new(Lembrete)
 	copyToEntity(dto, entity)
 	return entity
 }
 
-func mapperToDTO(entity *Lembrete) *domain.Lembrete {
+func MapperToDTO(entity *Lembrete) *domain.Lembrete {
 	dto := new(domain.Lembrete)
 	copyToDto(entity, dto)
 	return dto

@@ -25,8 +25,8 @@ func NewService(engine *xorm.Engine) domain.FalhaService {
 	repository := FalhaRepository{
 		GenericRepository: models.GenericRepository[domain.Falha, domain.FalhaFilter, Falha]{
 			DB:             engine,
-			MapperToDTO:    mapperToDTO,
-			MapperToEntity: mapperToEntity,
+			MapperToDTO:    MapperToDTO,
+			MapperToEntity: MapperToEntity,
 			CopyToDto:      copyToDto,
 			HasWhere:       hasWhere,
 			DoWhere:        doWhere,
@@ -44,13 +44,13 @@ func doWhere(query *xorm.Session, filter *domain.FalhaFilter) *xorm.Session {
 	return query.Where(where[0], where[1])
 }
 
-func mapperToEntity(dto *domain.Falha) *Falha {
+func MapperToEntity(dto *domain.Falha) *Falha {
 	entity := new(Falha)
 	copyToEntity(dto, entity)
 	return entity
 }
 
-func mapperToDTO(entity *Falha) *domain.Falha {
+func MapperToDTO(entity *Falha) *domain.Falha {
 	dto := new(domain.Falha)
 	copyToDto(entity, dto)
 	return dto

@@ -27,8 +27,8 @@ func NewService(engine *xorm.Engine) domain.MontadoraService {
 	repository := MontadoraRepository{
 		GenericRepository: models.GenericRepository[domain.Montadora, domain.MontadoraFilter, Montadora]{
 			DB:             engine,
-			MapperToDTO:    mapperToDTO,
-			MapperToEntity: mapperToEntity,
+			MapperToDTO:    MapperToDTO,
+			MapperToEntity: MapperToEntity,
 			CopyToDto:      copyToDto,
 			HasWhere:       hasWhere,
 			DoWhere:        doWhere,
@@ -46,13 +46,13 @@ func doWhere(query *xorm.Session, filter *domain.MontadoraFilter) *xorm.Session 
 	return query.Where(where[0], where[1])
 }
 
-func mapperToEntity(dto *domain.Montadora) *Montadora {
+func MapperToEntity(dto *domain.Montadora) *Montadora {
 	entity := new(Montadora)
 	copyToEntity(dto, entity)
 	return entity
 }
 
-func mapperToDTO(entity *Montadora) *domain.Montadora {
+func MapperToDTO(entity *Montadora) *domain.Montadora {
 	dto := new(domain.Montadora)
 	copyToDto(entity, dto)
 	return dto

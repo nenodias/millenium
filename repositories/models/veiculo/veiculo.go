@@ -33,8 +33,8 @@ func NewService(engine *xorm.Engine) domain.VeiculoService {
 	repository := VeiculoRepository{
 		GenericRepository: models.GenericRepository[domain.Veiculo, domain.VeiculoFilter, Veiculo]{
 			DB:             engine,
-			MapperToDTO:    mapperToDTO,
-			MapperToEntity: mapperToEntity,
+			MapperToDTO:    MapperToDTO,
+			MapperToEntity: MapperToEntity,
 			CopyToDto:      copyToDto,
 			HasWhere:       hasWhere,
 			DoWhere:        doWhere,
@@ -73,13 +73,13 @@ func doWhere(query *xorm.Session, filter *domain.VeiculoFilter) *xorm.Session {
 	}
 }
 
-func mapperToEntity(dto *domain.Veiculo) *Veiculo {
+func MapperToEntity(dto *domain.Veiculo) *Veiculo {
 	entity := new(Veiculo)
 	copyToEntity(dto, entity)
 	return entity
 }
 
-func mapperToDTO(entity *Veiculo) *domain.Veiculo {
+func MapperToDTO(entity *Veiculo) *domain.Veiculo {
 	dto := new(domain.Veiculo)
 	copyToDto(entity, dto)
 	return dto

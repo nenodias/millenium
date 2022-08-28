@@ -5,6 +5,11 @@ import (
 
 	domain "github.com/nenodias/millenium/core/domain/historico"
 	models "github.com/nenodias/millenium/repositories/models"
+	clienteModel "github.com/nenodias/millenium/repositories/models/cliente"
+	modeloModel "github.com/nenodias/millenium/repositories/models/modelo"
+	montadoraModel "github.com/nenodias/millenium/repositories/models/montadora"
+	tecnicoModel "github.com/nenodias/millenium/repositories/models/tecnico"
+	veiculoModel "github.com/nenodias/millenium/repositories/models/veiculo"
 	"github.com/rs/zerolog/log"
 	"xorm.io/xorm"
 )
@@ -75,8 +80,8 @@ func NewService(engine *xorm.Engine) domain.HistoricoService {
 	repository := HistoricoRepository{
 		GenericRepository: models.GenericRepository[domain.Historico, domain.HistoricoFilter, Historico]{
 			DB:             engine,
-			MapperToDTO:    mapperToDTO,
-			MapperToEntity: mapperToEntity,
+			MapperToDTO:    MapperToDTO,
+			MapperToEntity: MapperToEntity,
 			CopyToDto:      copyToDto,
 			HasWhere:       hasWhere,
 			DoWhere:        doWhere,
@@ -86,6 +91,60 @@ func NewService(engine *xorm.Engine) domain.HistoricoService {
 		},
 	}
 	return domain.HistoricoService(&repository)
+}
+
+func (hr *HistoricoRepository) FindOneForReport(id int64) (*domain.HistoricoReport, error) {
+	report := new(domain.HistoricoReport)
+	model, err := hr.FindOne(id)
+	if err != nil {
+		log.Error().Msg(err.Error())
+		return nil, err
+	}
+	report.Historico = *model
+	cliente := new(clienteModel.Cliente)
+	modelo := new(modeloModel.Modelo)
+	montadora := new(montadoraModel.Montadora)
+	tecnico := new(tecnicoModel.Tecnico)
+	veiculo := new(veiculoModel.Veiculo)
+	if model.IdCliente != 0 {
+		_, err = hr.DB.ID(model.IdCliente).Get(cliente)
+		if err != nil {
+			log.Error().Msg(err.Error())
+			return nil, err
+		}
+		report.Cliente = *clienteModel.MapperToDTO(cliente)
+	}
+	if model.IdVeiculo != 0 {
+		_, err = hr.DB.ID(model.IdVeiculo).Get(veiculo)
+		if err != nil {
+			log.Error().Msg(err.Error())
+			return nil, err
+		}
+		report.Veiculo = *veiculoModel.MapperToDTO(veiculo)
+		if veiculo.IdModelo != 0 {
+			_, err = hr.DB.ID(veiculo.IdModelo).Get(modelo)
+			if err != nil {
+				log.Error().Msg(err.Error())
+			}
+			report.Modelo = *modeloModel.MapperToDTO(modelo)
+			if modelo.IdMontadora != 0 {
+				_, err = hr.DB.ID(modelo.IdMontadora).Get(montadora)
+				if err != nil {
+					log.Error().Msg(err.Error())
+				}
+				report.Montadora = *montadoraModel.MapperToDTO(montadora)
+			}
+		}
+	}
+
+	if model.IdTecnico != 0 {
+		_, err = hr.DB.ID(model.IdTecnico).Get(tecnico)
+		if err != nil {
+			log.Error().Msg(err.Error())
+		}
+		report.Tecnico = *tecnicoModel.MapperToDTO(tecnico)
+	}
+	return report, nil
 }
 
 func AfterFind(gr *models.GenericRepository[domain.Historico, domain.HistoricoFilter, Historico], m *Historico) {
@@ -185,13 +244,13 @@ func doWhere(query *xorm.Session, filter *domain.HistoricoFilter) *xorm.Session 
 	return where
 }
 
-func mapperToEntity(dto *domain.Historico) *Historico {
+func MapperToEntity(dto *domain.Historico) *Historico {
 	entity := new(Historico)
 	copyToEntity(dto, entity)
 	return entity
 }
 
-func mapperToDTO(entity *Historico) *domain.Historico {
+func MapperToDTO(entity *Historico) *domain.Historico {
 	dto := new(domain.Historico)
 	copyToDto(entity, dto)
 	return dto

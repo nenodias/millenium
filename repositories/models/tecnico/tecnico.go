@@ -25,8 +25,8 @@ func NewService(engine *xorm.Engine) domain.TecnicoService {
 	repository := TecnicoRepository{
 		GenericRepository: models.GenericRepository[domain.Tecnico, domain.TecnicoFilter, Tecnico]{
 			DB:             engine,
-			MapperToDTO:    mapperToDTO,
-			MapperToEntity: mapperToEntity,
+			MapperToDTO:    MapperToDTO,
+			MapperToEntity: MapperToEntity,
 			CopyToDto:      copyToDto,
 			HasWhere:       hasWhere,
 			DoWhere:        doWhere,
@@ -44,13 +44,13 @@ func doWhere(query *xorm.Session, filter *domain.TecnicoFilter) *xorm.Session {
 	return query.Where(where[0], where[1])
 }
 
-func mapperToEntity(dto *domain.Tecnico) *Tecnico {
+func MapperToEntity(dto *domain.Tecnico) *Tecnico {
 	entity := new(Tecnico)
 	copyToEntity(dto, entity)
 	return entity
 }
 
-func mapperToDTO(entity *Tecnico) *domain.Tecnico {
+func MapperToDTO(entity *Tecnico) *domain.Tecnico {
 	dto := new(domain.Tecnico)
 	copyToDto(entity, dto)
 	return dto

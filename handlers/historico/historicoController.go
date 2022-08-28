@@ -34,15 +34,14 @@ func (hc *HistoricoController) GetReport(w http.ResponseWriter, r *http.Request)
 	params := mux.Vars(r)
 	txtId := params["id"]
 	id := utils.StringToInt64(txtId, 0)
-	model, err := hc.Service.FindOne(id)
+	model, err := hc.Service.(domain.HistoricoService).FindOneForReport(id)
 	if err != nil {
 		log.Error().Msg(err.Error())
 		w.WriteHeader(500)
 		return
 	}
 	if model != nil {
-		//TODO Generate Report
-		utils.WriteJson(model, w, 200, 500)
+		domain.GenerateReport(model, w)
 	} else {
 		w.WriteHeader(204)
 	}
