@@ -21,7 +21,7 @@ func GetTipoHistorico(t string) (TipoHistorico, error) {
 	case ORDEM_SERVICO.String():
 		return ORDEM_SERVICO, nil
 	default:
-		return "", fmt.Errorf("Tipo: %s não existe", t)
+		return "", fmt.Errorf("tipo: %s não existe", t)
 	}
 }
 
@@ -58,18 +58,19 @@ func (t TipoHistoricoItem) String() string {
 }
 
 type Historico struct {
-	Id          int64           `json:"id"`
-	IdCliente   int64           `json:"idCliente"`
-	IdVeiculo   int64           `json:"idVeiculo"`
-	IdTecnico   int64           `json:"idTecnico"`
-	NumeroOrdem int             `json:"numeroOrdem"`
-	Placa       string          `json:"placa"`
-	Sistema     int             `json:"sistema"`
-	Data        time.Time       `json:"data"`
-	Tipo        TipoHistorico   `json:"tipo"`
-	ValorTotal  float64         `json:"valorTotal"`
-	Observacao  string          `json:"observacao"`
-	Items       []HistoricoItem `json:"items"`
+	Id           int64           `json:"id"`
+	IdCliente    int64           `json:"idCliente"`
+	IdVeiculo    int64           `json:"idVeiculo"`
+	IdTecnico    int64           `json:"idTecnico"`
+	NumeroOrdem  int             `json:"numeroOrdem"`
+	Placa        string          `json:"placa"`
+	Sistema      int             `json:"sistema"`
+	Data         time.Time       `json:"data"`
+	Tipo         TipoHistorico   `json:"tipo"`
+	ValorTotal   float64         `json:"valorTotal"`
+	Observacao   string          `json:"observacao"`
+	Items        []HistoricoItem `json:"items"`
+	Kilometragem float64         `json:"km"`
 }
 
 func (t Historico) GetId() int64 {

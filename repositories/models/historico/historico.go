@@ -22,6 +22,7 @@ type Historico struct {
 	ValorTotal  float64              `xorm:"'valor_total' double"`
 	Observacao  string               `xorm:"'obs' varchar(500)"`
 	Items       []HistoricoItem      `xorm:"-"`
+	Vistoria    HistoricoVistoria    `xorm:"-"`
 }
 
 func (p *Historico) TableName() string {
@@ -103,6 +104,11 @@ func AfterFind(gr *models.GenericRepository[domain.Historico, domain.HistoricoFi
 			}
 			m.Items = append(m.Items, *model)
 		}
+
+		_, err = gr.DB.ID(m.Id).Get(&m.Vistoria)
+		if err != nil {
+			log.Error().Msgf("Error searching vistoria: %s", err.Error())
+		}
 	}
 }
 
@@ -122,6 +128,20 @@ func AfterSave(gr *models.GenericRepository[domain.Historico, domain.HistoricoFi
 				session.Rollback()
 				return
 			}
+		}
+
+		_, err = session.Exec("DELETE FROM vistoria WHERE sequencia = ?", m.Id)
+		if err != nil {
+			log.Error().Msg(err.Error())
+			session.Rollback()
+			return
+		}
+		m.Vistoria.Id = m.Id
+		_, err = session.Insert(&m.Vistoria)
+		if err != nil {
+			log.Error().Msg(err.Error())
+			session.Rollback()
+			return
 		}
 	}
 }
@@ -210,6 +230,7 @@ func copyToEntity(source *domain.Historico, destiny *Historico) {
 	destiny.ValorTotal = source.ValorTotal
 	destiny.Observacao = source.Observacao
 	destiny.Items = mapperToEntityItem(source.Items)
+	destiny.Vistoria.Kilometragem = source.Kilometragem
 }
 
 func copyToDto(source *Historico, destiny *domain.Historico) {
@@ -225,6 +246,7 @@ func copyToDto(source *Historico, destiny *domain.Historico) {
 	destiny.ValorTotal = source.ValorTotal
 	destiny.Observacao = source.Observacao
 	destiny.Items = mapperToDTOItem(source.Items)
+	destiny.Kilometragem = source.Vistoria.Kilometragem
 }
 
 func copyToEntityItem(source *domain.HistoricoItem, destiny *HistoricoItem) {
