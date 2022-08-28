@@ -1,12 +1,15 @@
 package historico
 
 import (
+	"net/http"
 	"net/url"
 	"time"
 
+	"github.com/gorilla/mux"
 	core "github.com/nenodias/millenium/core/domain"
 	"github.com/nenodias/millenium/core/domain/utils"
 	"github.com/nenodias/millenium/handlers"
+	"github.com/rs/zerolog/log"
 
 	domain "github.com/nenodias/millenium/core/domain/historico"
 )
@@ -24,6 +27,24 @@ func NewController(service *domain.HistoricoService) *HistoricoController {
 				model.Id = id
 			},
 		},
+	}
+}
+
+func (hc *HistoricoController) GetReport(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	txtId := params["id"]
+	id := utils.StringToInt64(txtId, 0)
+	model, err := hc.Service.FindOne(id)
+	if err != nil {
+		log.Error().Msg(err.Error())
+		w.WriteHeader(500)
+		return
+	}
+	if model != nil {
+		//TODO Generate Report
+		utils.WriteJson(model, w, 200, 500)
+	} else {
+		w.WriteHeader(204)
 	}
 }
 

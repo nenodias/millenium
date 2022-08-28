@@ -47,6 +47,7 @@ func main() {
 	historicoService := historicoModels.NewService(engine)
 	historicoController := historicoHandlers.NewController(&historicoService)
 	MappingApi(router, "historico", historicoController)
+	router.HandleFunc("/api/historico/report/{id}", historicoController.GetReport).Methods("GET")
 
 	lembreteService := lembreteModels.NewService(engine)
 	lembreteController := lembreteHandlers.NewController(&lembreteService)
