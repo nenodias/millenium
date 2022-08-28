@@ -5,6 +5,7 @@ import (
 
 	domain "github.com/nenodias/millenium/core/domain/historico"
 	models "github.com/nenodias/millenium/repositories/models"
+	"github.com/rs/zerolog/log"
 	"xorm.io/xorm"
 )
 
@@ -20,6 +21,7 @@ type Historico struct {
 	Tipo        domain.TipoHistorico `xorm:"'tipo' varchar(4)"`
 	ValorTotal  float64              `xorm:"'valor_total' double"`
 	Observacao  string               `xorm:"'obs' varchar(500)"`
+	Items       []HistoricoItem      `xorm:"-"`
 }
 
 func (p *Historico) TableName() string {
@@ -77,9 +79,29 @@ func NewService(engine *xorm.Engine) domain.HistoricoService {
 			CopyToDto:      copyToDto,
 			HasWhere:       hasWhere,
 			DoWhere:        doWhere,
+			AfterFind:      AfterFind,
 		},
 	}
 	return domain.HistoricoService(&repository)
+}
+
+func AfterFind(gr *models.GenericRepository[domain.Historico, domain.HistoricoFilter, Historico], m *Historico) {
+	if m.Id != 0 {
+		model := new(HistoricoItem)
+		rows, err := gr.DB.Where("sequencia = ?", m.Id).Rows(model)
+		if err != nil {
+			log.Error().Msgf("Error searching items: %s", err.Error())
+		}
+		defer rows.Close()
+		m.Items = make([]HistoricoItem, 0)
+		for rows.Next() {
+			err = rows.Scan(model)
+			if err != nil {
+				log.Error().Msgf("Error scanning item: %s", err.Error())
+			}
+			m.Items = append(m.Items, *model)
+		}
+	}
 }
 
 func hasWhere(filter *domain.HistoricoFilter) bool {
@@ -133,6 +155,26 @@ func mapperToDTO(entity *Historico) *domain.Historico {
 	return dto
 }
 
+func mapperToEntityItem(dtos []domain.HistoricoItem) []HistoricoItem {
+	items := make([]HistoricoItem, 0)
+	for _, dto := range dtos {
+		item := new(HistoricoItem)
+		copyToEntityItem(&dto, item)
+		items = append(items, *item)
+	}
+	return items
+}
+
+func mapperToDTOItem(dtos []HistoricoItem) []domain.HistoricoItem {
+	items := make([]domain.HistoricoItem, 0)
+	for _, dto := range dtos {
+		item := new(domain.HistoricoItem)
+		copyToDtoItem(&dto, item)
+		items = append(items, *item)
+	}
+	return items
+}
+
 func copyToEntity(source *domain.Historico, destiny *Historico) {
 	destiny.Id = source.Id
 	destiny.IdCliente = source.IdCliente
@@ -145,6 +187,7 @@ func copyToEntity(source *domain.Historico, destiny *Historico) {
 	destiny.Tipo = source.Tipo
 	destiny.ValorTotal = source.ValorTotal
 	destiny.Observacao = source.Observacao
+	destiny.Items = mapperToEntityItem(source.Items)
 }
 
 func copyToDto(source *Historico, destiny *domain.Historico) {
@@ -159,4 +202,25 @@ func copyToDto(source *Historico, destiny *domain.Historico) {
 	destiny.Tipo = source.Tipo
 	destiny.ValorTotal = source.ValorTotal
 	destiny.Observacao = source.Observacao
+	destiny.Items = mapperToDTOItem(source.Items)
+}
+
+func copyToEntityItem(source *domain.HistoricoItem, destiny *HistoricoItem) {
+	destiny.Id = source.Id
+	destiny.IdHistorico = source.IdHistorico
+	destiny.Ordem = source.Ordem
+	destiny.Tipo = source.Tipo
+	destiny.Descricao = source.Descricao
+	destiny.Quantidade = source.Quantidade
+	destiny.Valor = source.Valor
+}
+
+func copyToDtoItem(source *HistoricoItem, destiny *domain.HistoricoItem) {
+	destiny.Id = source.Id
+	destiny.IdHistorico = source.IdHistorico
+	destiny.Ordem = source.Ordem
+	destiny.Tipo = source.Tipo
+	destiny.Descricao = source.Descricao
+	destiny.Quantidade = source.Quantidade
+	destiny.Valor = source.Valor
 }

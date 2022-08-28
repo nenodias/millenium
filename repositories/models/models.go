@@ -16,6 +16,10 @@ type GenericRepository[T core.Identifiable, F core.PageableFilter, MODEL any] st
 	HasWhere       func(*F) bool
 	DoWhere        func(*xorm.Session, *F) *xorm.Session
 	DB             *xorm.Engine
+	AfterFind      func(*GenericRepository[T, F, MODEL], *MODEL)
+	AfterSave      func(*GenericRepository[T, F, MODEL], *MODEL)
+	AfterUpdate    func(*GenericRepository[T, F, MODEL], *MODEL)
+	AfterDelete    func(*GenericRepository[T, F, MODEL], int64)
 }
 
 func (gr *GenericRepository[T, F, MODEL]) FindOne(id int64) (*T, error) {
@@ -26,6 +30,9 @@ func (gr *GenericRepository[T, F, MODEL]) FindOne(id int64) (*T, error) {
 	}
 	if !exists {
 		return nil, nil
+	}
+	if gr.AfterFind != nil {
+		gr.AfterFind(gr, p)
 	}
 	return gr.MapperToDTO(p), nil
 }
@@ -43,10 +50,16 @@ func (gr *GenericRepository[T, F, MODEL]) Save(dto *T) (bool, error) {
 		if err != nil {
 			return false, err
 		}
+		if gr.AfterSave != nil {
+			gr.AfterSave(gr, entity)
+		}
 		gr.CopyToDto(entity, dto)
 		return rowsAffected == 1, nil
 	}
 	rowsAffected, err := gr.DB.ID(id).Update(entity)
+	if gr.AfterUpdate != nil {
+		gr.AfterUpdate(gr, entity)
+	}
 	if err != nil {
 		return false, err
 	}
@@ -66,6 +79,9 @@ func (gr *GenericRepository[T, F, MODEL]) DeleteOne(id int64) (bool, error) {
 		rowsAffected, err := gr.DB.ID(id).Delete(model)
 		if err != nil {
 			return false, err
+		}
+		if gr.AfterDelete != nil {
+			gr.AfterDelete(gr, id)
 		}
 		return rowsAffected == 1, nil
 	}
@@ -121,6 +137,9 @@ func (gr *GenericRepository[T, F, MODEL]) FindMany(filter *F) (core.PagebleConte
 			log.Error().Msg(err.Error())
 		}
 		count++
+		if gr.AfterFind != nil {
+			gr.AfterFind(gr, model)
+		}
 		response.Content = append(response.Content, gr.MapperToDTO(model))
 
 	}
