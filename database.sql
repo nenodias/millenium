@@ -46,3 +46,10 @@ ALTER TABLE vistoria RENAME COLUMN kilometragem TO km;
 ALTER TABLE vistoria RENAME COLUMN obs TO observacao;
 ALTER TABLE vistoria ALTER COLUMN id_historico to bigint
 ALTER TABLE vistoria ALTER COLUMN id_veiculo to bigint
+
+-- RENAMING TABLES FOR STANDARDIZE
+ALTER TABLE clientes RENAME TO cliente
+ALTER TABLE falhas RENAME TO falha
+ALTER TABLE lembretes RENAME TO lembrete
+ALTER TABLE servicos RENAME TO servicos
+ALTER TABLE pecas RENAME TO peca
