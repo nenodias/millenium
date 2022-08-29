@@ -10,7 +10,7 @@ import (
 
 type Montadora struct {
 	Id                int64  `xorm:"'id' bigint pk autoincr not null"`
-	Nome              string `xorm:"'nome_montadora' varchar(20) not null"`
+	Nome              string `xorm:"'nome' varchar(20) not null"`
 	Origem            string `xorm:"'origem' varchar(1) not null"`
 	CodigoMontadoraEA int    `xorm:"'codmon_ea' int"`
 }
@@ -42,7 +42,7 @@ func hasWhere(filter *domain.MontadoraFilter) bool {
 }
 
 func doWhere(query *xorm.Session, filter *domain.MontadoraFilter) *xorm.Session {
-	where := []string{"nome_montadora Like ?", "%" + filter.Nome + "%"}
+	where := []string{"nome Like ?", "%" + filter.Nome + "%"}
 	return query.Where(where[0], where[1])
 }
 

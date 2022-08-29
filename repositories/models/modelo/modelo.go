@@ -10,8 +10,8 @@ import (
 
 type Modelo struct {
 	Id              int64  `xorm:"'id' bigint pk autoincr not null"`
-	Nome            string `xorm:"'nome_modelo' varchar(40) not null"`
-	IdMontadora     int64  `xorm:"'id_monta' bigint"`
+	Nome            string `xorm:"'nome' varchar(40) not null"`
+	IdMontadora     int64  `xorm:"'id_montadora' bigint"`
 	CodigoVeiculoEA int    `xorm:"'codvei_ea' int"`
 }
 
@@ -47,11 +47,11 @@ func doWhere(query *xorm.Session, filter *domain.ModeloFilter) *xorm.Session {
 	hasNome := filter.Nome != "" && strings.TrimSpace(filter.Nome) != ""
 	hasIdModelo := filter.IdModelo != int64(0)
 	if hasNome && hasIdModelo {
-		return query.Where("nome_modelo Like ?", "%"+filter.Nome+"%").And("id_monta = ?", filter.IdModelo)
+		return query.Where("nome Like ?", "%"+filter.Nome+"%").And("id_montadora = ?", filter.IdModelo)
 	} else if hasNome {
-		return query.Where("nome_modelo Like ?", "%"+filter.Nome+"%")
+		return query.Where("nome Like ?", "%"+filter.Nome+"%")
 	} else {
-		return query.Where("id_monta = ?", filter.IdModelo)
+		return query.Where("id_montadora = ?", filter.IdModelo)
 	}
 }
 

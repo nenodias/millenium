@@ -29,7 +29,7 @@ func NewController(service *domain.TecnicoService) *TecnicoController {
 func GetFilters(query url.Values) domain.TecnicoFilter {
 	page := utils.StringToInt(query.Get("page"), utils.DEFAULT_PAGE)
 	size := utils.StringToInt(query.Get("size"), utils.DEFAULT_SIZE)
-	sortColumn := utils.StringNormalized(query.Get("sortColumn"), "codigo_tecnico")
+	sortColumn := utils.StringNormalized(query.Get("sortColumn"), "id")
 	sortDirection := core.GetSortDirection(query.Get("sortDirection"))
 	nome := utils.StringNormalized(query.Get("nome"), "")
 	return domain.TecnicoFilter{

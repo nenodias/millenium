@@ -15,7 +15,7 @@ type Servico struct {
 }
 
 func (p *Servico) TableName() string {
-	return "servicos"
+	return "servico"
 }
 
 type ServicoRepository struct {

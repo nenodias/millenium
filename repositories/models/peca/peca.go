@@ -15,7 +15,7 @@ type Peca struct {
 }
 
 func (p *Peca) TableName() string {
-	return "pecas"
+	return "peca"
 }
 
 type PecaRepository struct {

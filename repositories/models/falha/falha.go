@@ -14,7 +14,7 @@ type Falha struct {
 }
 
 func (p *Falha) TableName() string {
-	return "falhas"
+	return "falha"
 }
 
 type FalhaRepository struct {

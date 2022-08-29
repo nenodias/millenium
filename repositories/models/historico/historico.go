@@ -15,17 +15,17 @@ import (
 )
 
 type Historico struct {
-	Id          int64                `xorm:"'sequencia' bigint pk autoincr not null"`
-	IdCliente   int64                `xorm:"'codigo_cliente' bigint not null"`
-	IdVeiculo   int64                `xorm:"'codveiculo' bigint not null"`
-	IdTecnico   int64                `xorm:"'tecnico' bigint"`
-	NumeroOrdem int                  `xorm:"'nr_ordem' int"`
+	Id          int64                `xorm:"'id' bigint pk autoincr not null"`
+	IdCliente   int64                `xorm:"'id_cliente' bigint not null"`
+	IdVeiculo   int64                `xorm:"'id_veiculo' bigint not null"`
+	IdTecnico   int64                `xorm:"'id_tecnico' bigint"`
+	NumeroOrdem int                  `xorm:"'numero' int"`
 	Placa       string               `xorm:"'placa' varchar(8)"`
 	Sistema     int                  `xorm:"'sistema' int"`
 	Data        time.Time            `xorm:"'data' timestamp"`
 	Tipo        domain.TipoHistorico `xorm:"'tipo' varchar(4)"`
 	ValorTotal  float64              `xorm:"'valor_total' double"`
-	Observacao  string               `xorm:"'obs' varchar(500)"`
+	Observacao  string               `xorm:"'observacao' varchar(500)"`
 	Items       []HistoricoItem      `xorm:"-"`
 	Vistoria    HistoricoVistoria    `xorm:"-"`
 }
@@ -36,11 +36,11 @@ func (p *Historico) TableName() string {
 
 type HistoricoItem struct {
 	Id          int64                    `xorm:"'id' bigint pk autoincr not null"`
-	IdHistorico int64                    `xorm:"'sequencia' bigint not null"`
-	Ordem       int64                    `xorm:"'item' bigint not null"`
+	IdHistorico int64                    `xorm:"'id_historico' bigint not null"`
+	Ordem       int64                    `xorm:"'ordem' bigint not null"`
 	Tipo        domain.TipoHistoricoItem `xorm:"'tipo' varchar(1)"`
 	Descricao   string                   `xorm:"'historico' varchar(75)"`
-	Quantidade  int                      `xorm:"'qtd' int"`
+	Quantidade  int                      `xorm:"'quantidade' int"`
 	Valor       float64                  `xorm:"'valor' double"`
 }
 
@@ -49,10 +49,10 @@ func (p *HistoricoItem) TableName() string {
 }
 
 type HistoricoVistoria struct {
-	Id               int64   `xorm:"'sequencia' bigint pk autoincr not null"`
-	IdVeiculo        int     `xorm:"'carrovistoria' int"`
+	Id               int64   `xorm:"'id_historico' bigint pk autoincr not null"`
+	IdVeiculo        int64   `xorm:"'id_veiculo' bigint"`
 	NivelCombustivel int64   `xorm:"'nivelcomb' int"`
-	Kilometragem     float64 `xorm:"'kilometragem' double"`
+	Kilometragem     float64 `xorm:"'km' double"`
 	TocaFitas        uint8   `xorm:"'tocafitas' smallint"`
 	Cd               uint8   `xorm:"'cd' smallint"`
 	Disqueteira      uint8   `xorm:"'disqueteira' smallint"`
@@ -65,7 +65,7 @@ type HistoricoVistoria struct {
 	DescricaoOutro   string  `xorm:"'outro1descr' varchar(20)"`
 	Outro2           uint8   `xorm:"'outro2' smallint"`
 	DescricaoOutro2  string  `xorm:"'outro2descr' varchar(20)"`
-	Observacao       string  `xorm:"'obs' varchar(500)"`
+	Observacao       string  `xorm:"'observacao' varchar(500)"`
 }
 
 func (p *HistoricoVistoria) TableName() string {
@@ -150,7 +150,7 @@ func (hr *HistoricoRepository) FindOneForReport(id int64) (*domain.HistoricoRepo
 func AfterFind(gr *models.GenericRepository[domain.Historico, domain.HistoricoFilter, Historico], m *Historico) {
 	if m.Id != 0 {
 		model := new(HistoricoItem)
-		rows, err := gr.DB.Where("sequencia = ?", m.Id).Rows(model)
+		rows, err := gr.DB.Where("id_historico = ?", m.Id).Rows(model)
 		if err != nil {
 			log.Error().Msgf("Error searching items: %s", err.Error())
 		}
@@ -173,7 +173,7 @@ func AfterFind(gr *models.GenericRepository[domain.Historico, domain.HistoricoFi
 
 func AfterSave(gr *models.GenericRepository[domain.Historico, domain.HistoricoFilter, Historico], session *xorm.Session, m *Historico) {
 	if m.Id != 0 {
-		_, err := session.Exec("DELETE FROM historico_item WHERE sequencia = ?", m.Id)
+		_, err := session.Exec("DELETE FROM historico_item WHERE id_historico = ?", m.Id)
 		if err != nil {
 			log.Error().Msg(err.Error())
 			session.Rollback()
@@ -189,7 +189,7 @@ func AfterSave(gr *models.GenericRepository[domain.Historico, domain.HistoricoFi
 			}
 		}
 
-		_, err = session.Exec("DELETE FROM vistoria WHERE sequencia = ?", m.Id)
+		_, err = session.Exec("DELETE FROM vistoria WHERE id_historico = ?", m.Id)
 		if err != nil {
 			log.Error().Msg(err.Error())
 			session.Rollback()
@@ -230,16 +230,16 @@ func doWhere(query *xorm.Session, filter *domain.HistoricoFilter) *xorm.Session 
 		where = where.And("tipo = ?", filter.Tipo)
 	}
 	if hasNumeroOrdem {
-		where = where.And("nr_ordem = ?", filter.NumeroOrdem)
+		where = where.And("numero = ?", filter.NumeroOrdem)
 	}
 	if hasIdCliente {
-		where = where.And("codigo_cliente = ?", filter.IdCliente)
+		where = where.And("id_cliente = ?", filter.IdCliente)
 	}
 	if hasIdVeiculo {
-		where = where.And("codveiculo = ?", filter.IdVeiculo)
+		where = where.And("id_veiculo = ?", filter.IdVeiculo)
 	}
 	if hasIdTecnico {
-		where = where.And("tecnico = ?", filter.IdTecnico)
+		where = where.And("id_tecnico = ?", filter.IdTecnico)
 	}
 	return where
 }

@@ -9,8 +9,8 @@ import (
 )
 
 type Veiculo struct {
-	Id          int64              `xorm:"'codveiculo' bigint pk autoincr not null"`
-	IdCliente   int64              `xorm:"'codigo_cliente' bigint"`
+	Id          int64              `xorm:"'id' bigint pk autoincr not null"`
+	IdCliente   int64              `xorm:"'id_cliente' bigint"`
 	Placa       string             `xorm:"'placa' varchar(8) not null"`
 	Pais        string             `xorm:"'pais' varchar(20)"`
 	Cor         string             `xorm:"'cor' varchar(20)"`
@@ -59,7 +59,7 @@ func doWhere(query *xorm.Session, filter *domain.VeiculoFilter) *xorm.Session {
 		where = append(where, "placa Like ?", "%"+filter.Placa+"%")
 	}
 	if hasIdCliente {
-		where = append(where, "codigo_cliente = ?", filter.IdCliente)
+		where = append(where, "id_cliente = ?", filter.IdCliente)
 	}
 	if hasIdModelo {
 		where = append(where, "id_modelo = ?", filter.IdModelo)

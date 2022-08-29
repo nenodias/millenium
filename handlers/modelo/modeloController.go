@@ -32,7 +32,7 @@ func GetFilters(query url.Values) domain.ModeloFilter {
 	sortColumn := utils.StringNormalized(query.Get("sortColumn"), "id")
 	sortDirection := core.GetSortDirection(query.Get("sortDirection"))
 	nome := utils.StringNormalized(query.Get("nome"), "")
-	idModelo := utils.StringToInt64(query.Get("id_monta"), 0)
+	idModelo := utils.StringToInt64(query.Get("id_montadora"), 0)
 	return domain.ModeloFilter{
 		Nome:     nome,
 		IdModelo: idModelo,
