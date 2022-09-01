@@ -31,17 +31,29 @@ type HistoricoReport struct {
 
 func GenerateReport(historico *HistoricoReport, w http.ResponseWriter) {
 	pdf := fpdf.New("P", "mm", "A4", "")
+	tr := pdf.UnicodeTranslatorFromDescriptor("")
 	pdf.SetFont("Arial", "B", 16)
 	pdf.AddPage()
-	MakeHeader(historico, pdf)
-	pdf.Cell(40, 10, "Hello, world")
+	MakeHeader(historico, pdf, tr)
 	err := pdf.Output(w)
 	if err != nil {
 		log.Error().Msg(err.Error())
 	}
 }
 
-func MakeHeader(historico *HistoricoReport, pdf *fpdf.Fpdf) {
+func MakeHeader(historico *HistoricoReport, pdf *fpdf.Fpdf, tr func(string) string) {
 	logo := "d://workspace//logo_oficina.png"
 	pdf.Image(logo, 8, 10, 25, 0, false, "", 0, "")
+	pdf.Cell(25, 0, "")
+	pdf.SetFont("Arial", "B", 12)
+	pdf.CellFormat(100, 4, tr(REPORT_NAME), "", 1, "L", false, 0, "")
+	pdf.SetFont("Arial", "", 9)
+	pdf.CellFormat(25, 0, "", "", 0, "", false, 0, "")
+	pdf.CellFormat(100, 4, tr(REPORT_ADDRESS), "", 1, "L", false, 0, "")
+	pdf.CellFormat(25, 0, "", "", 0, "", false, 0, "")
+	pdf.CellFormat(80, 4, "Fone: "+tr(REPORT_PHONE), "", 0, "L", false, 0, "")
+	pdf.CellFormat(80, 4, "Celular: "+tr(REPORT_MOBILE), "", 1, "L", false, 0, "")
+	pdf.CellFormat(25, 0, "", "", 0, "", false, 0, "")
+	pdf.CellFormat(100, 4, "Email: "+tr(REPORT_EMAIL), "", 0, "L", false, 0, "")
+	pdf.Line(5, 27, 205, 27)
 }
