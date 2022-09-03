@@ -23,15 +23,19 @@ const (
 )
 
 type HistoricoReport struct {
-	Historico Historico
-	Cliente   clienteDomain.Cliente
-	Veiculo   veiculoDomain.Veiculo
-	Modelo    modeloDomain.Modelo
-	Montadora montadoraDomain.Montadora
-	Tecnico   tecnicoDomain.Tecnico
+	Historico       Historico
+	Cliente         clienteDomain.Cliente
+	Veiculo         veiculoDomain.Veiculo
+	Modelo          modeloDomain.Modelo
+	Montadora       montadoraDomain.Montadora
+	Tecnico         tecnicoDomain.Tecnico
+	SubTotalServico float64
+	SubTotalPeca    float64
+	Total           float64
 }
 
 func GenerateReport(historico *HistoricoReport, w http.ResponseWriter) {
+	Calculate(historico)
 	pdf := fpdf.New("P", "mm", "A4", "")
 	tr := pdf.UnicodeTranslatorFromDescriptor("")
 	pdf.SetFont("Arial", "B", 16)
@@ -154,4 +158,15 @@ func GetEnderecoCliente(historico *HistoricoReport) string {
 	endereco += " - "
 	endereco += historico.Cliente.Estado
 	return endereco
+}
+
+func Calculate(historico *HistoricoReport) {
+	for _, v := range historico.Historico.Items {
+		if v.Tipo == PECA {
+			historico.SubTotalPeca += (float64(v.Quantidade) * v.Valor)
+		} else if v.Tipo == SERVICO {
+			historico.SubTotalServico += (float64(v.Quantidade) * v.Valor)
+		}
+	}
+	historico.Total = historico.SubTotalPeca + historico.SubTotalServico
 }
