@@ -61,7 +61,7 @@ type Historico struct {
 	Id           int64           `json:"id"`
 	IdCliente    int64           `json:"idCliente"`
 	IdVeiculo    int64           `json:"idVeiculo"`
-	IdTecnico    int64           `json:"idTecnico"`
+	IdTecnico    *int64          `json:"idTecnico"`
 	NumeroOrdem  int64           `json:"numeroOrdem"`
 	Placa        string          `json:"placa"`
 	Sistema      int             `json:"sistema"`
@@ -78,8 +78,8 @@ func (t Historico) GetId() int64 {
 }
 
 type HistoricoItem struct {
-	Id          int64             `json:"id"`
-	IdHistorico int64             `json:"idHistorico"`
+	Id          int64             `json:"-"`
+	IdHistorico int64             `json:"-"`
 	Ordem       int64             `json:"item"`
 	Tipo        TipoHistoricoItem `json:"tipo"`
 	Descricao   string            `json:"descricao"`

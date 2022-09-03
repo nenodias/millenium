@@ -17,9 +17,9 @@ type GenericRepository[T core.Identifiable, F core.PageableFilter, MODEL any] st
 	DoWhere        func(*xorm.Session, *F) *xorm.Session
 	DB             *xorm.Engine
 	AfterFind      func(*GenericRepository[T, F, MODEL], *MODEL)
-	AfterSave      func(*GenericRepository[T, F, MODEL], *xorm.Session, *MODEL)
-	AfterUpdate    func(*GenericRepository[T, F, MODEL], *xorm.Session, *MODEL)
-	AfterDelete    func(*GenericRepository[T, F, MODEL], *xorm.Session, int64)
+	AfterSave      func(*GenericRepository[T, F, MODEL], *xorm.Session, *MODEL) bool
+	AfterUpdate    func(*GenericRepository[T, F, MODEL], *xorm.Session, *MODEL) bool
+	AfterDelete    func(*GenericRepository[T, F, MODEL], *xorm.Session, int64) bool
 }
 
 func (gr *GenericRepository[T, F, MODEL]) FindOne(id int64) (*T, error) {
@@ -63,7 +63,10 @@ func (gr *GenericRepository[T, F, MODEL]) Save(dto *T) (bool, error) {
 			return false, err
 		}
 		if gr.AfterSave != nil {
-			gr.AfterSave(gr, session, entity)
+			if !gr.AfterSave(gr, session, entity) {
+				session.Rollback()
+				return false, fmt.Errorf("error on after save")
+			}
 		}
 		gr.CopyToDto(entity, dto)
 		err = session.Commit()
@@ -75,7 +78,10 @@ func (gr *GenericRepository[T, F, MODEL]) Save(dto *T) (bool, error) {
 	}
 	rowsAffected, err := gr.DB.ID(id).Update(entity)
 	if gr.AfterUpdate != nil {
-		gr.AfterUpdate(gr, session, entity)
+		if !gr.AfterUpdate(gr, session, entity) {
+			session.Rollback()
+			return false, fmt.Errorf("error on after update")
+		}
 	}
 	if err != nil {
 		log.Error().Msg(err.Error())
@@ -117,7 +123,10 @@ func (gr *GenericRepository[T, F, MODEL]) DeleteOne(id int64) (bool, error) {
 			return false, err
 		}
 		if gr.AfterDelete != nil {
-			gr.AfterDelete(gr, session, id)
+			if !gr.AfterDelete(gr, session, id) {
+				session.Rollback()
+				return false, fmt.Errorf("error on after delete")
+			}
 		}
 		err = session.Commit()
 		if err != nil {

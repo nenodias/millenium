@@ -19,7 +19,7 @@ type Historico struct {
 	Id          int64                `xorm:"'id' bigint pk autoincr not null"`
 	IdCliente   int64                `xorm:"'id_cliente' bigint not null"`
 	IdVeiculo   int64                `xorm:"'id_veiculo' bigint not null"`
-	IdTecnico   int64                `xorm:"'id_tecnico' bigint"`
+	IdTecnico   *int64               `xorm:"'id_tecnico' bigint"`
 	NumeroOrdem int64                `xorm:"'numero' int"`
 	Placa       string               `xorm:"'placa' varchar(8)"`
 	Sistema     int                  `xorm:"'sistema' int"`
@@ -139,15 +139,15 @@ func (hr *HistoricoRepository) FindOneForReport(id int64) (*domain.HistoricoRepo
 			}
 		}
 
-		if model.IdTecnico != 0 {
-			_, err = hr.DB.ID(model.IdTecnico).Get(tecnico)
+		if model.IdTecnico != nil {
+			_, err = hr.DB.ID(*model.IdTecnico).Get(tecnico)
 			if err != nil {
 				log.Error().Msg(err.Error())
 			}
 			report.Tecnico = *tecnicoModel.MapperToDTO(tecnico)
 		}
 	} else {
-		return report, fmt.Errorf("Registro com id: %d nao encontrado", id)
+		return report, fmt.Errorf("registro com id: %d nao encontrado", id)
 	}
 	return report, nil
 }
@@ -176,20 +176,20 @@ func AfterFind(gr *models.GenericRepository[domain.Historico, domain.HistoricoFi
 	}
 }
 
-func AfterSave(gr *models.GenericRepository[domain.Historico, domain.HistoricoFilter, Historico], session *xorm.Session, m *Historico) {
+func AfterSave(gr *models.GenericRepository[domain.Historico, domain.HistoricoFilter, Historico], session *xorm.Session, m *Historico) bool {
 	if m.Id != 0 {
 		m.NumeroOrdem = m.Id
-		_, err := session.Exec("UPDATE historico SET numero_ordem = ? WHERE id = ?", m.Id, m.Id)
+		_, err := session.Exec("UPDATE historico SET numero = ? WHERE id = ?", m.Id, m.Id)
 		if err != nil {
 			log.Error().Msg(err.Error())
 			session.Rollback()
-			return
+			return false
 		}
 		_, err = session.Exec("DELETE FROM historico_item WHERE id_historico = ?", m.Id)
 		if err != nil {
 			log.Error().Msg(err.Error())
 			session.Rollback()
-			return
+			return false
 		}
 		for _, item := range m.Items {
 			item.IdHistorico = m.Id
@@ -197,7 +197,7 @@ func AfterSave(gr *models.GenericRepository[domain.Historico, domain.HistoricoFi
 			if err != nil {
 				log.Error().Msg(err.Error())
 				session.Rollback()
-				return
+				return false
 			}
 		}
 
@@ -205,16 +205,17 @@ func AfterSave(gr *models.GenericRepository[domain.Historico, domain.HistoricoFi
 		if err != nil {
 			log.Error().Msg(err.Error())
 			session.Rollback()
-			return
+			return false
 		}
 		m.Vistoria.Id = m.Id
 		_, err = session.Insert(&m.Vistoria)
 		if err != nil {
 			log.Error().Msg(err.Error())
 			session.Rollback()
-			return
+			return false
 		}
 	}
+	return true
 }
 
 func hasWhere(filter *domain.HistoricoFilter) bool {
