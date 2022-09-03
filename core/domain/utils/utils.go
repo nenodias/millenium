@@ -11,8 +11,10 @@ import (
 )
 
 const (
-	DEFAULT_PAGE = 0
-	DEFAULT_SIZE = 20
+	DEFAULT_PAGE    = 0
+	DEFAULT_SIZE    = 20
+	DATE_FOMAT      = "01/02/2006"
+	DATETIME_FORMAT = "01/02/2006 15:04:05"
 )
 
 func StringToInt(text string, fallback int) int {
@@ -32,7 +34,15 @@ func StringToInt64(text string, fallback int64) int64 {
 }
 
 func StringToDate(text string, fallback time.Time) time.Time {
-	return StringToDateFormat(text, "2006-01-02", fallback)
+	return StringToDateFormat(text, DATE_FOMAT, fallback)
+}
+
+func DateToString(value time.Time) string {
+	return value.Format(DATE_FOMAT)
+}
+
+func DateTimeToString(value time.Time) string {
+	return value.Format(DATETIME_FORMAT)
 }
 
 func StringToDateFormat(text string, format string, fallback time.Time) time.Time {
