@@ -1,6 +1,7 @@
 package historico
 
 import (
+	"fmt"
 	"time"
 
 	domain "github.com/nenodias/millenium/core/domain/historico"
@@ -100,49 +101,53 @@ func (hr *HistoricoRepository) FindOneForReport(id int64) (*domain.HistoricoRepo
 		log.Error().Msg(err.Error())
 		return nil, err
 	}
-	report.Historico = *model
-	cliente := new(clienteModel.Cliente)
-	modelo := new(modeloModel.Modelo)
-	montadora := new(montadoraModel.Montadora)
-	tecnico := new(tecnicoModel.Tecnico)
-	veiculo := new(veiculoModel.Veiculo)
-	if model.IdCliente != 0 {
-		_, err = hr.DB.ID(model.IdCliente).Get(cliente)
-		if err != nil {
-			log.Error().Msg(err.Error())
-			return nil, err
-		}
-		report.Cliente = *clienteModel.MapperToDTO(cliente)
-	}
-	if model.IdVeiculo != 0 {
-		_, err = hr.DB.ID(model.IdVeiculo).Get(veiculo)
-		if err != nil {
-			log.Error().Msg(err.Error())
-			return nil, err
-		}
-		report.Veiculo = *veiculoModel.MapperToDTO(veiculo)
-		if veiculo.IdModelo != 0 {
-			_, err = hr.DB.ID(veiculo.IdModelo).Get(modelo)
+	if model != nil {
+		report.Historico = *model
+		cliente := new(clienteModel.Cliente)
+		modelo := new(modeloModel.Modelo)
+		montadora := new(montadoraModel.Montadora)
+		tecnico := new(tecnicoModel.Tecnico)
+		veiculo := new(veiculoModel.Veiculo)
+		if model.IdCliente != 0 {
+			_, err = hr.DB.ID(model.IdCliente).Get(cliente)
 			if err != nil {
 				log.Error().Msg(err.Error())
+				return nil, err
 			}
-			report.Modelo = *modeloModel.MapperToDTO(modelo)
-			if modelo.IdMontadora != 0 {
-				_, err = hr.DB.ID(modelo.IdMontadora).Get(montadora)
+			report.Cliente = *clienteModel.MapperToDTO(cliente)
+		}
+		if model.IdVeiculo != 0 {
+			_, err = hr.DB.ID(model.IdVeiculo).Get(veiculo)
+			if err != nil {
+				log.Error().Msg(err.Error())
+				return nil, err
+			}
+			report.Veiculo = *veiculoModel.MapperToDTO(veiculo)
+			if veiculo.IdModelo != 0 {
+				_, err = hr.DB.ID(veiculo.IdModelo).Get(modelo)
 				if err != nil {
 					log.Error().Msg(err.Error())
 				}
-				report.Montadora = *montadoraModel.MapperToDTO(montadora)
+				report.Modelo = *modeloModel.MapperToDTO(modelo)
+				if modelo.IdMontadora != 0 {
+					_, err = hr.DB.ID(modelo.IdMontadora).Get(montadora)
+					if err != nil {
+						log.Error().Msg(err.Error())
+					}
+					report.Montadora = *montadoraModel.MapperToDTO(montadora)
+				}
 			}
 		}
-	}
 
-	if model.IdTecnico != 0 {
-		_, err = hr.DB.ID(model.IdTecnico).Get(tecnico)
-		if err != nil {
-			log.Error().Msg(err.Error())
+		if model.IdTecnico != 0 {
+			_, err = hr.DB.ID(model.IdTecnico).Get(tecnico)
+			if err != nil {
+				log.Error().Msg(err.Error())
+			}
+			report.Tecnico = *tecnicoModel.MapperToDTO(tecnico)
 		}
-		report.Tecnico = *tecnicoModel.MapperToDTO(tecnico)
+	} else {
+		return report, fmt.Errorf("Registro com id: %d nao encontrado", id)
 	}
 	return report, nil
 }

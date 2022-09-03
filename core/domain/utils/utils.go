@@ -2,6 +2,7 @@ package utils
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
@@ -13,8 +14,8 @@ import (
 const (
 	DEFAULT_PAGE    = 0
 	DEFAULT_SIZE    = 20
-	DATE_FOMAT      = "01/02/2006"
-	DATETIME_FORMAT = "01/02/2006 15:04:05"
+	DATE_FOMAT      = "02/01/2006"
+	DATETIME_FORMAT = "02/01/2006 15:04:05"
 )
 
 func StringToInt(text string, fallback int) int {
@@ -37,6 +38,14 @@ func StringToDate(text string, fallback time.Time) time.Time {
 	return StringToDateFormat(text, DATE_FOMAT, fallback)
 }
 
+func StringToDateFormat(text string, format string, fallback time.Time) time.Time {
+	value, err := time.Parse(format, text)
+	if err != nil {
+		return fallback
+	}
+	return value
+}
+
 func DateToString(value time.Time) string {
 	return value.Format(DATE_FOMAT)
 }
@@ -45,12 +54,12 @@ func DateTimeToString(value time.Time) string {
 	return value.Format(DATETIME_FORMAT)
 }
 
-func StringToDateFormat(text string, format string, fallback time.Time) time.Time {
-	value, err := time.Parse(format, text)
-	if err != nil {
-		return fallback
-	}
-	return value
+func IntToString(value int) string {
+	return fmt.Sprintf("%d", value)
+}
+
+func FloatMoney(value float64) string {
+	return fmt.Sprintf("%.2f", value)
 }
 
 func StringNormalized(raw string, fallback string) string {

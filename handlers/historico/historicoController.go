@@ -37,7 +37,7 @@ func (hc *HistoricoController) GetReport(w http.ResponseWriter, r *http.Request)
 	model, err := hc.Service.(domain.HistoricoService).FindOneForReport(id)
 	if err != nil {
 		log.Error().Msg(err.Error())
-		w.WriteHeader(500)
+		w.WriteHeader(404)
 		return
 	}
 	if model != nil {
