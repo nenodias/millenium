@@ -20,7 +20,7 @@ type Historico struct {
 	IdCliente   int64                `xorm:"'id_cliente' bigint not null"`
 	IdVeiculo   int64                `xorm:"'id_veiculo' bigint not null"`
 	IdTecnico   int64                `xorm:"'id_tecnico' bigint"`
-	NumeroOrdem int                  `xorm:"'numero' int"`
+	NumeroOrdem int64                `xorm:"'numero' int"`
 	Placa       string               `xorm:"'placa' varchar(8)"`
 	Sistema     int                  `xorm:"'sistema' int"`
 	Data        time.Time            `xorm:"'data' timestamp"`
@@ -178,7 +178,14 @@ func AfterFind(gr *models.GenericRepository[domain.Historico, domain.HistoricoFi
 
 func AfterSave(gr *models.GenericRepository[domain.Historico, domain.HistoricoFilter, Historico], session *xorm.Session, m *Historico) {
 	if m.Id != 0 {
-		_, err := session.Exec("DELETE FROM historico_item WHERE id_historico = ?", m.Id)
+		m.NumeroOrdem = m.Id
+		_, err := session.Exec("UPDATE historico SET numero_ordem = ? WHERE id = ?", m.Id, m.Id)
+		if err != nil {
+			log.Error().Msg(err.Error())
+			session.Rollback()
+			return
+		}
+		_, err = session.Exec("DELETE FROM historico_item WHERE id_historico = ?", m.Id)
 		if err != nil {
 			log.Error().Msg(err.Error())
 			session.Rollback()

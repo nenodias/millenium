@@ -53,7 +53,7 @@ func GetFilters(query url.Values) domain.HistoricoFilter {
 	sortColumn := utils.StringNormalized(query.Get("sortColumn"), "id")
 	sortDirection := core.GetSortDirection(query.Get("sortDirection"))
 	data := utils.StringToDate(query.Get("texto"), time.Time{})
-	numeroOrdem := utils.StringToInt(query.Get("numeroOrdem"), 0)
+	numeroOrdem := utils.StringToInt64(query.Get("numeroOrdem"), 0)
 	idTecnico := utils.StringToInt64(query.Get("idTecnico"), 0)
 	idCliente := utils.StringToInt64(query.Get("idCliente"), 0)
 	idVeiculo := utils.StringToInt64(query.Get("idVeiculo"), 0)

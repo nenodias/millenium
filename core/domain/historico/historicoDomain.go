@@ -62,7 +62,7 @@ type Historico struct {
 	IdCliente    int64           `json:"idCliente"`
 	IdVeiculo    int64           `json:"idVeiculo"`
 	IdTecnico    int64           `json:"idTecnico"`
-	NumeroOrdem  int             `json:"numeroOrdem"`
+	NumeroOrdem  int64           `json:"numeroOrdem"`
 	Placa        string          `json:"placa"`
 	Sistema      int             `json:"sistema"`
 	Data         time.Time       `json:"data"`
@@ -93,7 +93,7 @@ func (t HistoricoItem) GetId() int64 {
 
 type HistoricoFilter struct {
 	domain.Pageable
-	NumeroOrdem int
+	NumeroOrdem int64
 	IdCliente   int64
 	IdVeiculo   int64
 	IdTecnico   int64
