@@ -245,13 +245,13 @@ func MakeObservacoes(historico *HistoricoReport, pdf *fpdf.Fpdf, tr func(string)
 func GetVeiculoDescription(historico *HistoricoReport) string {
 	veiculo := ""
 	veiculo += historico.Veiculo.Placa
-	veiculo += "-"
+	veiculo += " - "
 	veiculo += historico.Modelo.Nome
-	veiculo += "-"
+	veiculo += " - "
 	veiculo += historico.Montadora.Nome
-	veiculo += "- Ano: "
+	veiculo += " - Ano: "
 	veiculo += historico.Veiculo.Ano
-	veiculo += "- Km: "
+	veiculo += " - Km: "
 	veiculo += fmt.Sprintf("%.0f", historico.Historico.Kilometragem)
 	return veiculo
 }
