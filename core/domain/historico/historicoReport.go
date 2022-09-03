@@ -82,7 +82,7 @@ func MakeCustomer(historico *HistoricoReport, pdf *fpdf.Fpdf, tr func(string) st
 	pdf.SetFont("Arial", "B", 10)
 	pdf.CellFormat(20, 7, tr("Endereço  :"), "", 0, "L", false, 0, "")
 	pdf.SetFont("Arial", "", 10)
-	pdf.CellFormat(100, 7, tr(historico.Cliente.Endereco), "", 0, "L", false, 0, "")
+	pdf.CellFormat(100, 7, tr(GetEnderecoCliente(historico)), "", 0, "L", false, 0, "")
 
 	pdf.Ln(4)
 	pdf.SetFont("Arial", "B", 10)
@@ -118,7 +118,7 @@ func MakeCustomer(historico *HistoricoReport, pdf *fpdf.Fpdf, tr func(string) st
 
 	pdf.Line(5, 54, 205, 54)
 
-	pdf.Ln(8)
+	pdf.Ln(9)
 	pdf.SetFont("Arial", "B", 14)
 	pdf.CellFormat(50, 8, tr(historico.Historico.Tipo.String()), "", 0, "L", false, 0, "")
 	pdf.SetFont("Arial", "B", 16)
@@ -142,4 +142,16 @@ func GetVeiculoDescription(historico *HistoricoReport) string {
 	veiculo += "- Km: "
 	veiculo += fmt.Sprintf("%.0f", historico.Historico.Kilometragem)
 	return veiculo
+}
+
+func GetEnderecoCliente(historico *HistoricoReport) string {
+	endereco := ""
+	endereco += historico.Cliente.Complemento
+	endereco += " - "
+	endereco += historico.Cliente.Bairro
+	endereco += " - "
+	endereco += historico.Cliente.Cidade
+	endereco += " - "
+	endereco += historico.Cliente.Estado
+	return endereco
 }
