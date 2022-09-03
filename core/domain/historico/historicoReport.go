@@ -43,6 +43,10 @@ func GenerateReport(historico *HistoricoReport, w http.ResponseWriter) {
 	pdf.AddPage()
 	MakeHeader(historico, pdf, tr)
 	MakeFooter(historico, pdf, tr)
+	MakeFalhas(historico, pdf, tr)
+	MakePecas(historico, pdf, tr)
+	MakeServicos(historico, pdf, tr)
+	MakeObservacoes(historico, pdf, tr)
 	err := pdf.Output(w)
 	if err != nil {
 		log.Error().Msg(err.Error())
@@ -132,6 +136,22 @@ func MakeCustomer(historico *HistoricoReport, pdf *fpdf.Fpdf, tr func(string) st
 
 	pdf.Ln(10)
 	pdf.Rect(5, 5, 200, 287, "D")
+}
+
+func MakeFalhas(historico *HistoricoReport, pdf *fpdf.Fpdf, tr func(string) string) {
+	//TODO
+}
+
+func MakePecas(historico *HistoricoReport, pdf *fpdf.Fpdf, tr func(string) string) {
+	//TODO
+}
+
+func MakeServicos(historico *HistoricoReport, pdf *fpdf.Fpdf, tr func(string) string) {
+	//TODO
+}
+
+func MakeObservacoes(historico *HistoricoReport, pdf *fpdf.Fpdf, tr func(string) string) {
+	//TODO
 }
 
 func GetVeiculoDescription(historico *HistoricoReport) string {
