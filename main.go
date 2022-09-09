@@ -77,11 +77,13 @@ func main() {
 	veiculoController := veiculoHandlers.NewController(&veiculoService)
 	MappingApi(router, "veiculo", veiculoController)
 
+	port := config.GetEnv("SERVER_PORT","8080")
+
 	srv := &http.Server{
 		Handler: router,
-		Addr:    "0.0.0.0:8080",
+		Addr:    "0.0.0.0:"+port,
 	}
-	log.Info().Msg("Listening on port :8080")
+	log.Info().Msg("Listening on port :"+port)
 	log.Error().Msg(srv.ListenAndServe().Error())
 }
 

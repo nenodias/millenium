@@ -51,5 +51,5 @@ ALTER TABLE vistoria ALTER COLUMN id_veiculo to bigint
 ALTER TABLE clientes RENAME TO cliente
 ALTER TABLE falhas RENAME TO falha
 ALTER TABLE lembretes RENAME TO lembrete
-ALTER TABLE servicos RENAME TO servicos
+ALTER TABLE servicos RENAME TO servico
 ALTER TABLE pecas RENAME TO peca
