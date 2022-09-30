@@ -1,0 +1,72 @@
+package auth
+
+import (
+	"fmt"
+	"time"
+
+	"github.com/golang-jwt/jwt"
+	"github.com/nenodias/millenium/config"
+)
+
+var secretKey = []byte("SecretYouShouldHide")
+
+func GenerateJWT() (string, error) {
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
+		Audience:  "millenium",
+		Subject:   "millenium",
+		IssuedAt:  time.Now().Unix(),
+		ExpiresAt: time.Now().Add(2 * time.Minute).Unix(),
+	})
+
+	tokenString, err := token.SignedString(secretKey)
+	if err != nil {
+		return "", err
+	}
+	return tokenString, nil
+}
+
+func Verify(tokenString string) (*jwt.StandardClaims, error) {
+	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
+		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+		}
+
+		return secretKey, nil
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+		return &jwt.StandardClaims{
+			Audience:  claims["aud"].(string),
+			Subject:   claims["sub"].(string),
+			IssuedAt:  int64(claims["iat"].(float64)),
+			ExpiresAt: int64(claims["exp"].(float64)),
+		}, nil
+	} else {
+		return nil, fmt.Errorf("Expired token")
+	}
+}
+
+func Init() {
+	secretKey = []byte(config.GetEnv("SERVER_SECRET", "secret"))
+}
+
+func Exec() {
+	valor, err := GenerateJWT()
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(valor)
+
+	res, err := Verify(valor)
+	if err != nil {
+		panic(err)
+	}
+	if res != nil {
+		fmt.Println(res)
+	}
+
+}

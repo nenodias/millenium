@@ -5,6 +5,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/nenodias/millenium/config"
+	auth "github.com/nenodias/millenium/core/domain/auth"
 	"github.com/nenodias/millenium/handlers"
 	clienteHandlers "github.com/nenodias/millenium/handlers/cliente"
 	falhaHandlers "github.com/nenodias/millenium/handlers/falha"
@@ -32,6 +33,7 @@ import (
 
 func main() {
 	config.Init()
+	auth.Init()
 	database.Init()
 	engine := database.GetEngine()
 	router := mux.NewRouter().StrictSlash(true)
