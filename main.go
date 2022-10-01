@@ -7,6 +7,7 @@ import (
 	"github.com/nenodias/millenium/config"
 	auth "github.com/nenodias/millenium/core/domain/auth"
 	"github.com/nenodias/millenium/handlers"
+	authHandlers "github.com/nenodias/millenium/handlers/auth"
 	clienteHandlers "github.com/nenodias/millenium/handlers/cliente"
 	falhaHandlers "github.com/nenodias/millenium/handlers/falha"
 	historicoHandlers "github.com/nenodias/millenium/handlers/historico"
@@ -37,6 +38,8 @@ func main() {
 	database.Init()
 	engine := database.GetEngine()
 	router := mux.NewRouter().StrictSlash(true)
+
+	router.HandleFunc("/api/auth/", authHandlers.Authenticate).Methods("POST")
 
 	clienteService := clienteModels.NewService(engine)
 	clienteController := clienteHandlers.NewController(&clienteService)
@@ -88,9 +91,9 @@ func main() {
 }
 
 func MappingApi(router *mux.Router, context string, controller handlers.CrudAPI) {
-	router.HandleFunc("/api/"+context+"/", controller.FindMany).Methods("GET")
-	router.HandleFunc("/api/"+context+"/", controller.Save).Methods("POST")
-	router.HandleFunc("/api/"+context+"/{id}", controller.FindOne).Methods("GET")
-	router.HandleFunc("/api/"+context+"/{id}", controller.DeleteOne).Methods("DELETE")
-	router.HandleFunc("/api/"+context+"/{id}", controller.Update).Methods("PUT")
+	router.HandleFunc("/api/"+context+"/", authHandlers.Middleware(controller.FindMany)).Methods("GET")
+	router.HandleFunc("/api/"+context+"/", authHandlers.Middleware(controller.Save)).Methods("POST")
+	router.HandleFunc("/api/"+context+"/{id}", authHandlers.Middleware(controller.FindOne)).Methods("GET")
+	router.HandleFunc("/api/"+context+"/{id}", authHandlers.Middleware(controller.DeleteOne)).Methods("DELETE")
+	router.HandleFunc("/api/"+context+"/{id}", authHandlers.Middleware(controller.Update)).Methods("PUT")
 }

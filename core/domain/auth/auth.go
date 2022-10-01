@@ -8,14 +8,22 @@ import (
 	"github.com/nenodias/millenium/config"
 )
 
+type AuthKey string
+
+const AUTH_KEY AuthKey = "auth"
+
 var secretKey = []byte("SecretYouShouldHide")
+
+type Token struct {
+	Token string `json:"token"`
+}
 
 func GenerateJWT() (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.StandardClaims{
 		Audience:  "millenium",
 		Subject:   "millenium",
 		IssuedAt:  time.Now().Unix(),
-		ExpiresAt: time.Now().Add(2 * time.Minute).Unix(),
+		ExpiresAt: time.Now().Add(60 * time.Minute).Unix(),
 	})
 
 	tokenString, err := token.SignedString(secretKey)
@@ -52,21 +60,4 @@ func Verify(tokenString string) (*jwt.StandardClaims, error) {
 
 func Init() {
 	secretKey = []byte(config.GetEnv("SERVER_SECRET", "secret"))
-}
-
-func Exec() {
-	valor, err := GenerateJWT()
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(valor)
-
-	res, err := Verify(valor)
-	if err != nil {
-		panic(err)
-	}
-	if res != nil {
-		fmt.Println(res)
-	}
-
 }
