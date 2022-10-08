@@ -40,7 +40,7 @@ type HistoricoItem struct {
 	IdHistorico int64                    `xorm:"'id_historico' bigint not null"`
 	Ordem       int64                    `xorm:"'ordem' bigint not null"`
 	Tipo        domain.TipoHistoricoItem `xorm:"'tipo' varchar(1)"`
-	Descricao   string                   `xorm:"'historico' varchar(75)"`
+	Descricao   string                   `xorm:"'descricao' varchar(75)"`
 	Quantidade  int                      `xorm:"'quantidade' int"`
 	Valor       float64                  `xorm:"'valor' double"`
 }
