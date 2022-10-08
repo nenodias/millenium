@@ -3,12 +3,12 @@ package auth
 import (
 	"context"
 	"encoding/base64"
-	"encoding/json"
 	"net/http"
 	"strings"
 
 	"github.com/nenodias/millenium/config"
 	"github.com/nenodias/millenium/core/domain/auth"
+	"github.com/nenodias/millenium/core/domain/utils"
 	"github.com/rs/zerolog/log"
 )
 
@@ -44,11 +44,7 @@ func Authenticate(w http.ResponseWriter, r *http.Request) {
 			tokenJson := auth.Token{
 				Token: token,
 			}
-			err = json.NewEncoder(w).Encode(tokenJson)
-			if err != nil {
-				log.Error().Msg(err.Error())
-				w.WriteHeader(500)
-			}
+			utils.WriteJson(tokenJson, w, 200, 500)
 		}
 	} else {
 		w.WriteHeader(401)
