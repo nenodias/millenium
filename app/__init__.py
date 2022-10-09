@@ -20,22 +20,23 @@ def create_app(debug=False):
     db.app = app
     db.init_app(app)
 
-    send_mail = jobs.create_email_job(app, db)
+    if app.config["JOBS_ENABLED"] == "True":
+        send_mail = jobs.create_email_job(app, db)
 
-    app.config['JOBS'] = [
-        {
+        app.config['JOBS'] = [
+            {
             'id': 'send_mail',
             'func': send_mail,
             'trigger': 'interval',
             'seconds': 60
+            }
+        ]
+        app.config['SCHEDULER_API_ENABLED'] = True
+        app.config['SCHEDULER_EXECUTORS'] = {
+            'default': {'type': 'threadpool', 'max_workers': 1}
         }
-    ]
-    app.config['SCHEDULER_API_ENABLED'] = True
-    app.config['SCHEDULER_EXECUTORS'] = {
-        'default': {'type': 'threadpool', 'max_workers': 1}
-    }
-    scheduler = APScheduler()
-    scheduler.init_app(app)
-    scheduler.start()
+        scheduler = APScheduler()
+        scheduler.init_app(app)
+        scheduler.start()
 
     return app
