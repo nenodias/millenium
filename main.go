@@ -6,7 +6,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/nenodias/millenium/config"
 	auth "github.com/nenodias/millenium/core/domain/auth"
-	"github.com/nenodias/millenium/handlers"
+	appHandlers "github.com/nenodias/millenium/handlers"
 	authHandlers "github.com/nenodias/millenium/handlers/auth"
 	clienteHandlers "github.com/nenodias/millenium/handlers/cliente"
 	falhaHandlers "github.com/nenodias/millenium/handlers/falha"
@@ -82,17 +82,18 @@ func main() {
 	veiculoController := veiculoHandlers.NewController(&veiculoService)
 	MappingApi(router, "veiculo", veiculoController)
 
-	port := config.GetEnv("SERVER_PORT","8080")
+	port := config.GetEnv("SERVER_PORT", "8080")
+	handler := appHandlers.CORSHandler{Inner: router, Origin: config.GetEnv("ALLOW_ORIGIN", "*")}
 
 	srv := &http.Server{
-		Handler: router,
-		Addr:    "0.0.0.0:"+port,
+		Handler: handler,
+		Addr:    "0.0.0.0:" + port,
 	}
-	log.Info().Msg("Listening on port :"+port)
+	log.Info().Msg("Listening on port :" + port)
 	log.Error().Msg(srv.ListenAndServe().Error())
 }
 
-func MappingApi(router *mux.Router, context string, controller handlers.CrudAPI) {
+func MappingApi(router *mux.Router, context string, controller appHandlers.CrudAPI) {
 	router.HandleFunc("/api/"+context+"/", authHandlers.Middleware(controller.FindMany)).Methods("GET")
 	router.HandleFunc("/api/"+context+"/", authHandlers.Middleware(controller.Save)).Methods("POST")
 	router.HandleFunc("/api/"+context+"/{id}", authHandlers.Middleware(controller.FindOne)).Methods("GET")

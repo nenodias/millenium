@@ -6,11 +6,28 @@ import (
 	"net/url"
 
 	"github.com/gorilla/mux"
-	"github.com/nenodias/millenium/core/domain"
 	core "github.com/nenodias/millenium/core/domain"
 	"github.com/nenodias/millenium/core/domain/utils"
 	"github.com/rs/zerolog/log"
 )
+
+type CORSHandler struct {
+	Inner  http.Handler
+	Origin string
+}
+
+func (ch CORSHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	w.Header().Add("Access-Control-Allow-Origin", ch.Origin)
+	w.Header().Add("Access-Control-Max-Age", "86400")
+	w.Header().Add("Access-Control-Allow-Credentials", "true")
+	w.Header().Add("Access-Control-Allow-Methods", "*")
+	w.Header().Add("Access-Control-Allow-Headers", "*")
+	if r.Method == "OPTIONS" {
+		w.WriteHeader(http.StatusOK)
+	} else {
+		ch.Inner.ServeHTTP(w, r)
+	}
+}
 
 type CrudAPI interface {
 	FindMany(w http.ResponseWriter, r *http.Request)
@@ -20,7 +37,7 @@ type CrudAPI interface {
 	Update(w http.ResponseWriter, r *http.Request)
 }
 
-type Controller[T domain.Identifiable, F domain.PageableFilter] struct {
+type Controller[T core.Identifiable, F core.PageableFilter] struct {
 	Service    core.Service[*T, *F]
 	GetFilters func(url.Values) F
 	SetModelId func(int64, *T)
