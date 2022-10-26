@@ -1,9 +1,10 @@
 package handlers
 
 import (
-	"encoding/json"
 	"net/http"
 	"net/url"
+
+	"github.com/goccy/go-json"
 
 	"github.com/gorilla/mux"
 	core "github.com/nenodias/millenium/core/domain"

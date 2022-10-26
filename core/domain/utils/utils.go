@@ -1,12 +1,13 @@
 package utils
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/goccy/go-json"
 
 	"github.com/rs/zerolog/log"
 )
