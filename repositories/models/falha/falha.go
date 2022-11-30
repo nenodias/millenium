@@ -40,7 +40,7 @@ func hasWhere(filter *domain.FalhaFilter) bool {
 }
 
 func doWhere(query *xorm.Session, filter *domain.FalhaFilter) *xorm.Session {
-	where := []string{"descricao Like ?", "%" + filter.Descricao + "%"}
+	where := []string{"descricao ILIKE ?", "%" + filter.Descricao + "%"}
 	return query.Where(where[0], where[1])
 }
 

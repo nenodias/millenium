@@ -56,7 +56,7 @@ func doWhere(query *xorm.Session, filter *domain.VeiculoFilter) *xorm.Session {
 	hasIdModelo := filter.IdModelo != int64(0)
 	where := make([]interface{}, 0)
 	if hasPlaca {
-		where = append(where, "placa Like ?", "%"+filter.Placa+"%")
+		where = append(where, "placa ILIKE ?", "%"+filter.Placa+"%")
 	}
 	if hasIdCliente {
 		where = append(where, "id_cliente = ?", filter.IdCliente)

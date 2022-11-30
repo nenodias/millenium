@@ -52,7 +52,7 @@ func doWhere(query *xorm.Session, filter *domain.LembreteFilter) *xorm.Session {
 	hasIdVeiculo := filter.IdVeiculo != int64(0)
 	where := make([]interface{}, 0)
 	if hasTexto {
-		where = append(where, "texto Like ?", "%"+filter.Texto+"%")
+		where = append(where, "texto ILIKE ?", "%"+filter.Texto+"%")
 	}
 	if hasIdCliente {
 		where = append(where, "id_cliente = ?", filter.IdCliente)

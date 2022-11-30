@@ -41,7 +41,7 @@ func hasWhere(filter *domain.PecaFilter) bool {
 }
 
 func doWhere(query *xorm.Session, filter *domain.PecaFilter) *xorm.Session {
-	where := []string{"descricao Like ?", "%" + filter.Descricao + "%"}
+	where := []string{"descricao ILIKE ?", "%" + filter.Descricao + "%"}
 	return query.Where(where[0], where[1])
 }
 

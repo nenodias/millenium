@@ -40,7 +40,7 @@ func hasWhere(filter *domain.TecnicoFilter) bool {
 }
 
 func doWhere(query *xorm.Session, filter *domain.TecnicoFilter) *xorm.Session {
-	where := []string{"nome Like ?", "%" + filter.Nome + "%"}
+	where := []string{"nome ILIKE ?", "%" + filter.Nome + "%"}
 	return query.Where(where[0], where[1])
 }
 

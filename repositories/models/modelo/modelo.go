@@ -47,9 +47,9 @@ func doWhere(query *xorm.Session, filter *domain.ModeloFilter) *xorm.Session {
 	hasNome := filter.Nome != "" && strings.TrimSpace(filter.Nome) != ""
 	hasIdModelo := filter.IdModelo != int64(0)
 	if hasNome && hasIdModelo {
-		return query.Where("nome Like ?", "%"+filter.Nome+"%").And("id_montadora = ?", filter.IdModelo)
+		return query.Where("nome ILIKE ?", "%"+filter.Nome+"%").And("id_montadora = ?", filter.IdModelo)
 	} else if hasNome {
-		return query.Where("nome Like ?", "%"+filter.Nome+"%")
+		return query.Where("nome ILIKE ?", "%"+filter.Nome+"%")
 	} else {
 		return query.Where("id_montadora = ?", filter.IdModelo)
 	}

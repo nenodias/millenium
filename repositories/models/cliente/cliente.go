@@ -67,13 +67,13 @@ func doWhere(query *xorm.Session, filter *domain.ClienteFilter) *xorm.Session {
 	hasCelular := filter.Celular != "" && strings.TrimSpace(filter.Celular) != ""
 	where := make([]interface{}, 0)
 	if hasNome {
-		where = append(where, "nome Like ?", "%"+filter.Nome+"%")
+		where = append(where, "nome ILIKE ?", "%"+filter.Nome+"%")
 	}
 	if hasTelefone {
-		where = append(where, "telefone Like ?", "%"+filter.Telefone+"%")
+		where = append(where, "telefone ILIKE  ?", "%"+filter.Telefone+"%")
 	}
 	if hasCelular {
-		where = append(where, "celular Like ?", "%"+filter.Celular+"%")
+		where = append(where, "celular ILIKE ?", "%"+filter.Celular+"%")
 	}
 	if len(where) == 2 {
 		return query.Where(where[0], where[1])
