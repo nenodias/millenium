@@ -4,6 +4,7 @@ import sys
 from io import BytesIO, StringIO
 from fpdf import FPDF
 from app.models import tupla_tipo_historico
+import app.config
 from app.utils import (
     from_str_to_datetime_or_none, format_date, to_float_or_zero
 )
@@ -12,12 +13,11 @@ from app.utils import (
 class DadosOficina():
 
     def __init__(self):
-        self.nome = 'AUTO MECÂNICA BAPTISTA'
-        self.endereco = 'R: São José, 32 - Vila Irerê' \
-            ' - Lençóis Paulista - SP - 18682-100'
-        self.telefone = '(14)3264-4598'
-        self.celular = '(14) 9 9126-2313'
-        self.email = 'mecanicacarrit@gmail.com'
+        self.nome = app.config['REPORT_COMPANY_NAME']
+        self.endereco = app.config['REPORT_COMPANY_ADDRESS']
+        self.telefone = app.config['REPORT_COMPANY_PHONE']
+        self.celular = app.config['REPORT_COMPANY_CELLPHONE']
+        self.email = app.config['REPORT_COMPANY_EMAIL']
 
 
 class MyPDF(FPDF):
