@@ -3,7 +3,7 @@ package main
 import (
 	"net/http"
 
-	"github.com/gorilla/mux"
+	"github.com/go-chi/chi/v5"
 	"github.com/nenodias/millenium/config"
 	auth "github.com/nenodias/millenium/core/domain/auth"
 	appHandlers "github.com/nenodias/millenium/handlers"
@@ -37,9 +37,9 @@ func main() {
 	auth.Init()
 	database.Init()
 	engine := database.GetEngine()
-	router := mux.NewRouter().StrictSlash(true)
+	router := chi.NewRouter()
 
-	router.HandleFunc("/api/auth/", authHandlers.Authenticate).Methods("POST")
+	router.Post("/api/auth/", authHandlers.Authenticate)
 
 	clienteService := clienteModels.NewService(engine)
 	clienteController := clienteHandlers.NewController(&clienteService)
@@ -52,7 +52,7 @@ func main() {
 	historicoService := historicoModels.NewService(engine)
 	historicoController := historicoHandlers.NewController(&historicoService)
 	MappingApi(router, "historico", historicoController)
-	router.HandleFunc("/api/historico/report/{id}", historicoController.GetReport).Methods("GET")
+	router.Get("/api/historico/report/{id}", historicoController.GetReport)
 
 	lembreteService := lembreteModels.NewService(engine)
 	lembreteController := lembreteHandlers.NewController(&lembreteService)
@@ -93,10 +93,12 @@ func main() {
 	log.Error().Msg(srv.ListenAndServe().Error())
 }
 
-func MappingApi(router *mux.Router, context string, controller appHandlers.CrudAPI) {
-	router.HandleFunc("/api/"+context+"/", authHandlers.Middleware(controller.FindMany)).Methods("GET")
-	router.HandleFunc("/api/"+context+"/", authHandlers.Middleware(controller.Save)).Methods("POST")
-	router.HandleFunc("/api/"+context+"/{id}", authHandlers.Middleware(controller.FindOne)).Methods("GET")
-	router.HandleFunc("/api/"+context+"/{id}", authHandlers.Middleware(controller.DeleteOne)).Methods("DELETE")
-	router.HandleFunc("/api/"+context+"/{id}", authHandlers.Middleware(controller.Update)).Methods("PUT")
+func MappingApi(router *chi.Mux, context string, controller appHandlers.CrudAPI) {
+	router.Route("/api/"+context, func(r chi.Router) {
+		r.Get("/", authHandlers.Middleware(controller.FindMany))
+		r.Post("/", authHandlers.Middleware(controller.Save))
+		r.Get("/{id}", authHandlers.Middleware(controller.FindOne))
+		r.Delete("/{id}", authHandlers.Middleware(controller.DeleteOne))
+		r.Put("/{id}", authHandlers.Middleware(controller.Update))
+	})
 }
