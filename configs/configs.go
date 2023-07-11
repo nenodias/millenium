@@ -10,10 +10,12 @@ import (
 )
 
 const (
+	DEBUG         = "DEBUG"
 	SERVER_PORT   = "SERVER_PORT"
 	SERVER_SECRET = "SERVER_SECRET"
 	ALLOW_ORIGIN  = "ALLOW_ORIGIN"
 
+	LOGO_REPORT              = "LOGO_REPORT"
 	REPORT_COMPANY_NAME      = "REPORT_COMPANY_NAME"
 	REPORT_COMPANY_ADDRESS   = "REPORT_COMPANY_ADDRESS"
 	REPORT_COMPANY_PHONE     = "REPORT_COMPANY_PHONE"
@@ -33,7 +35,7 @@ const (
 func logStartConfig() {
 	zerolog.SetGlobalLevel(zerolog.InfoLevel)
 	log.Logger = log.With().Str("app", "millenium").Caller().Logger()
-	debug := GetEnv("DEBUG", "false")
+	debug := GetEnv(DEBUG, "false")
 	if debug == "true" {
 		zerolog.SetGlobalLevel(zerolog.DebugLevel)
 		log.Debug().Msg("Debug enabled.")

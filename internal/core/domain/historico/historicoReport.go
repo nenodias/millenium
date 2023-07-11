@@ -82,7 +82,7 @@ func MakeFooter(historico *HistoricoReport, pdf *fpdf.Fpdf, tr func(string) stri
 }
 
 func MakeHeader(historico *HistoricoReport, pdf *fpdf.Fpdf, tr func(string) string) {
-	logo := configs.GetEnv("LOGO_REPORT", "d://workspace//logo_oficina.png")
+	logo := configs.GetEnv(configs.LOGO_REPORT, "d://workspace//logo_oficina.png")
 	pdf.Image(logo, 8, 10, 25, 0, false, "", 0, "")
 	pdf.CellFormat(25, 0, "", "", 0, "", false, 0, "")
 	pdf.SetFont("Arial", "B", 12)
