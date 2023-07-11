@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/nenodias/millenium/internal/configs"
+	"github.com/nenodias/millenium/configs"
 	auth "github.com/nenodias/millenium/internal/core/domain/auth"
 	appHandlers "github.com/nenodias/millenium/internal/handlers"
 	authHandlers "github.com/nenodias/millenium/internal/handlers/auth"
