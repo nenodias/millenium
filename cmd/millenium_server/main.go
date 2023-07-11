@@ -82,8 +82,8 @@ func main() {
 	veiculoController := veiculoHandlers.NewController(&veiculoService)
 	MappingApi(router, "veiculo", veiculoController)
 
-	port := configs.GetEnv("SERVER_PORT", "8080")
-	handler := appHandlers.CORSHandler{Inner: router, Origin: configs.GetEnv("ALLOW_ORIGIN", "*")}
+	port := configs.GetEnv(configs.SERVER_PORT, "8080")
+	handler := appHandlers.CORSHandler{Inner: router, Origin: configs.GetEnv(configs.ALLOW_ORIGIN, "*")}
 
 	srv := &http.Server{
 		Handler: handler,

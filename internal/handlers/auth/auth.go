@@ -29,8 +29,8 @@ func Middleware(handler http.HandlerFunc) func(http.ResponseWriter, *http.Reques
 }
 
 func Authenticate(w http.ResponseWriter, r *http.Request) {
-	username := configs.GetEnv("USER_DEFAULT", "admin")
-	password := configs.GetEnv("PASS_DEFAULT", "123456")
+	username := configs.GetEnv(configs.USER_DEFAULT, "admin")
+	password := configs.GetEnv(configs.PASS_DEFAULT, "123456")
 	bytes := username + ":" + password
 	basicAuth := base64.RawStdEncoding.EncodeToString([]byte(bytes))
 	basicAuthRequest := r.Header.Get("Authorization")

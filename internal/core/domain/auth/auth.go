@@ -59,5 +59,5 @@ func Verify(tokenString string) (*jwt.StandardClaims, error) {
 }
 
 func Init() {
-	secretKey = []byte(configs.GetEnv("SERVER_SECRET", "secret"))
+	secretKey = []byte(configs.GetEnv(configs.SERVER_SECRET, "secret"))
 }

@@ -14,11 +14,11 @@ var engine *xorm.Engine
 
 func Init() {
 	var err error
-	username := configs.GetEnv("POSTGRES_USER", "postgres")
-	password := configs.GetEnv("POSTGRES_PASSWORD", "postgres")
-	host := configs.GetEnv("POSTGRESQL_SERVICE_HOST", "localhost")
-	port := configs.GetEnv("POSTGRES_PORT", "5432")
-	database := configs.GetEnv("POSTGRES_DB", "carrit")
+	username := configs.GetEnv(configs.POSTGRES_USER, "postgres")
+	password := configs.GetEnv(configs.POSTGRES_PASSWORD, "postgres")
+	host := configs.GetEnv(configs.POSTGRESQL_SERVICE_HOST, "localhost")
+	port := configs.GetEnv(configs.POSTGRES_PORT, "5432")
+	database := configs.GetEnv(configs.POSTGRES_DB, "carrit")
 	urlConnection := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable", username, password, host, port, database)
 	engine, err = xorm.NewEngine("postgres", urlConnection)
 	if err != nil {
