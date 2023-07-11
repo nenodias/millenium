@@ -1,5 +1,10 @@
 # Millenium - golang version
 
+# Build
+```
+go build ./cmd/millenium_server
+```
+
 # /api/auth - POST
 # /api/backup - GET
 
