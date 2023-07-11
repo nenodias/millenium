@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	domain "github.com/nenodias/millenium/core/domain/falha"
+	"github.com/nenodias/millenium/repositories"
 	models "github.com/nenodias/millenium/repositories/models"
 	"xorm.io/xorm"
 )
@@ -22,7 +23,7 @@ type FalhaRepository struct {
 	models.GenericRepository[domain.Falha, domain.FalhaFilter, Falha]
 }
 
-func NewService(engine *xorm.Engine) domain.FalhaService {
+func NewService(engine *repositories.DatabaseEngine) domain.FalhaService {
 	repository := FalhaRepository{
 		GenericRepository: models.GenericRepository[domain.Falha, domain.FalhaFilter, Falha]{
 			DB:             engine,

@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	domain "github.com/nenodias/millenium/core/domain/peca"
+	"github.com/nenodias/millenium/repositories"
 	models "github.com/nenodias/millenium/repositories/models"
 	"xorm.io/xorm"
 )
@@ -23,7 +24,7 @@ type PecaRepository struct {
 	models.GenericRepository[domain.Peca, domain.PecaFilter, Peca]
 }
 
-func NewService(engine *xorm.Engine) domain.PecaService {
+func NewService(engine *repositories.DatabaseEngine) domain.PecaService {
 	repository := PecaRepository{
 		GenericRepository: models.GenericRepository[domain.Peca, domain.PecaFilter, Peca]{
 			DB:             engine,

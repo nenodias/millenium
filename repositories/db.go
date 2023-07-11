@@ -31,6 +31,6 @@ type DatabaseEngine struct {
 	xorm.Engine
 }
 
-func GetEngine() *xorm.Engine {
-	return engine
+func GetEngine() *DatabaseEngine {
+	return &DatabaseEngine{*engine}
 }

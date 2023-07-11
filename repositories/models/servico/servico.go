@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	domain "github.com/nenodias/millenium/core/domain/servico"
+	"github.com/nenodias/millenium/repositories"
 	models "github.com/nenodias/millenium/repositories/models"
 	"xorm.io/xorm"
 )
@@ -23,7 +24,7 @@ type ServicoRepository struct {
 	models.GenericRepository[domain.Servico, domain.ServicoFilter, Servico]
 }
 
-func NewService(engine *xorm.Engine) domain.ServicoService {
+func NewService(engine *repositories.DatabaseEngine) domain.ServicoService {
 	repository := ServicoRepository{
 		GenericRepository: models.GenericRepository[domain.Servico, domain.ServicoFilter, Servico]{
 			DB:             engine,

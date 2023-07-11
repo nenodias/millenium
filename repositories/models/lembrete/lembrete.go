@@ -6,6 +6,7 @@ import (
 	"time"
 
 	domain "github.com/nenodias/millenium/core/domain/lembrete"
+	"github.com/nenodias/millenium/repositories"
 	models "github.com/nenodias/millenium/repositories/models"
 	"xorm.io/xorm"
 )
@@ -26,7 +27,7 @@ type LembreteRepository struct {
 	models.GenericRepository[domain.Lembrete, domain.LembreteFilter, Lembrete]
 }
 
-func NewService(engine *xorm.Engine) domain.LembreteService {
+func NewService(engine *repositories.DatabaseEngine) domain.LembreteService {
 	repository := LembreteRepository{
 		GenericRepository: models.GenericRepository[domain.Lembrete, domain.LembreteFilter, Lembrete]{
 			DB:             engine,

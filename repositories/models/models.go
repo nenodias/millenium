@@ -6,6 +6,7 @@ import (
 	"math"
 
 	core "github.com/nenodias/millenium/core/domain"
+	"github.com/nenodias/millenium/repositories"
 	"github.com/rs/zerolog/log"
 	"xorm.io/xorm"
 )
@@ -16,7 +17,7 @@ type GenericRepository[T core.Identifiable, F core.PageableFilter, MODEL any] st
 	CopyToDto      func(context.Context, *MODEL, *T)
 	HasWhere       func(context.Context, *F) bool
 	DoWhere        func(context.Context, *xorm.Session, *F) *xorm.Session
-	DB             *xorm.Engine
+	DB             *repositories.DatabaseEngine
 	AfterFind      func(context.Context, *GenericRepository[T, F, MODEL], *MODEL)
 	AfterSave      func(context.Context, *GenericRepository[T, F, MODEL], *xorm.Session, *MODEL) bool
 	AfterUpdate    func(context.Context, *GenericRepository[T, F, MODEL], *xorm.Session, *MODEL) bool
