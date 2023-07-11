@@ -1,16 +1,17 @@
 package historico
 
 import (
+	"context"
 	"fmt"
 	"net/http"
 
 	"github.com/go-pdf/fpdf"
+	"github.com/nenodias/millenium/config"
 	clienteDomain "github.com/nenodias/millenium/core/domain/cliente"
 	modeloDomain "github.com/nenodias/millenium/core/domain/modelo"
 	montadoraDomain "github.com/nenodias/millenium/core/domain/montadora"
 	tecnicoDomain "github.com/nenodias/millenium/core/domain/tecnico"
 	"github.com/nenodias/millenium/core/domain/utils"
-	"github.com/nenodias/millenium/config"
 	veiculoDomain "github.com/nenodias/millenium/core/domain/veiculo"
 	"github.com/rs/zerolog/log"
 )
@@ -38,7 +39,7 @@ type HistoricoReport struct {
 	Total           float64
 }
 
-func GenerateReport(historico *HistoricoReport, w http.ResponseWriter) {
+func GenerateReport(ctx context.Context, historico *HistoricoReport, w http.ResponseWriter) {
 	Calculate(historico)
 	pdf := fpdf.New("P", "mm", "A4", "")
 	tr := pdf.UnicodeTranslatorFromDescriptor("")
@@ -66,7 +67,7 @@ func MakeFooter(historico *HistoricoReport, pdf *fpdf.Fpdf, tr func(string) stri
 }
 
 func MakeHeader(historico *HistoricoReport, pdf *fpdf.Fpdf, tr func(string) string) {
-	logo := config.GetEnv("LOGO_REPORT","d://workspace//logo_oficina.png")
+	logo := config.GetEnv("LOGO_REPORT", "d://workspace//logo_oficina.png")
 	pdf.Image(logo, 8, 10, 25, 0, false, "", 0, "")
 	pdf.CellFormat(25, 0, "", "", 0, "", false, 0, "")
 	pdf.SetFont("Arial", "B", 12)

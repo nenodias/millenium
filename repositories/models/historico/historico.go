@@ -1,6 +1,7 @@
 package historico
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -94,9 +95,9 @@ func NewService(engine *xorm.Engine) domain.HistoricoService {
 	return domain.HistoricoService(&repository)
 }
 
-func (hr *HistoricoRepository) FindOneForReport(id int64) (*domain.HistoricoReport, error) {
+func (hr *HistoricoRepository) FindOneForReport(ctx context.Context, id int64) (*domain.HistoricoReport, error) {
 	report := new(domain.HistoricoReport)
-	model, err := hr.FindOne(id)
+	model, err := hr.FindOne(ctx, id)
 	if err != nil {
 		log.Error().Msg(err.Error())
 		return nil, err

@@ -1,5 +1,7 @@
 package domain
 
+import "context"
+
 type PagebleContent[T any] struct {
 	Content       []T      `json:"content"`
 	Pageable      Pageable `json:"pageable"`
@@ -61,8 +63,8 @@ func (p Pageable) GetPageNumber() int {
 }
 
 type Service[T any, F any] interface {
-	FindMany(F) (PagebleContent[T], error)
-	FindOne(int64) (T, error)
-	DeleteOne(int64) (bool, error)
-	Save(T) (bool, error)
+	FindMany(context.Context, F) (PagebleContent[T], error)
+	FindOne(context.Context, int64) (T, error)
+	DeleteOne(context.Context, int64) (bool, error)
+	Save(context.Context, T) (bool, error)
 }

@@ -1,11 +1,12 @@
 package historico
 
 import (
+	"context"
 	"net/http"
 	"net/url"
 	"time"
 
-	"github.com/gorilla/mux"
+	"github.com/go-chi/chi/v5"
 	core "github.com/nenodias/millenium/core/domain"
 	"github.com/nenodias/millenium/core/domain/utils"
 	"github.com/nenodias/millenium/handlers"
@@ -31,23 +32,22 @@ func NewController(service *domain.HistoricoService) *HistoricoController {
 }
 
 func (hc *HistoricoController) GetReport(w http.ResponseWriter, r *http.Request) {
-	params := mux.Vars(r)
-	txtId := params["id"]
+	txtId := chi.URLParam(r, "id")
 	id := utils.StringToInt64(txtId, 0)
-	model, err := hc.Service.(domain.HistoricoService).FindOneForReport(id)
+	model, err := hc.Service.(domain.HistoricoService).FindOneForReport(r.Context(), id)
 	if err != nil {
 		log.Error().Msg(err.Error())
 		w.WriteHeader(404)
 		return
 	}
 	if model != nil {
-		domain.GenerateReport(model, w)
+		domain.GenerateReport(r.Context(), model, w)
 	} else {
 		w.WriteHeader(204)
 	}
 }
 
-func GetFilters(query url.Values) domain.HistoricoFilter {
+func GetFilters(ctx context.Context, query url.Values) domain.HistoricoFilter {
 	page := utils.StringToInt(query.Get("page"), utils.DEFAULT_PAGE)
 	size := utils.StringToInt(query.Get("size"), utils.DEFAULT_SIZE)
 	sortColumn := utils.StringNormalized(query.Get("sortColumn"), "id")

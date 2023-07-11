@@ -1,6 +1,7 @@
 package Veiculo
 
 import (
+	"context"
 	"net/url"
 
 	core "github.com/nenodias/millenium/core/domain"
@@ -26,7 +27,7 @@ func NewController(service *domain.VeiculoService) *VeiculoController {
 	}
 }
 
-func GetFilters(query url.Values) domain.VeiculoFilter {
+func GetFilters(ctx context.Context, query url.Values) domain.VeiculoFilter {
 	page := utils.StringToInt(query.Get("page"), utils.DEFAULT_PAGE)
 	size := utils.StringToInt(query.Get("size"), utils.DEFAULT_SIZE)
 	sortColumn := utils.StringNormalized(query.Get("sortColumn"), "id")

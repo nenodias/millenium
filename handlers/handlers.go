@@ -1,12 +1,13 @@
 package handlers
 
 import (
+	"context"
 	"net/http"
 	"net/url"
 
+	"github.com/go-chi/chi/v5"
 	"github.com/goccy/go-json"
 
-	"github.com/gorilla/mux"
 	core "github.com/nenodias/millenium/core/domain"
 	"github.com/nenodias/millenium/core/domain/utils"
 	"github.com/rs/zerolog/log"
@@ -40,14 +41,14 @@ type CrudAPI interface {
 
 type Controller[T core.Identifiable, F core.PageableFilter] struct {
 	Service    core.Service[*T, *F]
-	GetFilters func(url.Values) F
+	GetFilters func(context.Context, url.Values) F
 	SetModelId func(int64, *T)
 }
 
 func (t *Controller[T, F]) FindMany(w http.ResponseWriter, r *http.Request) {
 	query := r.URL.Query()
-	filter := t.GetFilters(query)
-	response, err := t.Service.FindMany(&filter)
+	filter := t.GetFilters(r.Context(), query)
+	response, err := t.Service.FindMany(r.Context(), &filter)
 	if err != nil {
 		log.Error().Msg(err.Error())
 		w.WriteHeader(500)
@@ -64,7 +65,7 @@ func (t *Controller[T, F]) Save(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(400)
 		return
 	}
-	success, err := t.Service.Save(model)
+	success, err := t.Service.Save(r.Context(), model)
 	if err != nil {
 		log.Error().Msg(err.Error())
 		w.WriteHeader(500)
@@ -78,10 +79,9 @@ func (t *Controller[T, F]) Save(w http.ResponseWriter, r *http.Request) {
 }
 
 func (t *Controller[T, F]) FindOne(w http.ResponseWriter, r *http.Request) {
-	params := mux.Vars(r)
-	txtId := params["id"]
+	txtId := chi.URLParam(r, "id")
 	id := utils.StringToInt64(txtId, 0)
-	model, err := t.Service.FindOne(id)
+	model, err := t.Service.FindOne(r.Context(), id)
 	if err != nil {
 		log.Error().Msg(err.Error())
 		w.WriteHeader(500)
@@ -95,11 +95,10 @@ func (t *Controller[T, F]) FindOne(w http.ResponseWriter, r *http.Request) {
 }
 
 func (t *Controller[T, F]) DeleteOne(w http.ResponseWriter, r *http.Request) {
-	params := mux.Vars(r)
-	txtId := params["id"]
+	txtId := chi.URLParam(r, "id")
 	id := utils.StringToInt64(txtId, 0)
 
-	_, err := t.Service.DeleteOne(id)
+	_, err := t.Service.DeleteOne(r.Context(), id)
 	if err != nil {
 		log.Error().Msg(err.Error())
 		w.WriteHeader(500)
@@ -110,10 +109,9 @@ func (t *Controller[T, F]) DeleteOne(w http.ResponseWriter, r *http.Request) {
 
 func (t *Controller[T, F]) Update(w http.ResponseWriter, r *http.Request) {
 	model := new(T)
-	params := mux.Vars(r)
-	txtId := params["id"]
+	txtId := chi.URLParam(r, "id")
 	id := utils.StringToInt64(txtId, 0)
-	record, err := t.Service.FindOne(id)
+	record, err := t.Service.FindOne(r.Context(), id)
 	if err != nil {
 		log.Error().Msg(err.Error())
 		w.WriteHeader(500)
@@ -127,7 +125,7 @@ func (t *Controller[T, F]) Update(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		t.SetModelId(id, model)
-		success, err := t.Service.Save(model)
+		success, err := t.Service.Save(r.Context(), model)
 		if err != nil {
 			log.Error().Msg(err.Error())
 			w.WriteHeader(500)

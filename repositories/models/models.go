@@ -1,6 +1,7 @@
 package models
 
 import (
+	"context"
 	"fmt"
 	"math"
 
@@ -22,7 +23,7 @@ type GenericRepository[T core.Identifiable, F core.PageableFilter, MODEL any] st
 	AfterDelete    func(*GenericRepository[T, F, MODEL], *xorm.Session, int64) bool
 }
 
-func (gr *GenericRepository[T, F, MODEL]) FindOne(id int64) (*T, error) {
+func (gr *GenericRepository[T, F, MODEL]) FindOne(ctx context.Context, id int64) (*T, error) {
 	p := new(MODEL)
 	exists, err := gr.DB.ID(id).Get(p)
 	if err != nil {
@@ -38,7 +39,7 @@ func (gr *GenericRepository[T, F, MODEL]) FindOne(id int64) (*T, error) {
 	return gr.MapperToDTO(p), nil
 }
 
-func (gr *GenericRepository[T, F, MODEL]) Save(dto *T) (bool, error) {
+func (gr *GenericRepository[T, F, MODEL]) Save(ctx context.Context, dto *T) (bool, error) {
 	entity := gr.MapperToEntity(dto)
 	model := new(MODEL)
 	id := (*dto).GetId()
@@ -97,7 +98,7 @@ func (gr *GenericRepository[T, F, MODEL]) Save(dto *T) (bool, error) {
 	return rowsAffected == 1, nil
 }
 
-func (gr *GenericRepository[T, F, MODEL]) DeleteOne(id int64) (bool, error) {
+func (gr *GenericRepository[T, F, MODEL]) DeleteOne(ctx context.Context, id int64) (bool, error) {
 	model := new(MODEL)
 	session := gr.DB.NewSession()
 	err := session.Begin()
@@ -137,7 +138,7 @@ func (gr *GenericRepository[T, F, MODEL]) DeleteOne(id int64) (bool, error) {
 	}
 }
 
-func (gr *GenericRepository[T, F, MODEL]) FindMany(filter *F) (core.PagebleContent[*T], error) {
+func (gr *GenericRepository[T, F, MODEL]) FindMany(ctx context.Context, filter *F) (core.PagebleContent[*T], error) {
 	response := core.PagebleContent[*T]{
 		Number: (*filter).GetPageNumber(),
 

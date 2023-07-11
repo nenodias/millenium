@@ -1,6 +1,7 @@
 package historico
 
 import (
+	"context"
 	"fmt"
 	"time"
 
@@ -103,5 +104,5 @@ type HistoricoFilter struct {
 
 type HistoricoService interface {
 	domain.Service[*Historico, *HistoricoFilter]
-	FindOneForReport(int64) (*HistoricoReport, error)
+	FindOneForReport(context.Context, int64) (*HistoricoReport, error)
 }
