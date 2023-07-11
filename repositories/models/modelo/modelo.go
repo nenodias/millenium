@@ -1,6 +1,7 @@
 package modelo
 
 import (
+	"context"
 	"strings"
 
 	domain "github.com/nenodias/millenium/core/domain/modelo"
@@ -37,13 +38,13 @@ func NewService(engine *xorm.Engine) domain.ModeloService {
 	return domain.ModeloService(&repository)
 }
 
-func hasWhere(filter *domain.ModeloFilter) bool {
+func hasWhere(ctx context.Context, filter *domain.ModeloFilter) bool {
 	hasNome := filter.Nome != "" && strings.TrimSpace(filter.Nome) != ""
 	hasIdModelo := filter.IdModelo != int64(0)
 	return hasNome || hasIdModelo
 }
 
-func doWhere(query *xorm.Session, filter *domain.ModeloFilter) *xorm.Session {
+func doWhere(ctx context.Context, query *xorm.Session, filter *domain.ModeloFilter) *xorm.Session {
 	hasNome := filter.Nome != "" && strings.TrimSpace(filter.Nome) != ""
 	hasIdModelo := filter.IdModelo != int64(0)
 	if hasNome && hasIdModelo {
@@ -55,26 +56,26 @@ func doWhere(query *xorm.Session, filter *domain.ModeloFilter) *xorm.Session {
 	}
 }
 
-func MapperToEntity(dto *domain.Modelo) *Modelo {
+func MapperToEntity(ctx context.Context, dto *domain.Modelo) *Modelo {
 	entity := new(Modelo)
-	copyToEntity(dto, entity)
+	copyToEntity(ctx, dto, entity)
 	return entity
 }
 
-func MapperToDTO(entity *Modelo) *domain.Modelo {
+func MapperToDTO(ctx context.Context, entity *Modelo) *domain.Modelo {
 	dto := new(domain.Modelo)
-	copyToDto(entity, dto)
+	copyToDto(ctx, entity, dto)
 	return dto
 }
 
-func copyToEntity(source *domain.Modelo, destiny *Modelo) {
+func copyToEntity(ctx context.Context, source *domain.Modelo, destiny *Modelo) {
 	destiny.Id = source.Id
 	destiny.Nome = source.Nome
 	destiny.IdMontadora = source.IdMontadora
 	destiny.CodigoVeiculoEA = source.CodigoVeiculoEA
 }
 
-func copyToDto(source *Modelo, destiny *domain.Modelo) {
+func copyToDto(ctx context.Context, source *Modelo, destiny *domain.Modelo) {
 	destiny.Id = source.Id
 	destiny.Nome = source.Nome
 	destiny.IdMontadora = source.IdMontadora

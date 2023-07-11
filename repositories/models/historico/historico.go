@@ -115,7 +115,7 @@ func (hr *HistoricoRepository) FindOneForReport(ctx context.Context, id int64) (
 				log.Error().Msg(err.Error())
 				return nil, err
 			}
-			report.Cliente = *clienteModel.MapperToDTO(cliente)
+			report.Cliente = *clienteModel.MapperToDTO(ctx, cliente)
 		}
 		if model.IdVeiculo != 0 {
 			_, err = hr.DB.ID(model.IdVeiculo).Get(veiculo)
@@ -123,19 +123,19 @@ func (hr *HistoricoRepository) FindOneForReport(ctx context.Context, id int64) (
 				log.Error().Msg(err.Error())
 				return nil, err
 			}
-			report.Veiculo = *veiculoModel.MapperToDTO(veiculo)
+			report.Veiculo = *veiculoModel.MapperToDTO(ctx, veiculo)
 			if veiculo.IdModelo != 0 {
 				_, err = hr.DB.ID(veiculo.IdModelo).Get(modelo)
 				if err != nil {
 					log.Error().Msg(err.Error())
 				}
-				report.Modelo = *modeloModel.MapperToDTO(modelo)
+				report.Modelo = *modeloModel.MapperToDTO(ctx, modelo)
 				if modelo.IdMontadora != 0 {
 					_, err = hr.DB.ID(modelo.IdMontadora).Get(montadora)
 					if err != nil {
 						log.Error().Msg(err.Error())
 					}
-					report.Montadora = *montadoraModel.MapperToDTO(montadora)
+					report.Montadora = *montadoraModel.MapperToDTO(ctx, montadora)
 				}
 			}
 		}
@@ -145,7 +145,7 @@ func (hr *HistoricoRepository) FindOneForReport(ctx context.Context, id int64) (
 			if err != nil {
 				log.Error().Msg(err.Error())
 			}
-			report.Tecnico = *tecnicoModel.MapperToDTO(tecnico)
+			report.Tecnico = *tecnicoModel.MapperToDTO(ctx, tecnico)
 		}
 	} else {
 		return report, fmt.Errorf("registro com id: %d nao encontrado", id)
@@ -153,7 +153,7 @@ func (hr *HistoricoRepository) FindOneForReport(ctx context.Context, id int64) (
 	return report, nil
 }
 
-func AfterFind(gr *models.GenericRepository[domain.Historico, domain.HistoricoFilter, Historico], m *Historico) {
+func AfterFind(ctx context.Context, gr *models.GenericRepository[domain.Historico, domain.HistoricoFilter, Historico], m *Historico) {
 	if m.Id != 0 {
 		model := new(HistoricoItem)
 		rows, err := gr.DB.Where("id_historico = ?", m.Id).Rows(model)
@@ -177,7 +177,7 @@ func AfterFind(gr *models.GenericRepository[domain.Historico, domain.HistoricoFi
 	}
 }
 
-func AfterSave(gr *models.GenericRepository[domain.Historico, domain.HistoricoFilter, Historico], session *xorm.Session, m *Historico) bool {
+func AfterSave(ctx context.Context, gr *models.GenericRepository[domain.Historico, domain.HistoricoFilter, Historico], session *xorm.Session, m *Historico) bool {
 	if m.Id != 0 {
 		m.NumeroOrdem = m.Id
 		_, err := session.Exec("UPDATE historico SET numero = ? WHERE id = ?", m.Id, m.Id)
@@ -219,7 +219,7 @@ func AfterSave(gr *models.GenericRepository[domain.Historico, domain.HistoricoFi
 	return true
 }
 
-func hasWhere(filter *domain.HistoricoFilter) bool {
+func hasWhere(ctx context.Context, filter *domain.HistoricoFilter) bool {
 	hasData := !filter.Data.IsZero()
 	hasTipo := filter.Tipo != nil
 	hasNumeroOrdem := filter.IdCliente != int64(0)
@@ -229,7 +229,7 @@ func hasWhere(filter *domain.HistoricoFilter) bool {
 	return hasData || hasTipo || hasNumeroOrdem || hasIdCliente || hasIdVeiculo || hasIdTecnico
 }
 
-func doWhere(query *xorm.Session, filter *domain.HistoricoFilter) *xorm.Session {
+func doWhere(ctx context.Context, query *xorm.Session, filter *domain.HistoricoFilter) *xorm.Session {
 	hasData := !filter.Data.IsZero()
 	hasTipo := filter.Tipo != nil
 	hasNumeroOrdem := filter.IdCliente != int64(0)
@@ -258,39 +258,39 @@ func doWhere(query *xorm.Session, filter *domain.HistoricoFilter) *xorm.Session 
 	return where
 }
 
-func MapperToEntity(dto *domain.Historico) *Historico {
+func MapperToEntity(ctx context.Context, dto *domain.Historico) *Historico {
 	entity := new(Historico)
-	copyToEntity(dto, entity)
+	copyToEntity(ctx, dto, entity)
 	return entity
 }
 
-func MapperToDTO(entity *Historico) *domain.Historico {
+func MapperToDTO(ctx context.Context, entity *Historico) *domain.Historico {
 	dto := new(domain.Historico)
-	copyToDto(entity, dto)
+	copyToDto(ctx, entity, dto)
 	return dto
 }
 
-func mapperToEntityItem(dtos []domain.HistoricoItem) []HistoricoItem {
+func mapperToEntityItem(ctx context.Context, dtos []domain.HistoricoItem) []HistoricoItem {
 	items := make([]HistoricoItem, 0)
 	for _, dto := range dtos {
 		item := new(HistoricoItem)
-		copyToEntityItem(&dto, item)
+		copyToEntityItem(ctx, &dto, item)
 		items = append(items, *item)
 	}
 	return items
 }
 
-func mapperToDTOItem(dtos []HistoricoItem) []domain.HistoricoItem {
+func mapperToDTOItem(ctx context.Context, dtos []HistoricoItem) []domain.HistoricoItem {
 	items := make([]domain.HistoricoItem, 0)
 	for _, dto := range dtos {
 		item := new(domain.HistoricoItem)
-		copyToDtoItem(&dto, item)
+		copyToDtoItem(ctx, &dto, item)
 		items = append(items, *item)
 	}
 	return items
 }
 
-func copyToEntity(source *domain.Historico, destiny *Historico) {
+func copyToEntity(ctx context.Context, source *domain.Historico, destiny *Historico) {
 	destiny.Id = source.Id
 	destiny.IdCliente = source.IdCliente
 	destiny.IdVeiculo = source.IdVeiculo
@@ -302,11 +302,11 @@ func copyToEntity(source *domain.Historico, destiny *Historico) {
 	destiny.Tipo = source.Tipo
 	destiny.ValorTotal = source.ValorTotal
 	destiny.Observacao = source.Observacao
-	destiny.Items = mapperToEntityItem(source.Items)
+	destiny.Items = mapperToEntityItem(ctx, source.Items)
 	destiny.Vistoria.Kilometragem = source.Kilometragem
 }
 
-func copyToDto(source *Historico, destiny *domain.Historico) {
+func copyToDto(ctx context.Context, source *Historico, destiny *domain.Historico) {
 	destiny.Id = source.Id
 	destiny.IdCliente = source.IdCliente
 	destiny.IdVeiculo = source.IdVeiculo
@@ -318,11 +318,11 @@ func copyToDto(source *Historico, destiny *domain.Historico) {
 	destiny.Tipo = source.Tipo
 	destiny.ValorTotal = source.ValorTotal
 	destiny.Observacao = source.Observacao
-	destiny.Items = mapperToDTOItem(source.Items)
+	destiny.Items = mapperToDTOItem(ctx, source.Items)
 	destiny.Kilometragem = source.Vistoria.Kilometragem
 }
 
-func copyToEntityItem(source *domain.HistoricoItem, destiny *HistoricoItem) {
+func copyToEntityItem(ctx context.Context, source *domain.HistoricoItem, destiny *HistoricoItem) {
 	destiny.Id = source.Id
 	destiny.IdHistorico = source.IdHistorico
 	destiny.Ordem = source.Ordem
@@ -332,7 +332,7 @@ func copyToEntityItem(source *domain.HistoricoItem, destiny *HistoricoItem) {
 	destiny.Valor = source.Valor
 }
 
-func copyToDtoItem(source *HistoricoItem, destiny *domain.HistoricoItem) {
+func copyToDtoItem(ctx context.Context, source *HistoricoItem, destiny *domain.HistoricoItem) {
 	destiny.Id = source.Id
 	destiny.IdHistorico = source.IdHistorico
 	destiny.Ordem = source.Ordem

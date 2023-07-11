@@ -1,6 +1,7 @@
 package montadora
 
 import (
+	"context"
 	"strings"
 
 	domain "github.com/nenodias/millenium/core/domain/montadora"
@@ -37,35 +38,35 @@ func NewService(engine *xorm.Engine) domain.MontadoraService {
 	return domain.MontadoraService(&repository)
 }
 
-func hasWhere(filter *domain.MontadoraFilter) bool {
+func hasWhere(ctx context.Context, filter *domain.MontadoraFilter) bool {
 	return filter.Nome != "" && strings.TrimSpace(filter.Nome) != ""
 }
 
-func doWhere(query *xorm.Session, filter *domain.MontadoraFilter) *xorm.Session {
+func doWhere(ctx context.Context, query *xorm.Session, filter *domain.MontadoraFilter) *xorm.Session {
 	where := []string{"nome ILIKE ?", "%" + filter.Nome + "%"}
 	return query.Where(where[0], where[1])
 }
 
-func MapperToEntity(dto *domain.Montadora) *Montadora {
+func MapperToEntity(ctx context.Context, dto *domain.Montadora) *Montadora {
 	entity := new(Montadora)
-	copyToEntity(dto, entity)
+	copyToEntity(ctx, dto, entity)
 	return entity
 }
 
-func MapperToDTO(entity *Montadora) *domain.Montadora {
+func MapperToDTO(ctx context.Context, entity *Montadora) *domain.Montadora {
 	dto := new(domain.Montadora)
-	copyToDto(entity, dto)
+	copyToDto(ctx, entity, dto)
 	return dto
 }
 
-func copyToEntity(source *domain.Montadora, destiny *Montadora) {
+func copyToEntity(ctx context.Context, source *domain.Montadora, destiny *Montadora) {
 	destiny.Id = source.Id
 	destiny.Nome = source.Nome
 	destiny.Origem = source.Origem
 	destiny.CodigoMontadoraEA = source.CodigoMontadoraEA
 }
 
-func copyToDto(source *Montadora, destiny *domain.Montadora) {
+func copyToDto(ctx context.Context, source *Montadora, destiny *domain.Montadora) {
 	destiny.Id = source.Id
 	destiny.Nome = source.Nome
 	destiny.Origem = source.Origem

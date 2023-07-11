@@ -1,6 +1,7 @@
 package falha
 
 import (
+	"context"
 	"strings"
 
 	domain "github.com/nenodias/millenium/core/domain/falha"
@@ -35,33 +36,33 @@ func NewService(engine *xorm.Engine) domain.FalhaService {
 	return domain.FalhaService(&repository)
 }
 
-func hasWhere(filter *domain.FalhaFilter) bool {
+func hasWhere(ctx context.Context, filter *domain.FalhaFilter) bool {
 	return filter.Descricao != "" && strings.TrimSpace(filter.Descricao) != ""
 }
 
-func doWhere(query *xorm.Session, filter *domain.FalhaFilter) *xorm.Session {
+func doWhere(ctx context.Context, query *xorm.Session, filter *domain.FalhaFilter) *xorm.Session {
 	where := []string{"descricao ILIKE ?", "%" + filter.Descricao + "%"}
 	return query.Where(where[0], where[1])
 }
 
-func MapperToEntity(dto *domain.Falha) *Falha {
+func MapperToEntity(ctx context.Context, dto *domain.Falha) *Falha {
 	entity := new(Falha)
-	copyToEntity(dto, entity)
+	copyToEntity(ctx, dto, entity)
 	return entity
 }
 
-func MapperToDTO(entity *Falha) *domain.Falha {
+func MapperToDTO(ctx context.Context, entity *Falha) *domain.Falha {
 	dto := new(domain.Falha)
-	copyToDto(entity, dto)
+	copyToDto(ctx, entity, dto)
 	return dto
 }
 
-func copyToEntity(source *domain.Falha, destiny *Falha) {
+func copyToEntity(ctx context.Context, source *domain.Falha, destiny *Falha) {
 	destiny.Id = source.Id
 	destiny.Descricao = source.Descricao
 }
 
-func copyToDto(source *Falha, destiny *domain.Falha) {
+func copyToDto(ctx context.Context, source *Falha, destiny *domain.Falha) {
 	destiny.Id = source.Id
 	destiny.Descricao = source.Descricao
 }

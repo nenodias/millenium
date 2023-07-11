@@ -1,6 +1,7 @@
 package cliente
 
 import (
+	"context"
 	"strings"
 	"time"
 
@@ -54,14 +55,14 @@ func NewService(engine *xorm.Engine) domain.ClienteService {
 	return domain.ClienteService(&repository)
 }
 
-func hasWhere(filter *domain.ClienteFilter) bool {
+func hasWhere(ctx context.Context, filter *domain.ClienteFilter) bool {
 	hasNome := filter.Nome != "" && strings.TrimSpace(filter.Nome) != ""
 	hasTelefone := filter.Telefone != "" && strings.TrimSpace(filter.Telefone) != ""
 	hasCelular := filter.Celular != "" && strings.TrimSpace(filter.Celular) != ""
 	return hasNome || hasTelefone || hasCelular
 }
 
-func doWhere(query *xorm.Session, filter *domain.ClienteFilter) *xorm.Session {
+func doWhere(ctx context.Context, query *xorm.Session, filter *domain.ClienteFilter) *xorm.Session {
 	hasNome := filter.Nome != "" && strings.TrimSpace(filter.Nome) != ""
 	hasTelefone := filter.Telefone != "" && strings.TrimSpace(filter.Telefone) != ""
 	hasCelular := filter.Celular != "" && strings.TrimSpace(filter.Celular) != ""
@@ -84,19 +85,19 @@ func doWhere(query *xorm.Session, filter *domain.ClienteFilter) *xorm.Session {
 	}
 }
 
-func MapperToEntity(dto *domain.Cliente) *Cliente {
+func MapperToEntity(ctx context.Context, dto *domain.Cliente) *Cliente {
 	entity := new(Cliente)
-	copyToEntity(dto, entity)
+	copyToEntity(ctx, dto, entity)
 	return entity
 }
 
-func MapperToDTO(entity *Cliente) *domain.Cliente {
+func MapperToDTO(ctx context.Context, entity *Cliente) *domain.Cliente {
 	dto := new(domain.Cliente)
-	copyToDto(entity, dto)
+	copyToDto(ctx, entity, dto)
 	return dto
 }
 
-func copyToEntity(source *domain.Cliente, destiny *Cliente) {
+func copyToEntity(ctx context.Context, source *domain.Cliente, destiny *Cliente) {
 	destiny.Id = source.Id
 	destiny.Nome = source.Nome
 	destiny.RG = source.RG
@@ -119,7 +120,7 @@ func copyToEntity(source *domain.Cliente, destiny *Cliente) {
 	destiny.Mes = source.Mes
 }
 
-func copyToDto(source *Cliente, destiny *domain.Cliente) {
+func copyToDto(ctx context.Context, source *Cliente, destiny *domain.Cliente) {
 	destiny.Id = source.Id
 	destiny.Nome = source.Nome
 	destiny.RG = source.RG

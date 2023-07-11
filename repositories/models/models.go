@@ -11,16 +11,16 @@ import (
 )
 
 type GenericRepository[T core.Identifiable, F core.PageableFilter, MODEL any] struct {
-	MapperToDTO    func(*MODEL) *T
-	MapperToEntity func(*T) *MODEL
-	CopyToDto      func(*MODEL, *T)
-	HasWhere       func(*F) bool
-	DoWhere        func(*xorm.Session, *F) *xorm.Session
+	MapperToDTO    func(context.Context, *MODEL) *T
+	MapperToEntity func(context.Context, *T) *MODEL
+	CopyToDto      func(context.Context, *MODEL, *T)
+	HasWhere       func(context.Context, *F) bool
+	DoWhere        func(context.Context, *xorm.Session, *F) *xorm.Session
 	DB             *xorm.Engine
-	AfterFind      func(*GenericRepository[T, F, MODEL], *MODEL)
-	AfterSave      func(*GenericRepository[T, F, MODEL], *xorm.Session, *MODEL) bool
-	AfterUpdate    func(*GenericRepository[T, F, MODEL], *xorm.Session, *MODEL) bool
-	AfterDelete    func(*GenericRepository[T, F, MODEL], *xorm.Session, int64) bool
+	AfterFind      func(context.Context, *GenericRepository[T, F, MODEL], *MODEL)
+	AfterSave      func(context.Context, *GenericRepository[T, F, MODEL], *xorm.Session, *MODEL) bool
+	AfterUpdate    func(context.Context, *GenericRepository[T, F, MODEL], *xorm.Session, *MODEL) bool
+	AfterDelete    func(context.Context, *GenericRepository[T, F, MODEL], *xorm.Session, int64) bool
 }
 
 func (gr *GenericRepository[T, F, MODEL]) FindOne(ctx context.Context, id int64) (*T, error) {
@@ -34,13 +34,13 @@ func (gr *GenericRepository[T, F, MODEL]) FindOne(ctx context.Context, id int64)
 		return nil, nil
 	}
 	if gr.AfterFind != nil {
-		gr.AfterFind(gr, p)
+		gr.AfterFind(ctx, gr, p)
 	}
-	return gr.MapperToDTO(p), nil
+	return gr.MapperToDTO(ctx, p), nil
 }
 
 func (gr *GenericRepository[T, F, MODEL]) Save(ctx context.Context, dto *T) (bool, error) {
-	entity := gr.MapperToEntity(dto)
+	entity := gr.MapperToEntity(ctx, dto)
 	model := new(MODEL)
 	id := (*dto).GetId()
 	session := gr.DB.NewSession()
@@ -64,12 +64,12 @@ func (gr *GenericRepository[T, F, MODEL]) Save(ctx context.Context, dto *T) (boo
 			return false, err
 		}
 		if gr.AfterSave != nil {
-			if !gr.AfterSave(gr, session, entity) {
+			if !gr.AfterSave(ctx, gr, session, entity) {
 				session.Rollback()
 				return false, fmt.Errorf("error on after save")
 			}
 		}
-		gr.CopyToDto(entity, dto)
+		gr.CopyToDto(ctx, entity, dto)
 		err = session.Commit()
 		if err != nil {
 			log.Error().Msg(err.Error())
@@ -79,7 +79,7 @@ func (gr *GenericRepository[T, F, MODEL]) Save(ctx context.Context, dto *T) (boo
 	}
 	rowsAffected, err := gr.DB.ID(id).Update(entity)
 	if gr.AfterUpdate != nil {
-		if !gr.AfterUpdate(gr, session, entity) {
+		if !gr.AfterUpdate(ctx, gr, session, entity) {
 			session.Rollback()
 			return false, fmt.Errorf("error on after update")
 		}
@@ -89,7 +89,7 @@ func (gr *GenericRepository[T, F, MODEL]) Save(ctx context.Context, dto *T) (boo
 		session.Rollback()
 		return false, err
 	}
-	gr.CopyToDto(entity, dto)
+	gr.CopyToDto(ctx, entity, dto)
 	err = session.Commit()
 	if err != nil {
 		log.Error().Msg(err.Error())
@@ -124,7 +124,7 @@ func (gr *GenericRepository[T, F, MODEL]) DeleteOne(ctx context.Context, id int6
 			return false, err
 		}
 		if gr.AfterDelete != nil {
-			if !gr.AfterDelete(gr, session, id) {
+			if !gr.AfterDelete(ctx, gr, session, id) {
 				session.Rollback()
 				return false, fmt.Errorf("error on after delete")
 			}
@@ -154,10 +154,10 @@ func (gr *GenericRepository[T, F, MODEL]) FindMany(ctx context.Context, filter *
 
 	model := new(MODEL)
 	var total int64
-	hasWhere := gr.HasWhere(filter)
+	hasWhere := gr.HasWhere(ctx, filter)
 
 	if hasWhere {
-		total, _ = gr.DoWhere(query, filter).Count(model)
+		total, _ = gr.DoWhere(ctx, query, filter).Count(model)
 	} else {
 		total, _ = query.Count(model)
 	}
@@ -168,7 +168,7 @@ func (gr *GenericRepository[T, F, MODEL]) FindMany(ctx context.Context, filter *
 	var err error
 	offset := (*filter).GetPageNumber() * (*filter).GetPageSize()
 	if hasWhere {
-		rows, err = gr.DoWhere(query, filter).OrderBy(orderBy).Limit(
+		rows, err = gr.DoWhere(ctx, query, filter).OrderBy(orderBy).Limit(
 			(*filter).GetPageSize(), offset,
 		).Rows(model)
 	} else {
@@ -190,9 +190,9 @@ func (gr *GenericRepository[T, F, MODEL]) FindMany(ctx context.Context, filter *
 		}
 		count++
 		if gr.AfterFind != nil {
-			gr.AfterFind(gr, model)
+			gr.AfterFind(ctx, gr, model)
 		}
-		response.Content = append(response.Content, gr.MapperToDTO(model))
+		response.Content = append(response.Content, gr.MapperToDTO(ctx, model))
 
 	}
 	response.Size = count

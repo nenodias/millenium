@@ -1,6 +1,7 @@
 package veiculo
 
 import (
+	"context"
 	"strings"
 
 	domain "github.com/nenodias/millenium/core/domain/veiculo"
@@ -43,14 +44,14 @@ func NewService(engine *xorm.Engine) domain.VeiculoService {
 	return domain.VeiculoService(&repository)
 }
 
-func hasWhere(filter *domain.VeiculoFilter) bool {
+func hasWhere(ctx context.Context, filter *domain.VeiculoFilter) bool {
 	hasPlaca := filter.Placa != "" && strings.TrimSpace(filter.Placa) != ""
 	hasIdCliente := filter.IdCliente != int64(0)
 	hasIdModelo := filter.IdModelo != int64(0)
 	return hasPlaca || hasIdCliente || hasIdModelo
 }
 
-func doWhere(query *xorm.Session, filter *domain.VeiculoFilter) *xorm.Session {
+func doWhere(ctx context.Context, query *xorm.Session, filter *domain.VeiculoFilter) *xorm.Session {
 	hasPlaca := filter.Placa != "" && strings.TrimSpace(filter.Placa) != ""
 	hasIdCliente := filter.IdCliente != int64(0)
 	hasIdModelo := filter.IdModelo != int64(0)
@@ -73,19 +74,19 @@ func doWhere(query *xorm.Session, filter *domain.VeiculoFilter) *xorm.Session {
 	}
 }
 
-func MapperToEntity(dto *domain.Veiculo) *Veiculo {
+func MapperToEntity(ctx context.Context, dto *domain.Veiculo) *Veiculo {
 	entity := new(Veiculo)
-	copyToEntity(dto, entity)
+	copyToEntity(ctx, dto, entity)
 	return entity
 }
 
-func MapperToDTO(entity *Veiculo) *domain.Veiculo {
+func MapperToDTO(ctx context.Context, entity *Veiculo) *domain.Veiculo {
 	dto := new(domain.Veiculo)
-	copyToDto(entity, dto)
+	copyToDto(ctx, entity, dto)
 	return dto
 }
 
-func copyToEntity(source *domain.Veiculo, destiny *Veiculo) {
+func copyToEntity(ctx context.Context, source *domain.Veiculo, destiny *Veiculo) {
 	destiny.Id = source.Id
 	destiny.IdCliente = source.IdCliente
 	destiny.Placa = source.Placa
@@ -98,7 +99,7 @@ func copyToEntity(source *domain.Veiculo, destiny *Veiculo) {
 	destiny.IdModelo = source.IdModelo
 }
 
-func copyToDto(source *Veiculo, destiny *domain.Veiculo) {
+func copyToDto(ctx context.Context, source *Veiculo, destiny *domain.Veiculo) {
 	destiny.Id = source.Id
 	destiny.IdCliente = source.IdCliente
 	destiny.Placa = source.Placa

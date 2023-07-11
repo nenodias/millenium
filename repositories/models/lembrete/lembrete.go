@@ -1,6 +1,7 @@
 package lembrete
 
 import (
+	"context"
 	"strings"
 	"time"
 
@@ -39,14 +40,14 @@ func NewService(engine *xorm.Engine) domain.LembreteService {
 	return domain.LembreteService(&repository)
 }
 
-func hasWhere(filter *domain.LembreteFilter) bool {
+func hasWhere(ctx context.Context, filter *domain.LembreteFilter) bool {
 	hasTexto := filter.Texto != "" && strings.TrimSpace(filter.Texto) != ""
 	hasIdCliente := filter.IdCliente != int64(0)
 	hasIdVeiculo := filter.IdVeiculo != int64(0)
 	return hasTexto || hasIdCliente || hasIdVeiculo
 }
 
-func doWhere(query *xorm.Session, filter *domain.LembreteFilter) *xorm.Session {
+func doWhere(ctx context.Context, query *xorm.Session, filter *domain.LembreteFilter) *xorm.Session {
 	hasTexto := filter.Texto != "" && strings.TrimSpace(filter.Texto) != ""
 	hasIdCliente := filter.IdCliente != int64(0)
 	hasIdVeiculo := filter.IdVeiculo != int64(0)
@@ -69,19 +70,19 @@ func doWhere(query *xorm.Session, filter *domain.LembreteFilter) *xorm.Session {
 	}
 }
 
-func MapperToEntity(dto *domain.Lembrete) *Lembrete {
+func MapperToEntity(ctx context.Context, dto *domain.Lembrete) *Lembrete {
 	entity := new(Lembrete)
-	copyToEntity(dto, entity)
+	copyToEntity(ctx, dto, entity)
 	return entity
 }
 
-func MapperToDTO(entity *Lembrete) *domain.Lembrete {
+func MapperToDTO(ctx context.Context, entity *Lembrete) *domain.Lembrete {
 	dto := new(domain.Lembrete)
-	copyToDto(entity, dto)
+	copyToDto(ctx, entity, dto)
 	return dto
 }
 
-func copyToEntity(source *domain.Lembrete, destiny *Lembrete) {
+func copyToEntity(ctx context.Context, source *domain.Lembrete, destiny *Lembrete) {
 	destiny.Id = source.Id
 	destiny.Texto = source.Texto
 	destiny.IdCliente = source.IdCliente
@@ -89,7 +90,7 @@ func copyToEntity(source *domain.Lembrete, destiny *Lembrete) {
 	destiny.Data = source.Data
 }
 
-func copyToDto(source *Lembrete, destiny *domain.Lembrete) {
+func copyToDto(ctx context.Context, source *Lembrete, destiny *domain.Lembrete) {
 	destiny.Id = source.Id
 	destiny.Texto = source.Texto
 	destiny.IdCliente = source.IdCliente

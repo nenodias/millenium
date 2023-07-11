@@ -1,6 +1,7 @@
 package peca
 
 import (
+	"context"
 	"strings"
 
 	domain "github.com/nenodias/millenium/core/domain/peca"
@@ -36,34 +37,34 @@ func NewService(engine *xorm.Engine) domain.PecaService {
 	return domain.PecaService(&repository)
 }
 
-func hasWhere(filter *domain.PecaFilter) bool {
+func hasWhere(ctx context.Context, filter *domain.PecaFilter) bool {
 	return filter.Descricao != "" && strings.TrimSpace(filter.Descricao) != ""
 }
 
-func doWhere(query *xorm.Session, filter *domain.PecaFilter) *xorm.Session {
+func doWhere(ctx context.Context, query *xorm.Session, filter *domain.PecaFilter) *xorm.Session {
 	where := []string{"descricao ILIKE ?", "%" + filter.Descricao + "%"}
 	return query.Where(where[0], where[1])
 }
 
-func MapperToEntity(dto *domain.Peca) *Peca {
+func MapperToEntity(ctx context.Context, dto *domain.Peca) *Peca {
 	entity := new(Peca)
-	copyToEntity(dto, entity)
+	copyToEntity(ctx, dto, entity)
 	return entity
 }
 
-func MapperToDTO(entity *Peca) *domain.Peca {
+func MapperToDTO(ctx context.Context, entity *Peca) *domain.Peca {
 	dto := new(domain.Peca)
-	copyToDto(entity, dto)
+	copyToDto(ctx, entity, dto)
 	return dto
 }
 
-func copyToEntity(source *domain.Peca, destiny *Peca) {
+func copyToEntity(ctx context.Context, source *domain.Peca, destiny *Peca) {
 	destiny.Id = source.Id
 	destiny.Descricao = source.Descricao
 	destiny.Valor = source.Valor
 }
 
-func copyToDto(source *Peca, destiny *domain.Peca) {
+func copyToDto(ctx context.Context, source *Peca, destiny *domain.Peca) {
 	destiny.Id = source.Id
 	destiny.Descricao = source.Descricao
 	destiny.Valor = source.Valor

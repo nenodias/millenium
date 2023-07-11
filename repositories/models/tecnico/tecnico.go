@@ -1,6 +1,7 @@
 package tecnico
 
 import (
+	"context"
 	"strings"
 
 	domain "github.com/nenodias/millenium/core/domain/tecnico"
@@ -35,33 +36,33 @@ func NewService(engine *xorm.Engine) domain.TecnicoService {
 	return domain.TecnicoService(&repository)
 }
 
-func hasWhere(filter *domain.TecnicoFilter) bool {
+func hasWhere(ctx context.Context, filter *domain.TecnicoFilter) bool {
 	return filter.Nome != "" && strings.TrimSpace(filter.Nome) != ""
 }
 
-func doWhere(query *xorm.Session, filter *domain.TecnicoFilter) *xorm.Session {
+func doWhere(ctx context.Context, query *xorm.Session, filter *domain.TecnicoFilter) *xorm.Session {
 	where := []string{"nome ILIKE ?", "%" + filter.Nome + "%"}
 	return query.Where(where[0], where[1])
 }
 
-func MapperToEntity(dto *domain.Tecnico) *Tecnico {
+func MapperToEntity(ctx context.Context, dto *domain.Tecnico) *Tecnico {
 	entity := new(Tecnico)
-	copyToEntity(dto, entity)
+	copyToEntity(ctx, dto, entity)
 	return entity
 }
 
-func MapperToDTO(entity *Tecnico) *domain.Tecnico {
+func MapperToDTO(ctx context.Context, entity *Tecnico) *domain.Tecnico {
 	dto := new(domain.Tecnico)
-	copyToDto(entity, dto)
+	copyToDto(ctx, entity, dto)
 	return dto
 }
 
-func copyToEntity(source *domain.Tecnico, destiny *Tecnico) {
+func copyToEntity(ctx context.Context, source *domain.Tecnico, destiny *Tecnico) {
 	destiny.Id = source.Id
 	destiny.Nome = source.Nome
 }
 
-func copyToDto(source *Tecnico, destiny *domain.Tecnico) {
+func copyToDto(ctx context.Context, source *Tecnico, destiny *domain.Tecnico) {
 	destiny.Id = source.Id
 	destiny.Nome = source.Nome
 }
