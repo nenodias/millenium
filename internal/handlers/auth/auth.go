@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/nenodias/millenium/internal/config"
+	"github.com/nenodias/millenium/configs"
 	"github.com/nenodias/millenium/internal/core/domain/auth"
 	"github.com/nenodias/millenium/internal/core/domain/utils"
 	"github.com/rs/zerolog/log"
@@ -29,8 +29,8 @@ func Middleware(handler http.HandlerFunc) func(http.ResponseWriter, *http.Reques
 }
 
 func Authenticate(w http.ResponseWriter, r *http.Request) {
-	username := config.GetEnv("USER_DEFAULT", "admin")
-	password := config.GetEnv("PASS_DEFAULT", "123456")
+	username := configs.GetEnv("USER_DEFAULT", "admin")
+	password := configs.GetEnv("PASS_DEFAULT", "123456")
 	bytes := username + ":" + password
 	basicAuth := base64.RawStdEncoding.EncodeToString([]byte(bytes))
 	basicAuthRequest := r.Header.Get("Authorization")

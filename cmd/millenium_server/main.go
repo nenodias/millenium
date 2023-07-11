@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/nenodias/millenium/internal/config"
+	"github.com/nenodias/millenium/internal/configs"
 	auth "github.com/nenodias/millenium/internal/core/domain/auth"
 	appHandlers "github.com/nenodias/millenium/internal/handlers"
 	authHandlers "github.com/nenodias/millenium/internal/handlers/auth"
@@ -33,7 +33,7 @@ import (
 )
 
 func main() {
-	config.Init()
+	configs.Init()
 	auth.Init()
 	database.Init()
 	engine := database.GetEngine()
@@ -82,8 +82,8 @@ func main() {
 	veiculoController := veiculoHandlers.NewController(&veiculoService)
 	MappingApi(router, "veiculo", veiculoController)
 
-	port := config.GetEnv("SERVER_PORT", "8080")
-	handler := appHandlers.CORSHandler{Inner: router, Origin: config.GetEnv("ALLOW_ORIGIN", "*")}
+	port := configs.GetEnv("SERVER_PORT", "8080")
+	handler := appHandlers.CORSHandler{Inner: router, Origin: configs.GetEnv("ALLOW_ORIGIN", "*")}
 
 	srv := &http.Server{
 		Handler: handler,

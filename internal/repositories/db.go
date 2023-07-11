@@ -6,7 +6,7 @@ import (
 	"github.com/rs/zerolog/log"
 
 	_ "github.com/lib/pq"
-	"github.com/nenodias/millenium/internal/config"
+	"github.com/nenodias/millenium/configs"
 	"xorm.io/xorm"
 )
 
@@ -14,11 +14,11 @@ var engine *xorm.Engine
 
 func Init() {
 	var err error
-	username := config.GetEnv("POSTGRES_USER", "postgres")
-	password := config.GetEnv("POSTGRES_PASSWORD", "postgres")
-	host := config.GetEnv("POSTGRESQL_SERVICE_HOST", "localhost")
-	port := config.GetEnv("POSTGRES_PORT", "5432")
-	database := config.GetEnv("POSTGRES_DB", "carrit")
+	username := configs.GetEnv("POSTGRES_USER", "postgres")
+	password := configs.GetEnv("POSTGRES_PASSWORD", "postgres")
+	host := configs.GetEnv("POSTGRESQL_SERVICE_HOST", "localhost")
+	port := configs.GetEnv("POSTGRES_PORT", "5432")
+	database := configs.GetEnv("POSTGRES_DB", "carrit")
 	urlConnection := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable", username, password, host, port, database)
 	engine, err = xorm.NewEngine("postgres", urlConnection)
 	if err != nil {

@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"github.com/go-pdf/fpdf"
-	"github.com/nenodias/millenium/internal/config"
+	"github.com/nenodias/millenium/configs"
 	clienteDomain "github.com/nenodias/millenium/internal/core/domain/cliente"
 	modeloDomain "github.com/nenodias/millenium/internal/core/domain/modelo"
 	montadoraDomain "github.com/nenodias/millenium/internal/core/domain/montadora"
@@ -16,13 +16,25 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-const (
-	REPORT_NAME    = "AUTO MECÂNICA BAPTISTA"
-	REPORT_ADDRESS = "R: São José, 32 - Vila Irerê - Lençóis Paulista - SP - 18682-100"
-	REPORT_PHONE   = "(14)3264-4598"
-	REPORT_MOBILE  = "(14) 9 9126-2313"
-	REPORT_EMAIL   = "mecanicacarrit@gmail.com"
-)
+type Company struct {
+	Name,
+	Address,
+	Phone,
+	Mobile,
+	Email string
+}
+
+var company *Company
+
+func loadCompany() *Company {
+	return &Company{
+		Name:    configs.GetEnv(configs.REPORT_COMPANY_NAME, "AUTO MECÂNICA BAPTISTA"),
+		Address: configs.GetEnv(configs.REPORT_COMPANY_ADDRESS, "R: São José, 32 - Vila Irerê - Lençóis Paulista - SP - 18682-100"),
+		Phone:   configs.GetEnv(configs.REPORT_COMPANY_PHONE, "(14)3264-4598"),
+		Mobile:  configs.GetEnv(configs.REPORT_COMPANY_CELLPHONE, "(14) 9 9126-2313"),
+		Email:   configs.GetEnv(configs.REPORT_COMPANY_EMAIL, "mecanicacarrit@gmail.com"),
+	}
+}
 
 type HistoricoReport struct {
 	Historico       Historico
@@ -40,6 +52,9 @@ type HistoricoReport struct {
 }
 
 func GenerateReport(ctx context.Context, historico *HistoricoReport, w http.ResponseWriter) {
+	if company == nil {
+		company = loadCompany()
+	}
 	Calculate(historico)
 	pdf := fpdf.New("P", "mm", "A4", "")
 	tr := pdf.UnicodeTranslatorFromDescriptor("")
@@ -67,22 +82,22 @@ func MakeFooter(historico *HistoricoReport, pdf *fpdf.Fpdf, tr func(string) stri
 }
 
 func MakeHeader(historico *HistoricoReport, pdf *fpdf.Fpdf, tr func(string) string) {
-	logo := config.GetEnv("LOGO_REPORT", "d://workspace//logo_oficina.png")
+	logo := configs.GetEnv("LOGO_REPORT", "d://workspace//logo_oficina.png")
 	pdf.Image(logo, 8, 10, 25, 0, false, "", 0, "")
 	pdf.CellFormat(25, 0, "", "", 0, "", false, 0, "")
 	pdf.SetFont("Arial", "B", 12)
-	pdf.CellFormat(100, 4, tr(REPORT_NAME), "", 0, "L", false, 0, "")
+	pdf.CellFormat(100, 4, tr(company.Name), "", 0, "L", false, 0, "")
 	pdf.Ln(4)
 	pdf.SetFont("Arial", "", 9)
 	pdf.CellFormat(25, 0, "", "", 0, "", false, 0, "")
-	pdf.CellFormat(100, 4, tr(REPORT_ADDRESS), "", 0, "L", false, 0, "")
+	pdf.CellFormat(100, 4, tr(company.Address), "", 0, "L", false, 0, "")
 	pdf.Ln(4)
 	pdf.CellFormat(25, 0, "", "", 0, "", false, 0, "")
-	pdf.CellFormat(80, 4, "Fone: "+tr(REPORT_PHONE), "", 0, "L", false, 0, "")
-	pdf.CellFormat(80, 4, "Celular: "+tr(REPORT_MOBILE), "", 0, "L", false, 0, "")
+	pdf.CellFormat(80, 4, "Fone: "+tr(company.Phone), "", 0, "L", false, 0, "")
+	pdf.CellFormat(80, 4, "Celular: "+tr(company.Mobile), "", 0, "L", false, 0, "")
 	pdf.Ln(4)
 	pdf.CellFormat(25, 0, "", "", 0, "", false, 0, "")
-	pdf.CellFormat(100, 4, "Email: "+tr(REPORT_EMAIL), "", 0, "L", false, 0, "")
+	pdf.CellFormat(100, 4, "Email: "+tr(company.Email), "", 0, "L", false, 0, "")
 	pdf.Ln(4)
 	pdf.Line(5, 27, 205, 27)
 

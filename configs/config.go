@@ -1,4 +1,4 @@
-package config
+package configs
 
 import (
 	"os"
@@ -7,6 +7,14 @@ import (
 	"github.com/rs/zerolog/log"
 
 	"github.com/joho/godotenv"
+)
+
+const (
+	REPORT_COMPANY_NAME      = "REPORT_COMPANY_NAME"
+	REPORT_COMPANY_ADDRESS   = "REPORT_COMPANY_ADDRESS"
+	REPORT_COMPANY_PHONE     = "REPORT_COMPANY_PHONE"
+	REPORT_COMPANY_CELLPHONE = "REPORT_COMPANY_CELLPHONE"
+	REPORT_COMPANY_EMAIL     = "REPORT_COMPANY_EMAIL"
 )
 
 func logStartConfig() {

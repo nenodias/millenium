@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt"
-	"github.com/nenodias/millenium/internal/config"
+	"github.com/nenodias/millenium/configs"
 )
 
 type AuthKey string
@@ -59,5 +59,5 @@ func Verify(tokenString string) (*jwt.StandardClaims, error) {
 }
 
 func Init() {
-	secretKey = []byte(config.GetEnv("SERVER_SECRET", "secret"))
+	secretKey = []byte(configs.GetEnv("SERVER_SECRET", "secret"))
 }
