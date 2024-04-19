@@ -111,7 +111,7 @@ func (hr *HistoricoRepository) FindOneForReport(ctx context.Context, id int64) (
 		montadora := new(montadoraModel.Montadora)
 		tecnico := new(tecnicoModel.Tecnico)
 		veiculo := new(veiculoModel.Veiculo)
-		if model.IdCliente != 0 {
+		if utils.HasValueInt64(model.IdCliente) {
 			_, err = hr.DB.ID(model.IdCliente).Get(cliente)
 			if err != nil {
 				log.Error().Msg(err.Error())
@@ -119,20 +119,20 @@ func (hr *HistoricoRepository) FindOneForReport(ctx context.Context, id int64) (
 			}
 			report.Cliente = *clienteModel.MapperToDTO(ctx, cliente)
 		}
-		if model.IdVeiculo != 0 {
+		if utils.HasValueInt64(model.IdVeiculo) {
 			_, err = hr.DB.ID(model.IdVeiculo).Get(veiculo)
 			if err != nil {
 				log.Error().Msg(err.Error())
 				return nil, err
 			}
 			report.Veiculo = *veiculoModel.MapperToDTO(ctx, veiculo)
-			if veiculo.IdModelo != 0 {
+			if utils.HasValueInt64(veiculo.IdModelo) {
 				_, err = hr.DB.ID(veiculo.IdModelo).Get(modelo)
 				if err != nil {
 					log.Error().Msg(err.Error())
 				}
 				report.Modelo = *modeloModel.MapperToDTO(ctx, modelo)
-				if modelo.IdMontadora != 0 {
+				if utils.HasValueInt64(modelo.IdMontadora) {
 					_, err = hr.DB.ID(modelo.IdMontadora).Get(montadora)
 					if err != nil {
 						log.Error().Msg(err.Error())
@@ -156,7 +156,7 @@ func (hr *HistoricoRepository) FindOneForReport(ctx context.Context, id int64) (
 }
 
 func AfterFind(ctx context.Context, gr *models.GenericRepository[domain.Historico, domain.HistoricoFilter, Historico], m *Historico) {
-	if m.Id != 0 {
+	if utils.HasValueInt64(m.Id) {
 		model := new(HistoricoItem)
 		rows, err := gr.DB.Where("id_historico = ?", m.Id).Rows(model)
 		if err != nil {
@@ -180,7 +180,7 @@ func AfterFind(ctx context.Context, gr *models.GenericRepository[domain.Historic
 }
 
 func AfterSave(ctx context.Context, gr *models.GenericRepository[domain.Historico, domain.HistoricoFilter, Historico], session *xorm.Session, m *Historico) bool {
-	if m.Id != 0 {
+	if utils.HasValueInt64(m.Id) {
 		m.NumeroOrdem = m.Id
 		_, err := session.Exec("UPDATE historico SET numero = ? WHERE id = ?", m.Id, m.Id)
 		if err != nil {
