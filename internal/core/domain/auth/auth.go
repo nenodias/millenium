@@ -36,7 +36,7 @@ func GenerateJWT() (string, error) {
 func Verify(tokenString string) (*jwt.StandardClaims, error) {
 	token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
-			return nil, fmt.Errorf("Unexpected signing method: %v", token.Header["alg"])
+			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
 
 		return secretKey, nil
@@ -54,7 +54,7 @@ func Verify(tokenString string) (*jwt.StandardClaims, error) {
 			ExpiresAt: int64(claims["exp"].(float64)),
 		}, nil
 	} else {
-		return nil, fmt.Errorf("Expired token")
+		return nil, fmt.Errorf("expired token")
 	}
 }
 
