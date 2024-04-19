@@ -185,13 +185,19 @@ func AfterSave(ctx context.Context, gr *models.GenericRepository[domain.Historic
 		_, err := session.Exec("UPDATE historico SET numero = ? WHERE id = ?", m.Id, m.Id)
 		if err != nil {
 			log.Error().Msg(err.Error())
-			session.Rollback()
+			err = session.Rollback()
+			if err != nil {
+				log.Error().Msg(err.Error())
+			}
 			return false
 		}
 		_, err = session.Exec("DELETE FROM historico_item WHERE id_historico = ?", m.Id)
 		if err != nil {
 			log.Error().Msg(err.Error())
-			session.Rollback()
+			err = session.Rollback()
+			if err != nil {
+				log.Error().Msg(err.Error())
+			}
 			return false
 		}
 		for _, item := range m.Items {
@@ -199,7 +205,10 @@ func AfterSave(ctx context.Context, gr *models.GenericRepository[domain.Historic
 			_, err := session.Insert(&item)
 			if err != nil {
 				log.Error().Msg(err.Error())
-				session.Rollback()
+				err = session.Rollback()
+				if err != nil {
+					log.Error().Msg(err.Error())
+				}
 				return false
 			}
 		}
@@ -207,14 +216,20 @@ func AfterSave(ctx context.Context, gr *models.GenericRepository[domain.Historic
 		_, err = session.Exec("DELETE FROM vistoria WHERE id_historico = ?", m.Id)
 		if err != nil {
 			log.Error().Msg(err.Error())
-			session.Rollback()
+			err = session.Rollback()
+			if err != nil {
+				log.Error().Msg(err.Error())
+			}
 			return false
 		}
 		m.Vistoria.Id = m.Id
 		_, err = session.Insert(&m.Vistoria)
 		if err != nil {
 			log.Error().Msg(err.Error())
-			session.Rollback()
+			err = session.Rollback()
+			if err != nil {
+				log.Error().Msg(err.Error())
+			}
 			return false
 		}
 	}

@@ -48,25 +48,28 @@ func (gr *GenericRepository[T, F, MODEL]) Save(ctx context.Context, dto *T) (boo
 	err := session.Begin()
 	if err != nil {
 		log.Error().Msg(err.Error())
-		session.Rollback()
+		err = session.Rollback()
 		return false, err
 	}
 	exists, err := session.ID(id).Exist(model)
 	if err != nil {
 		log.Error().Msg(err.Error())
-		session.Rollback()
+		err = session.Rollback()
 		return false, err
 	}
 	if !exists {
 		rowsAffected, err := gr.DB.InsertOne(entity)
 		if err != nil {
 			log.Error().Msg(err.Error())
-			session.Rollback()
+			err = session.Rollback()
 			return false, err
 		}
 		if gr.AfterSave != nil {
 			if !gr.AfterSave(ctx, gr, session, entity) {
-				session.Rollback()
+				err = session.Rollback()
+				if err != nil {
+					log.Error().Msg(err.Error())
+				}
 				return false, fmt.Errorf("error on after save")
 			}
 		}
@@ -81,13 +84,16 @@ func (gr *GenericRepository[T, F, MODEL]) Save(ctx context.Context, dto *T) (boo
 	rowsAffected, err := gr.DB.ID(id).Update(entity)
 	if gr.AfterUpdate != nil {
 		if !gr.AfterUpdate(ctx, gr, session, entity) {
-			session.Rollback()
+			err = session.Rollback()
+			if err != nil {
+				log.Error().Msg(err.Error())
+			}
 			return false, fmt.Errorf("error on after update")
 		}
 	}
 	if err != nil {
 		log.Error().Msg(err.Error())
-		session.Rollback()
+		err = session.Rollback()
 		return false, err
 	}
 	gr.CopyToDto(ctx, entity, dto)
@@ -105,28 +111,37 @@ func (gr *GenericRepository[T, F, MODEL]) DeleteOne(ctx context.Context, id int6
 	err := session.Begin()
 	if err != nil {
 		log.Error().Msg(err.Error())
-		session.Rollback()
+		err = session.Rollback()
+		if err != nil {
+			log.Error().Msg(err.Error())
+		}
 		return false, err
 	}
 	exists, err := session.ID(id).Exist(model)
 	if err != nil {
 		log.Error().Msg(err.Error())
-		session.Rollback()
+		err = session.Rollback()
 		return false, err
 	}
 	if !exists {
-		session.Rollback()
+		err = session.Rollback()
+		if err != nil {
+			log.Error().Msg(err.Error())
+		}
 		return true, nil
 	} else {
 		rowsAffected, err := session.ID(id).Delete(model)
 		if err != nil {
 			log.Error().Msg(err.Error())
-			session.Rollback()
+			err = session.Rollback()
 			return false, err
 		}
 		if gr.AfterDelete != nil {
 			if !gr.AfterDelete(ctx, gr, session, id) {
-				session.Rollback()
+				err = session.Rollback()
+				if err != nil {
+					log.Error().Msg(err.Error())
+				}
 				return false, fmt.Errorf("error on after delete")
 			}
 		}
