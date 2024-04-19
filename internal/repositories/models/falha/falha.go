@@ -2,9 +2,9 @@ package falha
 
 import (
 	"context"
-	"strings"
 
 	domain "github.com/nenodias/millenium/internal/core/domain/falha"
+	"github.com/nenodias/millenium/internal/core/domain/utils"
 	"github.com/nenodias/millenium/internal/repositories"
 	models "github.com/nenodias/millenium/internal/repositories/models"
 	"xorm.io/xorm"
@@ -38,7 +38,7 @@ func NewService(engine *repositories.DatabaseEngine) domain.FalhaService {
 }
 
 func hasWhere(ctx context.Context, filter *domain.FalhaFilter) bool {
-	return filter.Descricao != "" && strings.TrimSpace(filter.Descricao) != ""
+	return utils.HasValue(filter.Descricao)
 }
 
 func doWhere(ctx context.Context, query *xorm.Session, filter *domain.FalhaFilter) *xorm.Session {

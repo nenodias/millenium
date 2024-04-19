@@ -2,9 +2,9 @@ package peca
 
 import (
 	"context"
-	"strings"
 
 	domain "github.com/nenodias/millenium/internal/core/domain/peca"
+	"github.com/nenodias/millenium/internal/core/domain/utils"
 	"github.com/nenodias/millenium/internal/repositories"
 	models "github.com/nenodias/millenium/internal/repositories/models"
 	"xorm.io/xorm"
@@ -39,7 +39,7 @@ func NewService(engine *repositories.DatabaseEngine) domain.PecaService {
 }
 
 func hasWhere(ctx context.Context, filter *domain.PecaFilter) bool {
-	return filter.Descricao != "" && strings.TrimSpace(filter.Descricao) != ""
+	return utils.HasValue(filter.Descricao)
 }
 
 func doWhere(ctx context.Context, query *xorm.Session, filter *domain.PecaFilter) *xorm.Session {

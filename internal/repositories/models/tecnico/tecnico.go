@@ -2,9 +2,9 @@ package tecnico
 
 import (
 	"context"
-	"strings"
 
 	domain "github.com/nenodias/millenium/internal/core/domain/tecnico"
+	"github.com/nenodias/millenium/internal/core/domain/utils"
 	"github.com/nenodias/millenium/internal/repositories"
 	models "github.com/nenodias/millenium/internal/repositories/models"
 	"xorm.io/xorm"
@@ -38,7 +38,7 @@ func NewService(engine *repositories.DatabaseEngine) domain.TecnicoService {
 }
 
 func hasWhere(ctx context.Context, filter *domain.TecnicoFilter) bool {
-	return filter.Nome != "" && strings.TrimSpace(filter.Nome) != ""
+	return utils.HasValue(filter.Nome)
 }
 
 func doWhere(ctx context.Context, query *xorm.Session, filter *domain.TecnicoFilter) *xorm.Session {

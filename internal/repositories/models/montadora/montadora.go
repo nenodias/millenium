@@ -2,9 +2,9 @@ package montadora
 
 import (
 	"context"
-	"strings"
 
 	domain "github.com/nenodias/millenium/internal/core/domain/montadora"
+	"github.com/nenodias/millenium/internal/core/domain/utils"
 	"github.com/nenodias/millenium/internal/repositories"
 	models "github.com/nenodias/millenium/internal/repositories/models"
 	"xorm.io/xorm"
@@ -40,7 +40,7 @@ func NewService(engine *repositories.DatabaseEngine) domain.MontadoraService {
 }
 
 func hasWhere(ctx context.Context, filter *domain.MontadoraFilter) bool {
-	return filter.Nome != "" && strings.TrimSpace(filter.Nome) != ""
+	return utils.HasValue(filter.Nome)
 }
 
 func doWhere(ctx context.Context, query *xorm.Session, filter *domain.MontadoraFilter) *xorm.Session {

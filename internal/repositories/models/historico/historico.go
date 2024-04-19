@@ -6,6 +6,7 @@ import (
 	"time"
 
 	domain "github.com/nenodias/millenium/internal/core/domain/historico"
+	"github.com/nenodias/millenium/internal/core/domain/utils"
 	"github.com/nenodias/millenium/internal/repositories"
 	models "github.com/nenodias/millenium/internal/repositories/models"
 	clienteModel "github.com/nenodias/millenium/internal/repositories/models/cliente"
@@ -223,20 +224,20 @@ func AfterSave(ctx context.Context, gr *models.GenericRepository[domain.Historic
 func hasWhere(ctx context.Context, filter *domain.HistoricoFilter) bool {
 	hasData := !filter.Data.IsZero()
 	hasTipo := filter.Tipo != nil
-	hasNumeroOrdem := filter.IdCliente != int64(0)
-	hasIdCliente := filter.IdCliente != int64(0)
-	hasIdVeiculo := filter.IdVeiculo != int64(0)
-	hasIdTecnico := filter.IdTecnico != int64(0)
+	hasNumeroOrdem := utils.HasValueInt64(filter.IdCliente)
+	hasIdCliente := utils.HasValueInt64(filter.IdCliente)
+	hasIdVeiculo := utils.HasValueInt64(filter.IdVeiculo)
+	hasIdTecnico := utils.HasValueInt64(filter.IdTecnico)
 	return hasData || hasTipo || hasNumeroOrdem || hasIdCliente || hasIdVeiculo || hasIdTecnico
 }
 
 func doWhere(ctx context.Context, query *xorm.Session, filter *domain.HistoricoFilter) *xorm.Session {
 	hasData := !filter.Data.IsZero()
 	hasTipo := filter.Tipo != nil
-	hasNumeroOrdem := filter.IdCliente != int64(0)
-	hasIdCliente := filter.IdCliente != int64(0)
-	hasIdVeiculo := filter.IdVeiculo != int64(0)
-	hasIdTecnico := filter.IdTecnico != int64(0)
+	hasNumeroOrdem := utils.HasValueInt64(filter.IdCliente)
+	hasIdCliente := utils.HasValueInt64(filter.IdCliente)
+	hasIdVeiculo := utils.HasValueInt64(filter.IdVeiculo)
+	hasIdTecnico := utils.HasValueInt64(filter.IdTecnico)
 	where := query.Where("1 = ?", 1)
 	if hasData {
 		where = where.And("data = ?", filter.Data)

@@ -2,9 +2,9 @@ package modelo
 
 import (
 	"context"
-	"strings"
 
 	domain "github.com/nenodias/millenium/internal/core/domain/modelo"
+	"github.com/nenodias/millenium/internal/core/domain/utils"
 	"github.com/nenodias/millenium/internal/repositories"
 	models "github.com/nenodias/millenium/internal/repositories/models"
 	"xorm.io/xorm"
@@ -40,14 +40,14 @@ func NewService(engine *repositories.DatabaseEngine) domain.ModeloService {
 }
 
 func hasWhere(ctx context.Context, filter *domain.ModeloFilter) bool {
-	hasNome := filter.Nome != "" && strings.TrimSpace(filter.Nome) != ""
-	hasIdModelo := filter.IdModelo != int64(0)
+	hasNome := utils.HasValue(filter.Nome)
+	hasIdModelo := utils.HasValueInt64(filter.IdModelo)
 	return hasNome || hasIdModelo
 }
 
 func doWhere(ctx context.Context, query *xorm.Session, filter *domain.ModeloFilter) *xorm.Session {
-	hasNome := filter.Nome != "" && strings.TrimSpace(filter.Nome) != ""
-	hasIdModelo := filter.IdModelo != int64(0)
+	hasNome := utils.HasValue(filter.Nome)
+	hasIdModelo := utils.HasValueInt64(filter.IdModelo)
 	if hasNome && hasIdModelo {
 		return query.Where("nome ILIKE ?", "%"+filter.Nome+"%").And("id_montadora = ?", filter.IdModelo)
 	} else if hasNome {

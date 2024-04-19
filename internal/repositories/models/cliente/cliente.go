@@ -2,10 +2,10 @@ package cliente
 
 import (
 	"context"
-	"strings"
 	"time"
 
 	domain "github.com/nenodias/millenium/internal/core/domain/cliente"
+	"github.com/nenodias/millenium/internal/core/domain/utils"
 	"github.com/nenodias/millenium/internal/repositories"
 	models "github.com/nenodias/millenium/internal/repositories/models"
 	"xorm.io/xorm"
@@ -57,16 +57,16 @@ func NewService(engine *repositories.DatabaseEngine) domain.ClienteService {
 }
 
 func hasWhere(ctx context.Context, filter *domain.ClienteFilter) bool {
-	hasNome := filter.Nome != "" && strings.TrimSpace(filter.Nome) != ""
-	hasTelefone := filter.Telefone != "" && strings.TrimSpace(filter.Telefone) != ""
-	hasCelular := filter.Celular != "" && strings.TrimSpace(filter.Celular) != ""
+	hasNome := utils.HasValue(filter.Nome)
+	hasTelefone := utils.HasValue(filter.Telefone)
+	hasCelular := utils.HasValue(filter.Celular)
 	return hasNome || hasTelefone || hasCelular
 }
 
 func doWhere(ctx context.Context, query *xorm.Session, filter *domain.ClienteFilter) *xorm.Session {
-	hasNome := filter.Nome != "" && strings.TrimSpace(filter.Nome) != ""
-	hasTelefone := filter.Telefone != "" && strings.TrimSpace(filter.Telefone) != ""
-	hasCelular := filter.Celular != "" && strings.TrimSpace(filter.Celular) != ""
+	hasNome := utils.HasValue(filter.Nome)
+	hasTelefone := utils.HasValue(filter.Telefone)
+	hasCelular := utils.HasValue(filter.Celular)
 	where := make([]interface{}, 0)
 	if hasNome {
 		where = append(where, "nome ILIKE ?", "%"+filter.Nome+"%")

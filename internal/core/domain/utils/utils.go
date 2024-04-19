@@ -78,3 +78,11 @@ func WriteJson(data interface{}, w http.ResponseWriter, statusOk int, statusErro
 		w.WriteHeader(statusError)
 	}
 }
+
+func HasValue(filterValue string) bool {
+	return filterValue != "" && strings.TrimSpace(filterValue) != ""
+}
+
+func HasValueInt64(value int64) bool {
+	return value != int64(0)
+}

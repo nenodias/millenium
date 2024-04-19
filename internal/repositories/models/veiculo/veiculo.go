@@ -2,8 +2,8 @@ package veiculo
 
 import (
 	"context"
-	"strings"
 
+	"github.com/nenodias/millenium/internal/core/domain/utils"
 	domain "github.com/nenodias/millenium/internal/core/domain/veiculo"
 	"github.com/nenodias/millenium/internal/repositories"
 	models "github.com/nenodias/millenium/internal/repositories/models"
@@ -46,16 +46,16 @@ func NewService(engine *repositories.DatabaseEngine) domain.VeiculoService {
 }
 
 func hasWhere(ctx context.Context, filter *domain.VeiculoFilter) bool {
-	hasPlaca := filter.Placa != "" && strings.TrimSpace(filter.Placa) != ""
-	hasIdCliente := filter.IdCliente != int64(0)
-	hasIdModelo := filter.IdModelo != int64(0)
+	hasPlaca := utils.HasValue(filter.Placa)
+	hasIdCliente := utils.HasValueInt64(filter.IdCliente)
+	hasIdModelo := utils.HasValueInt64(filter.IdModelo)
 	return hasPlaca || hasIdCliente || hasIdModelo
 }
 
 func doWhere(ctx context.Context, query *xorm.Session, filter *domain.VeiculoFilter) *xorm.Session {
-	hasPlaca := filter.Placa != "" && strings.TrimSpace(filter.Placa) != ""
-	hasIdCliente := filter.IdCliente != int64(0)
-	hasIdModelo := filter.IdModelo != int64(0)
+	hasPlaca := utils.HasValue(filter.Placa)
+	hasIdCliente := utils.HasValueInt64(filter.IdCliente)
+	hasIdModelo := utils.HasValueInt64(filter.IdModelo)
 	where := make([]interface{}, 0)
 	if hasPlaca {
 		where = append(where, "placa ILIKE ?", "%"+filter.Placa+"%")

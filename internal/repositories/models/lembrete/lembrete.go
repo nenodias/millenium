@@ -2,10 +2,10 @@ package lembrete
 
 import (
 	"context"
-	"strings"
 	"time"
 
 	domain "github.com/nenodias/millenium/internal/core/domain/lembrete"
+	"github.com/nenodias/millenium/internal/core/domain/utils"
 	"github.com/nenodias/millenium/internal/repositories"
 	models "github.com/nenodias/millenium/internal/repositories/models"
 	"xorm.io/xorm"
@@ -42,16 +42,16 @@ func NewService(engine *repositories.DatabaseEngine) domain.LembreteService {
 }
 
 func hasWhere(ctx context.Context, filter *domain.LembreteFilter) bool {
-	hasTexto := filter.Texto != "" && strings.TrimSpace(filter.Texto) != ""
-	hasIdCliente := filter.IdCliente != int64(0)
-	hasIdVeiculo := filter.IdVeiculo != int64(0)
+	hasTexto := utils.HasValue(filter.Texto)
+	hasIdCliente := utils.HasValueInt64(filter.IdCliente)
+	hasIdVeiculo := utils.HasValueInt64(filter.IdVeiculo)
 	return hasTexto || hasIdCliente || hasIdVeiculo
 }
 
 func doWhere(ctx context.Context, query *xorm.Session, filter *domain.LembreteFilter) *xorm.Session {
-	hasTexto := filter.Texto != "" && strings.TrimSpace(filter.Texto) != ""
-	hasIdCliente := filter.IdCliente != int64(0)
-	hasIdVeiculo := filter.IdVeiculo != int64(0)
+	hasTexto := utils.HasValue(filter.Texto)
+	hasIdCliente := utils.HasValueInt64(filter.IdCliente)
+	hasIdVeiculo := utils.HasValueInt64(filter.IdVeiculo)
 	where := make([]interface{}, 0)
 	if hasTexto {
 		where = append(where, "texto ILIKE ?", "%"+filter.Texto+"%")
