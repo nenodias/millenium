@@ -8,7 +8,7 @@ ALTER TABLE clientes RENAME COLUMN fax_com TO fax_comercial;
 ALTER TABLE clientes RENAME COLUMN e_mail TO email;
 ALTER TABLE clientes RENAME COLUMN bip_cod TO bip;
 ALTER TABLE clientes RENAME COLUMN dtnasc TO data_nascimento;
-ALTER TABLE clientes ALTER COLUMN id to bigint
+ALTER TABLE clientes ALTER COLUMN id TYPE bigint USING id::bigint;
 
 ALTER TABLE historico RENAME COLUMN sequencia TO id;
 ALTER TABLE historico RENAME COLUMN codveiculo TO id_veiculo;
@@ -16,16 +16,16 @@ ALTER TABLE historico RENAME COLUMN codigo_cliente TO id_cliente;
 ALTER TABLE historico RENAME COLUMN tecnico TO id_tecnico;
 ALTER TABLE historico RENAME COLUMN nr_ordem TO numero;
 ALTER TABLE historico RENAME COLUMN obs TO observacao;
-ALTER TABLE historico ALTER COLUMN id to bigint
-ALTER TABLE historico ALTER COLUMN id_veiculo to bigint
-ALTER TABLE historico ALTER COLUMN id_cliente to bigint
-ALTER TABLE historico ALTER COLUMN id_tecnico to bigint
+ALTER TABLE historico ALTER COLUMN id TYPE bigint USING id::bigint;
+ALTER TABLE historico ALTER COLUMN id_veiculo TYPE bigint USING id_veiculo::bigint;
+ALTER TABLE historico ALTER COLUMN id_cliente TYPE bigint USING id_cliente::bigint;
+ALTER TABLE historico ALTER COLUMN id_tecnico TYPE bigint USING id_tecnico::bigint;
 ALTER TABLE historico ALTER COLUMN numero to bigint
 
 ALTER TABLE historico_item RENAME COLUMN sequencia TO id_historico;
 ALTER TABLE historico_item RENAME COLUMN qtd TO quantidade;
 ALTER TABLE historico_item RENAME COLUMN item TO ordem;
-ALTER TABLE historico_item ALTER COLUMN id_historico to bigint
+ALTER TABLE historico_item ALTER COLUMN id_historico TYPE bigint USING id_historico::bigint;
 
 ALTER TABLE modelo RENAME COLUMN id_monta TO id_montadora;
 ALTER TABLE modelo RENAME COLUMN nome_modelo TO nome;
@@ -33,19 +33,19 @@ ALTER TABLE modelo RENAME COLUMN nome_modelo TO nome;
 ALTER TABLE montadora RENAME COLUMN nome_montadora TO nome;
 
 ALTER TABLE tecnico RENAME COLUMN codigo_tecnico TO id;
-ALTER TABLE tecnico ALTER COLUMN id to bigint
+ALTER TABLE tecnico ALTER COLUMN id TYPE bigint USING id::bigint;
 
 ALTER TABLE veiculo RENAME COLUMN codveiculo TO id;
 ALTER TABLE veiculo RENAME COLUMN codigo_cliente TO id_cliente;
-ALTER TABLE veiculo ALTER COLUMN id to bigint
-ALTER TABLE veiculo ALTER COLUMN id_cliente to bigint
+ALTER TABLE veiculo ALTER COLUMN id TYPE bigint USING id::bigint;
+ALTER TABLE veiculo ALTER COLUMN id_cliente TYPE bigint USING id_cliente::bigint;
 
 ALTER TABLE vistoria RENAME COLUMN sequencia TO id_historico;
 ALTER TABLE vistoria RENAME COLUMN carrovistoria TO id_veiculo;
 ALTER TABLE vistoria RENAME COLUMN kilometragem TO km;
 ALTER TABLE vistoria RENAME COLUMN obs TO observacao;
-ALTER TABLE vistoria ALTER COLUMN id_historico to bigint
-ALTER TABLE vistoria ALTER COLUMN id_veiculo to bigint
+ALTER TABLE vistoria ALTER COLUMN id_historico TYPE bigint USING id_historico::bigint;
+ALTER TABLE vistoria ALTER COLUMN id_veiculo TYPE bigint USING id_veiculo::bigint;
 
 -- RENAMING TABLES FOR STANDARDIZE
 ALTER TABLE clientes RENAME TO cliente
