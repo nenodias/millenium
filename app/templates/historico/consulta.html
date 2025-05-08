@@ -204,24 +204,25 @@
                 return d1;
             };
 
-            var getVeiculo = function(id){
+            var getVeiculo = function(idVeiculo){
                 var d1 = $.Deferred();
+                var optional = {'id':'','id_modelo':'','placa':''};
                 $.ajax({
-                    url:'{{ url_for("veiculo.ajax_by_id",pk='') }}'+id,
+                    url:'{{ url_for("veiculo.ajax_by_id",pk='') }}'+idVeiculo,
                     method:'get',
                     dataType: 'json'
                 }).done(function(data){
                     d1.resolve(data);
                 }).fail(function(){
-                    d1.resolve('');
+                    d1.resolve(optional);
                 });
                 return d1;
             };
 
-            var getCliente = function(id){
+            var getCliente = function(idCliente){
                 var d1 = $.Deferred();
                 $.ajax({
-                    url:'{{ url_for("cliente.ajax_by_id",pk='') }}'+id,
+                    url:'{{ url_for("cliente.ajax_by_id",pk='') }}'+idCliente,
                     method:'get',
                     dataType: 'json'
                 }).done(function(data){
@@ -232,11 +233,11 @@
                 return d1;
             };
 
-            var getTecnico = function(id){
+            var getTecnico = function(idTecnico){
                 var d1 = $.Deferred();
-                if(id !== undefined && id !== ''){
+                if(idTecnico !== undefined && idTecnico !== ''){
                     $.ajax({
-                        url:'{{ url_for("tecnico.ajax_by_id",pk='') }}'+id,
+                        url:'{{ url_for("tecnico.ajax_by_id",pk='') }}'+idTecnico,
                         method:'get',
                         dataType: 'json'
                     }).done(function(data){

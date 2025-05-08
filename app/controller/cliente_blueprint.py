@@ -183,7 +183,7 @@ def count():
 @cliente_blueprint.route('/ajax/<pk>', methods = ['get'])
 @auth_require()
 def ajax_by_id(pk):
-    data = Cliente.query.filter_by(id=pk).one()
-    if data:
+    data = Cliente.query.filter_by(id=pk).one_or_none()
+    if data is not None:
         return Response(response=json.dumps( Cliente.to_dict(data, cliente_colunas) ), status=200, mimetype="application/json")
     return '',404

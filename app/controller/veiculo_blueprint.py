@@ -158,7 +158,7 @@ def count():
 @veiculo_blueprint.route('/ajax/<pk>', methods = ['get'])
 @auth_require()
 def ajax_by_id(pk):
-    data = Veiculo.query.filter_by(id=pk).one()
-    if data:
+    data = Veiculo.query.filter_by(id=pk).one_or_none()
+    if data is not None:
         return Response(response=json.dumps( Veiculo.to_dict(data, veiculo_colunas) ), status=200, mimetype="application/json")
     return '',404

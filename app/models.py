@@ -174,17 +174,17 @@ class MixinSerialize():
 
 
 class Cliente(MixinSerialize, db.Model):
-    __tablename__ = 'clientes'
+    __tablename__ = 'cliente'
 
     id = db.Column(
-        'codigo_cliente',
+        'id',
         db.Integer,
         primary_key=True,
         server_default=text("nextval('clientes_codigo_cliente_seq'::regclass)")
     )
-    nome = db.Column('nome_cliente', db.String(60), nullable=False)
+    nome = db.Column('nome', db.String(60), nullable=False)
     rg = db.Column('ie_rg', db.String(16))
-    cpf = db.Column('cgc', db.String(19))
+    cpf = db.Column('cpf', db.String(19))
     endereco = db.Column(db.String(50))
     complemento = db.Column(db.String(30))
     bairro = db.Column(db.String(30))
@@ -192,14 +192,14 @@ class Cliente(MixinSerialize, db.Model):
     cep = db.Column(db.String(9))
     estado = db.Column(db.String(2))
     pais = db.Column(db.String(20))
-    telefone = db.Column('tel_res', db.String(20))
-    fax = db.Column('fax_res', db.String(20))
+    telefone = db.Column('telefone', db.String(20))
+    fax = db.Column('fax', db.String(20))
     celular = db.Column(db.String(20))
-    telefone_comercial = db.Column('tel_com', db.String(20))
-    fax_comercial = db.Column('fax_com', db.String(20))
-    email = db.Column('e_mail', db.String(40))
-    bip = db.Column('bip_cod', db.String(30))
-    data_nascimento = db.Column('dtnasc', db.DateTime)
+    telefone_comercial = db.Column('tel_comercial', db.String(20))
+    fax_comercial = db.Column('fax_comercial', db.String(20))
+    email = db.Column('email', db.String(40))
+    bip = db.Column('bip', db.String(30))
+    data_nascimento = db.Column('data_nascimento', db.DateTime)
     mes = db.Column(db.Integer)
 
 
@@ -207,29 +207,29 @@ class Historico(MixinSerialize, db.Model):
     __tablename__ = 'historico'
 
     id = db.Column(
-        'sequencia',
+        'id',
         db.Integer,
         primary_key=True,
         server_default=text("nextval('historico_sequencia_seq'::regclass)")
     )
     id_veiculo = db.Column(
-        'codveiculo',
-        db.ForeignKey('veiculo.codveiculo'),
+        'id_veiculo',
+        db.ForeignKey('veiculo.id'),
         nullable=False
     )
     id_cliente = db.Column(
-        'codigo_cliente',
-        db.ForeignKey('clientes.codigo_cliente'),
+        'id_cliente',
+        db.ForeignKey('cliente.id'),
         nullable=False
     )
-    id_tecnico = db.Column('tecnico', db.ForeignKey('tecnico.codigo_tecnico'))
-    numero_ordem = db.Column('nr_ordem', db.Integer)
+    id_tecnico = db.Column('id_tecnico', db.ForeignKey('tecnico.id'))
+    numero_ordem = db.Column('numero', db.Integer)
     placa = db.Column(db.String(8))
     sistema = db.Column(db.Integer)
     data = db.Column(db.DateTime)
     tipo = db.Column(db.String(4))
     valor_total = db.Column(db.Float(53))
-    observacao = db.Column('obs', db.String(500))
+    observacao = db.Column('observacao', db.String(500))
 
     cliente = db.relationship('Cliente')
     veiculo = db.relationship('Veiculo')
@@ -247,14 +247,14 @@ class HistoricoItem(MixinSerialize, db.Model):
         server_default=text("nextval('histitem_id_seq'::regclass)")
     )
     id_historico = db.Column(
-        'sequencia',
-        db.ForeignKey('historico.sequencia'),
+        'id_historico',
+        db.ForeignKey('historico.id'),
         nullable=False
     )
-    ordem = db.Column('item', db.Integer, nullable=False)
+    ordem = db.Column('ordem', db.Integer, nullable=False)
     tipo = db.Column(db.String(1))
     descricao = db.Column('historico', db.String(75))
-    quantidade = db.Column('qtd', db.Integer)
+    quantidade = db.Column('quantidade', db.Integer)
     valor = db.Column(db.Float(53))
 
 
@@ -266,9 +266,9 @@ class Modelo(MixinSerialize, db.Model):
         primary_key=True,
         server_default=text("nextval('modelo_id_seq'::regclass)")
     )
-    nome = db.Column('nome_modelo', db.String(40), nullable=False)
+    nome = db.Column('nome', db.String(40), nullable=False)
     codvei_ea = db.Column(db.Integer)
-    id_monta = db.Column(db.ForeignKey('montadora.id'))
+    id_monta = db.Column('id_montadora', db.ForeignKey('montadora.id'))
 
     montadora = db.relationship('Montadora', backref='modelos')
 
@@ -282,12 +282,12 @@ class Montadora(MixinSerialize, db.Model):
         server_default=text("nextval('monta_id_seq'::regclass)")
     )
     origem = db.Column(db.String(1), nullable=False)
-    nome = db.Column('nome_montadora', db.String(20), nullable=False)
+    nome = db.Column('nome', db.String(20), nullable=False)
     codmon_ea = db.Column(db.Integer)
 
 
 class Falha(MixinSerialize, db.Model):
-    __tablename__ = 'falhas'
+    __tablename__ = 'falha'
 
     id = db.Column(
         db.BigInteger,
@@ -298,7 +298,7 @@ class Falha(MixinSerialize, db.Model):
 
 
 class Peca(MixinSerialize, db.Model):
-    __tablename__ = 'pecas'
+    __tablename__ = 'peca'
 
     id = db.Column(
         db.BigInteger,
@@ -310,7 +310,7 @@ class Peca(MixinSerialize, db.Model):
 
 
 class Servico(MixinSerialize, db.Model):
-    __tablename__ = 'servicos'
+    __tablename__ = 'servico'
 
     id = db.Column(
         db.BigInteger,
@@ -325,7 +325,7 @@ class Tecnico(MixinSerialize, db.Model):
     __tablename__ = 'tecnico'
 
     id = db.Column(
-        'codigo_tecnico',
+        'id',
         db.Integer,
         primary_key=True,
         server_default=text("nextval('tecnico_codigo_tecnico_seq'::regclass)")
@@ -337,14 +337,14 @@ class Veiculo(MixinSerialize, db.Model):
     __tablename__ = 'veiculo'
 
     id = db.Column(
-        'codveiculo',
+        'id',
         db.Integer,
         primary_key=True,
         server_default=text("nextval('veiculo_codveiculo_seq'::regclass)")
     )
     id_cliente = db.Column(
-        'codigo_cliente',
-        db.ForeignKey('clientes.codigo_cliente')
+        'id_cliente',
+        db.ForeignKey('cliente.id')
     )
     placa = db.Column(db.String(8), nullable=False)
     pais = db.Column(db.String(20))
@@ -371,13 +371,13 @@ class Vistoria(db.Model):
     __tablename__ = 'vistoria'
 
     id = db.Column(
-        'sequencia',
-        db.ForeignKey('historico.sequencia'),
+        'id_historico',
+        db.ForeignKey('historico.id'),
         primary_key=True
     )
-    id_carrovistoria = db.Column('carrovistoria', db.Integer)
+    id_carrovistoria = db.Column('id_veiculo', db.Integer)
     nivel_combustivel = db.Column('nivelcomb', db.Integer)
-    kilometragem = db.Column(db.Float)
+    kilometragem = db.Column('km', db.Float)
     tocafitas = db.Column(db.SmallInteger, server_default=text("0"))
     cd = db.Column(db.SmallInteger, server_default=text("0"))
     disqueteira = db.Column(db.SmallInteger, server_default=text("0"))
@@ -390,11 +390,11 @@ class Vistoria(db.Model):
     outro1_descricao = db.Column('outro1descr', db.String(20))
     outro2 = db.Column(db.SmallInteger, server_default=text("0"))
     outro2_descricao = db.Column('outro2descr', db.String(20))
-    observacao = db.Column('obs', db.String(500))
+    observacao = db.Column('observacao', db.String(500))
 
 
 class Lembrete(MixinSerialize, db.Model):
-    __tablename__ = 'lembretes'
+    __tablename__ = 'lembrete'
 
     id = db.Column(
         db.BigInteger,
@@ -403,11 +403,11 @@ class Lembrete(MixinSerialize, db.Model):
     )
     id_veiculo = db.Column(
         'id_veiculo',
-        db.ForeignKey('veiculo.codveiculo')
+        db.ForeignKey('veiculo.id')
     )
     id_cliente = db.Column(
         'id_cliente',
-        db.ForeignKey('clientes.codigo_cliente')
+        db.ForeignKey('cliente.id')
     )
     texto = db.Column(db.String(5000))
     data_notificacao = db.Column(db.DateTime)

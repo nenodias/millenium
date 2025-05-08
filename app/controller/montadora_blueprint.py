@@ -130,7 +130,7 @@ def count():
 @montadora_blueprint.route('/ajax/<pk>', methods = ['get'])
 @auth_require()
 def ajax_by_id(pk):
-    data = Montadora.query.filter_by(id=pk).one()
-    if data:
+    data = Montadora.query.filter_by(id=pk).one_or_none()
+    if data is not None:
         return Response(response=json.dumps( Montadora.to_dict(data, montadora_colunas) ), status=200, mimetype="application/json")
     return '',404
