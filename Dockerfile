@@ -17,7 +17,7 @@ ADD config.py /app
 ADD requirements.txt /app
 ADD setup.py /app
 
-RUN apt-get update && apt-get install -y libpq-dev
+RUN apt-get update && apt-get install -y libpq-dev postgresql-client
 
 RUN apt-get autoremove -y && \
     apt-get autoclean -y
@@ -31,4 +31,4 @@ RUN /app/venv/bin/pip install -r requirements.txt
 
 EXPOSE 8000
 
-ENTRYPOINT ["gunicorn", "wsgi:application", "--bind", "0.0.0.0:${PORT}"]
+ENTRYPOINT gunicorn wsgi:application --bind 0.0.0.0:$PORT
