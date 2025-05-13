@@ -91,13 +91,18 @@ def backup():
         database = db_url.database
 
         # Build pg_dump command
+        try:
+            os.remove(f'/tmp/{database}_backup.sql')
+        except FileNotFoundError:
+            pass
         cmd = [
             'pg_dump',
             '-h', host,
             '-p', porta,
             '-U', usuario,
+            '-d', database,
             '-w',  # no password prompt, we use PGPASSWORD env
-            database
+            '-f', f'/tmp/{database}_backup.sql'  # output file>'
         ]
 
         # Use PGPASSWORD env var for password
@@ -112,6 +117,8 @@ def backup():
             return Response(f"Backup failed: {output}", status=500, content_type='text/plain; charset=utf-8')
 
         # Send as file download
+        with open(f'/tmp/{database}_backup.sql', 'rb') as f:
+            output = f.read()
         return Response(
             output,
             content_type='application/octet-stream',
