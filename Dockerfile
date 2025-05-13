@@ -1,4 +1,4 @@
-FROM python:3.9
+FROM python:3.13
 
 ENV LANG=en_US.UTF-8
 ENV LANGUAGE=en_US:en
@@ -12,6 +12,15 @@ ADD wsgi.py /app
 ADD config.py /app
 ADD requirements.txt /app
 ADD setup.py /app
+
+RUN sudo apt-get update && \
+    sudo apt-get install -y libpq-dev && \
+    sudo apt-get clean
+
+RUN apt-get autoremove -y && \
+    apt-get autoclean -y
+
+USER app
 
 RUN /usr/local/bin/pip install --upgrade pip
 RUN /usr/local/bin/pip install -r requirements.txt
