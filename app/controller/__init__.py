@@ -119,6 +119,10 @@ def backup():
         # Send as file download
         with open(f'/tmp/{database}_backup.sql', 'rb') as f:
             output = f.read()
+        try:
+            os.remove(f'/tmp/{database}_backup.sql')
+        except FileNotFoundError:
+            pass
         return Response(
             output,
             content_type='application/octet-stream',
