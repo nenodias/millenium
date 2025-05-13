@@ -7,24 +7,28 @@ ENV PORT=8000
 
 WORKDIR /app
 
+RUN useradd --create-home --home-dir /app --shell /bin/bash app
+RUN chown -R app:app /app
+RUN chmod -R 755 /app
+
 ADD app  /app/app
 ADD wsgi.py /app
 ADD config.py /app
 ADD requirements.txt /app
 ADD setup.py /app
 
-RUN sudo apt-get update && \
-    sudo apt-get install -y libpq-dev && \
-    sudo apt-get clean
+RUN apt-get update && apt-get install -y libpq-dev
 
 RUN apt-get autoremove -y && \
     apt-get autoclean -y
 
 USER app
 
-RUN /usr/local/bin/pip install --upgrade pip
-RUN /usr/local/bin/pip install -r requirements.txt
+RUN /usr/local/bin/python -m venv /app/venv
+ENV PATH="/app/venv/bin:$PATH"
+RUN /app/venv/bin/pip install --upgrade pip
+RUN /app/venv/bin/pip install -r requirements.txt
 
 EXPOSE 8000
 
-ENTRYPOINT gunicorn wsgi:application --bind 0.0.0.0:$PORT
+ENTRYPOINT ["gunicorn", "wsgi:application", "--bind", "0.0.0.0:${PORT}"]
