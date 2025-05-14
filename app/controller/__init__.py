@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import os
 import pexpect
 import logging
 from flask import (
@@ -18,6 +19,7 @@ from .cliente_blueprint import cliente_blueprint
 from .veiculo_blueprint import veiculo_blueprint
 from .historico_blueprint import historico_blueprint
 from .lembrete_blueprint import lembrete_blueprint
+from sqlalchemy.engine.url import make_url
 
 sistema = Blueprint('sistema', __name__)
 
@@ -79,28 +81,58 @@ def index():
 @sistema.route('/backup')
 @auth_require()
 def backup():
-    uri = config.SQLALCHEMY_DATABASE_URI.split('://')[1]
-    parte = uri.split('@')
-    usuario, senha = parte[0].split(':')
-    parte = parte[1].split(':')
-    host = parte[0]
-    database = None
-    if '/' in parte[1]:
-        porta, database = parte[1].split('/')
-    else:
-        porta = parte[1]
-    # executando o pg_dump
-    call = ' -p '+porta+' -U '+usuario+' -h '+host+' -W'
-    if not database:
-        call += ' -C'
-        call = 'pg_dump' + call
-    else:
-        call = 'pg_dump ' + database + call
-    ps = pexpect.spawn(call)
-    ps.expect(':')
-    ps.send('%s\n' % (senha))
-    stdout = ps.read()
-    return Response(stdout, content_type='text/plain; charset=utf-8')
+    try:
+        # Parse DB URI
+        db_url = make_url(config.SQLALCHEMY_DATABASE_URI)
+        usuario = db_url.username
+        senha = db_url.password
+        host = db_url.host or 'localhost'
+        porta = str(db_url.port or 5432)
+        database = db_url.database
+
+        # Build pg_dump command
+        try:
+            os.remove(f'/tmp/{database}_backup.sql')
+        except FileNotFoundError:
+            pass
+        cmd = [
+            'pg_dump',
+            '-h', host,
+            '-p', porta,
+            '-U', usuario,
+            '-d', database,
+            '-w',  # no password prompt, we use PGPASSWORD env
+            '-f', f'/tmp/{database}_backup.sql'  # output file>'
+        ]
+
+        # Use PGPASSWORD env var for password
+        env = dict(**os.environ, PGPASSWORD=senha or '')
+
+        # Run pg_dump
+        ps = pexpect.spawn(' '.join(cmd), env=env, encoding='utf-8')
+        output = ps.read()  # Read all output
+        ps.close()          # Wait for process to finish
+
+        if ps.exitstatus != 0:
+            return Response(f"Backup failed: {output}", status=500, content_type='text/plain; charset=utf-8')
+
+        # Send as file download
+        with open(f'/tmp/{database}_backup.sql', 'rb') as f:
+            output = f.read()
+        try:
+            os.remove(f'/tmp/{database}_backup.sql')
+        except FileNotFoundError:
+            pass
+        return Response(
+            output,
+            content_type='application/octet-stream',
+            headers={
+                'Content-Disposition': f'attachment; filename={database}_backup.sql'
+            }
+        )
+    except Exception as e:
+        logging.exception("Backup failed")
+        return Response(f"Backup failed: {str(e)}", status=500, content_type='text/plain; charset=utf-8')
 
 
 def init_app(app):

@@ -137,7 +137,7 @@ def count():
 @peca_blueprint.route('/ajax/<pk>', methods = ['get'])
 @auth_require()
 def ajax_by_id(pk):
-    data = Peca.query.filter_by(id=pk).one()
-    if data:
+    data = Peca.query.filter_by(id=pk).one_or_none()
+    if data is not None:
         return Response(response=json.dumps( Peca.to_dict(data, peca_colunas) ), status=200, mimetype="application/json")
     return '',404
