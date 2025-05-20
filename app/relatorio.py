@@ -9,11 +9,11 @@ from app.utils import (
     from_str_to_datetime_or_none, format_date, to_float_or_zero
 )
 
+DEFAULT_FONT = "Arial"
 
 class DadosOficina():
 
     def __init__(self):
-        print(config)
         self.nome = config.REPORT_COMPANY_NAME
         self.endereco = config.REPORT_COMPANY_ADDRESS
         self.telefone = config.REPORT_COMPANY_PHONE
@@ -93,11 +93,11 @@ class MyPDF(FPDF):
 
         # Dados Oficina
 
-        self.set_font("Arial", style="B", size=12)
+        self.set_font(DEFAULT_FONT, style="B", size=12)
         self.cell(w=100, h=4, txt=self.oficina.nome, border=0, ln=0, align='L')
         self.ln(4)
 
-        self.set_font("Arial", style="", size=9)
+        self.set_font(DEFAULT_FONT, style="", size=9)
         self.cell(
             w=25, h=0, txt='', border=0, ln=0, align='', fill=False, link=''
         )
@@ -145,57 +145,57 @@ class MyPDF(FPDF):
         # Dados Cliente
 
         self.ln(1)
-        self.set_font("Arial", style="B", size=10)
+        self.set_font(DEFAULT_FONT, style="B", size=10)
         self.cell(w=20, h=7, txt='Cliente      :', border=0, ln=0, align='L')
-        self.set_font("Arial", style="", size=10)
+        self.set_font(DEFAULT_FONT, style="", size=10)
         self.cell(w=100, h=7, txt=self.cliente, border=0, ln=0, align='L')
 
         self.ln(4)
-        self.set_font("Arial", style="B", size=10)
+        self.set_font(DEFAULT_FONT, style="B", size=10)
         self.cell(w=20, h=7, txt='Endereço  :', border=0, ln=0, align='L')
-        self.set_font("Arial", style="", size=10)
+        self.set_font(DEFAULT_FONT, style="", size=10)
         self.cell(w=100, h=7, txt=self.endereco, border=0, ln=0, align='L')
 
         self.ln(4)
-        self.set_font("Arial", style="B", size=10)
+        self.set_font(DEFAULT_FONT, style="B", size=10)
         self.cell(w=21, h=7, txt='Telefone    :', border=0, ln=0, align='L')
-        self.set_font("Arial", style="", size=10)
+        self.set_font(DEFAULT_FONT, style="", size=10)
         self.cell(w=50, h=7, txt=self.telefone, border=0, ln=0, align='L')
-        self.set_font("Arial", style="B", size=10)
+        self.set_font(DEFAULT_FONT, style="B", size=10)
         self.cell(w=18, h=7, txt=' - Celular:', border=0, ln=0, align='L')
-        self.set_font("Arial", style="", size=10)
+        self.set_font(DEFAULT_FONT, style="", size=10)
         self.cell(w=50, h=7, txt=self.celular, border=0, ln=0, align='L')
-        self.set_font("Arial", style="B", size=10)
+        self.set_font(DEFAULT_FONT, style="B", size=10)
         self.cell(w=23, h=7, txt=' - Fone Coml:', border=0, ln=0, align='L')
-        self.set_font("Arial", style="", size=10)
+        self.set_font(DEFAULT_FONT, style="", size=10)
         self.cell(
             w=50, h=7, txt=self.telefone_comercial, border=0, ln=0, align='L'
         )
 
         self.ln(4)
-        self.set_font("Arial", style="B", size=10)
+        self.set_font(DEFAULT_FONT, style="B", size=10)
         self.cell(w=20, h=7, txt='CPF/CNPJ :', border=0, ln=0, align='L')
-        self.set_font("Arial", style="", size=10)
+        self.set_font(DEFAULT_FONT, style="", size=10)
         self.cell(w=100, h=7, txt=self.cpf, border=0, ln=0, align='L')
 
         self.ln(4)
-        self.set_font("Arial", style="B", size=10)
+        self.set_font(DEFAULT_FONT, style="B", size=10)
         self.cell(w=20, h=7, txt='Técnico     :', border=0, ln=0, align='L')
-        self.set_font("Arial", style="", size=10)
+        self.set_font(DEFAULT_FONT, style="", size=10)
         self.cell(w=100, h=7, txt=self.tecnico, border=0, ln=0, align='L')
 
         self.ln(4)
-        self.set_font("Arial", style="B", size=10)
+        self.set_font(DEFAULT_FONT, style="B", size=10)
         self.cell(w=20, h=7, txt='Veículo     :', border=0, ln=0, align='L')
-        self.set_font("Arial", style="", size=10)
+        self.set_font(DEFAULT_FONT, style="", size=10)
         self.cell(w=100, h=7, txt=self.veiculo, border=0, ln=0, align='L')
 
         self.line(5, 54, 205, 54)
 
         self.ln(8)
-        self.set_font("Arial", style="B", size=14)
+        self.set_font(DEFAULT_FONT, style="B", size=14)
         self.cell(w=50, h=8, txt=self.tipo, border=0, ln=0, align='L')
-        self.set_font("Arial", style="B", size=16)
+        self.set_font(DEFAULT_FONT, style="B", size=16)
         self.cell(w=110, h=8, txt=self.numero_ordem, border=0, ln=0, align='L')
         self.cell(w=20, h=8, txt=self.data, border=0, ln=0, align='L')
         self.line(5, 64, 205, 64)
@@ -209,7 +209,7 @@ class MyPDF(FPDF):
     def footer(self):
         self.set_y(-15)
 
-        self.set_font("Arial", style="I", size=8)
+        self.set_font(DEFAULT_FONT, style="I", size=8)
 
         pageNum = "%s/{nb}" % self.page_no()
         self.cell(0, 10, pageNum, align="C")
@@ -217,13 +217,13 @@ class MyPDF(FPDF):
     def draw_falhas(self):
         def desenhar_titulo():
             self.ln(1)
-            self.set_font("Arial", style="B", size=12)
+            self.set_font(DEFAULT_FONT, style="B", size=12)
             self.cell(w=120, h=8, txt='FALHAS', border=0, ln=0, align='L')
             self.ln(8)
         if self.falhas:
             desenhar_titulo()
             for falha in self.falhas:
-                self.set_font("Arial", style="", size=10)
+                self.set_font(DEFAULT_FONT, style="", size=10)
                 self.cell(
                     w=120,
                     h=8,
@@ -240,9 +240,9 @@ class MyPDF(FPDF):
     def draw_pecas(self):
         def desenhar_titulo():
             self.ln(1)
-            self.set_font("Arial", style="B", size=12)
+            self.set_font(DEFAULT_FONT, style="B", size=12)
             self.cell(w=120, h=8, txt='PEÇAS', border=0, ln=0, align='L')
-            self.set_font("Arial", style="B", size=10)
+            self.set_font(DEFAULT_FONT, style="B", size=10)
             self.cell(w=25, h=8, txt='Qtd.', border=0, ln=0, align='C')
             self.cell(w=25, h=8, txt='Valor', border=0, ln=0, align='C')
             self.cell(w=25, h=8, txt='Total', border=0, ln=0, align='C')
@@ -250,7 +250,7 @@ class MyPDF(FPDF):
         if self.pecas:
             desenhar_titulo()
             for peca in self.pecas:
-                self.set_font("Arial", style="", size=9)
+                self.set_font(DEFAULT_FONT, style="", size=9)
                 self.cell(
                     w=120,
                     h=6,
@@ -300,9 +300,9 @@ class MyPDF(FPDF):
     def draw_servicos(self):
         def desenhar_titulo():
             self.ln(1)
-            self.set_font("Arial", style="B", size=12)
+            self.set_font(DEFAULT_FONT, style="B", size=12)
             self.cell(w=120, h=8, txt='SERVIÇOS', border=0, ln=0, align='L')
-            self.set_font("Arial", style="B", size=10)
+            self.set_font(DEFAULT_FONT, style="B", size=10)
             self.cell(w=25, h=8, txt='Qtd.', border=0, ln=0, align='C')
             self.cell(w=25, h=8, txt='Valor', border=0, ln=0, align='C')
             self.cell(w=25, h=8, txt='Total', border=0, ln=0, align='C')
@@ -310,7 +310,7 @@ class MyPDF(FPDF):
         if self.servicos:
             desenhar_titulo()
             for servico in self.servicos:
-                self.set_font("Arial", style="", size=9)
+                self.set_font(DEFAULT_FONT, style="", size=9)
                 self.cell(
                     w=120,
                     h=6,
@@ -359,7 +359,7 @@ class MyPDF(FPDF):
 
         # total
         self.ln(2)
-        self.set_font("Arial", style="B", size=10)
+        self.set_font(DEFAULT_FONT, style="B", size=10)
         self.cell(
             w=160, h=6, txt='Total:', border=0, ln=0, align='R'
         )
@@ -369,9 +369,9 @@ class MyPDF(FPDF):
         self.ln(1)
 
     def draw_observacoes(self):
-        self.set_font("Arial", style="B", size=10)
+        self.set_font(DEFAULT_FONT, style="B", size=10)
         self.cell(w=160, h=6, txt='Observação:', border=0, ln=6, align='L')
-        self.set_font("Arial", style="", size=9)
+        self.set_font(DEFAULT_FONT, style="", size=9)
         self.write(5, self.observacoes)
 
 

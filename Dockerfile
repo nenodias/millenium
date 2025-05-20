@@ -17,7 +17,16 @@ ADD config.py /app
 ADD requirements.txt /app
 ADD setup.py /app
 
-RUN apt-get update && apt-get install -y libpq-dev postgresql-client
+RUN apt-get update && apt-get install -y libpq-dev postgresql-client wget software-properties-common
+
+RUN wget https://font.download/dl/font/arial.zip
+RUN unzip arial.zip -d /usr/share/fonts/truetype/
+RUN chmod 755 /usr/share/fonts/truetype/*
+RUN rm -f arial.zip
+
+RUN apt-get update && \
+    apt-get install -y cabextract fontconfig && \
+    fc-cache -f -v || true
 
 RUN apt-get autoremove -y && \
     apt-get autoclean -y
